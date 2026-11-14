@@ -684,6 +684,7 @@ async function loadDashboard() {
 
   adminMessage("Loading dashboard...");
   await Promise.all([loadAdminOrders(), loadAdminProducts()]);
+  await startOrderMonitor();
   adminMessage("Dashboard updated.", "success");
 }
 

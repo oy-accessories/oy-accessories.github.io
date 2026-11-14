@@ -1,114 +1,121 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Discover premium accessories at OY Accessories.">
+<meta name="description" content="OY Accessories - Timeless Details">
 <title>OY Accessories | Timeless Details</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root {
-  --black:#11110f;
-  --dark:#191916;
-  --ivory:#f7f4ed;
-  --gold:#c6a66b;
-  --muted:#aaa69c;
-  --white:#fff;
+:root{
+--black:#11110f;--dark:#1b1a17;--ivory:#f7f4ed;
+--gold:#c6a66b;--muted:#aaa69c;--white:#fff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--ivory);color:var(--black)}
-button,input,textarea{font:inherit}
+body{font-family:Arial,sans-serif;background:var(--ivory);color:var(--black)}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-header{background:var(--black);color:white;padding:22px 7%;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:25px;font-weight:800;letter-spacing:3px}
-.logo span{color:var(--gold);font-weight:400}
-nav a{color:white;text-decoration:none;margin-left:25px;font-size:13px;letter-spacing:1px}
+a{text-decoration:none;color:inherit}
+header{background:var(--black);color:white;padding:20px 7%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.logo{font-size:24px;font-weight:bold;letter-spacing:3px}
+.logo span{color:var(--gold);font-weight:normal}
+nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+nav a{font-size:12px;letter-spacing:1px}
 nav a:hover{color:var(--gold)}
-.hero{min-height:510px;background:linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.18)),url("https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85") center/cover;display:flex;align-items:center;padding:70px 9%;color:white}
-.hero-content{max-width:520px}
-.hero small{color:var(--gold);letter-spacing:4px;text-transform:uppercase}
-.hero h1{font-family:Georgia,serif;font-size:clamp(42px,6vw,72px);font-weight:400;line-height:1.08;margin:20px 0}
-.hero p{color:#e0ded8;line-height:1.8;max-width:420px}
-.gold-btn{display:inline-block;background:var(--gold);color:var(--black);border:0;padding:15px 28px;font-weight:bold;letter-spacing:1px;text-decoration:none;margin-top:25px}
-.gold-btn:hover{background:#ddc18d}
-.section{padding:75px 7%}
+button,.btn{border:0}
+.gold-btn{display:inline-block;background:var(--gold);color:var(--black);padding:14px 22px;font-weight:bold;letter-spacing:1px}
+.dark-btn{background:var(--black);color:white;padding:12px 18px}
+.outline-btn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 15px}
+.danger-btn{background:#a83c35;color:white;padding:9px 12px}
+.small-btn{padding:8px 11px;font-size:12px}
+.hero{min-height:480px;background:linear-gradient(90deg,#000c,#0002),url("https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85") center/cover;display:flex;align-items:center;padding:65px 9%;color:white}
+.hero-content{max-width:530px}
+.hero small,.section-head small{color:var(--gold);letter-spacing:4px;text-transform:uppercase}
+.hero h1{font:normal clamp(42px,6vw,70px)/1.1 Georgia,serif;margin:20px 0}
+.hero p{line-height:1.8;color:#eee}
+.section{padding:70px 7%}
 .section-head{text-align:center;margin-bottom:35px}
-.section-head small{color:#a48650;letter-spacing:3px;text-transform:uppercase}
-.section-head h2{font-family:Georgia,serif;font-size:38px;font-weight:400;margin-top:12px}
-.categories{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:35px}
-.chip{background:transparent;border:1px solid #d4cec1;padding:10px 17px;border-radius:30px;color:#333}
-.chip:hover,.chip.active{background:var(--black);color:white;border-color:var(--black)}
+.section-head h2{font:normal 38px Georgia,serif;margin-top:12px}
+.categories{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+.chip{border:1px solid #d4cec1;background:transparent;border-radius:30px;padding:10px 17px}
+.chip.active,.chip:hover{background:var(--black);color:white}
 .products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
-.product{background:white;overflow:hidden;transition:transform .2s}
-.product:hover{transform:translateY(-5px)}
-.product img{width:100%;height:260px;object-fit:cover;background:#e9e5dc}
-.product-info{padding:18px}
-.product-info small{color:#a48650;text-transform:uppercase;letter-spacing:1px;font-size:11px}
-.product-info h3{font-family:Georgia,serif;font-size:20px;font-weight:400;margin:9px 0}
+.product{background:white}
+.product img{width:100%;height:250px;object-fit:cover;background:#eee}
+.product-info{padding:17px}
+.product-info small{color:#a48650;text-transform:uppercase;font-size:11px}
+.product-info h3{font:normal 20px Georgia,serif;margin:9px 0}
 .price{font-weight:bold;margin:12px 0}
-.product-info button{width:100%;padding:12px;background:var(--black);color:white;border:0;letter-spacing:1px;font-size:12px}
-.product-info button:hover{background:var(--gold);color:var(--black)}
-.product-info button:disabled{opacity:.45;cursor:not-allowed}
-.empty{text-align:center;padding:45px;color:#777;grid-column:1/-1}
-.loading{text-align:center;padding:45px;color:#777}
+.product-info button{width:100%;padding:12px;background:var(--black);color:white;font-size:12px}
+.product-info button:disabled{opacity:.4}
+.empty,.loading{text-align:center;padding:35px;color:#777;grid-column:1/-1}
 .about{background:#eae5da;text-align:center}
 .about p{max-width:650px;margin:20px auto;line-height:1.9;color:#555}
-footer{background:var(--black);color:white;padding:45px 7%;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
-footer p{color:var(--muted);margin-top:12px;font-size:13px;line-height:1.7}
-footer strong{color:var(--gold)}
-.whatsapp{position:fixed;bottom:22px;right:22px;background:#1d9d58;color:white;padding:14px 20px;border-radius:30px;text-decoration:none;z-index:5;font-size:13px;font-weight:bold}
-.cart-button{background:transparent;border:1px solid var(--gold);color:white;padding:10px 16px}
+footer{background:var(--black);color:white;padding:40px 7%;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
+footer p{color:var(--muted);font-size:13px;margin-top:12px;line-height:1.7}
 .overlay{display:none;position:fixed;inset:0;background:#0009;z-index:10}
-.panel{background:var(--ivory);height:100%;width:min(500px,100%);margin-left:auto;padding:25px;overflow-y:auto}
-.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
-.panel-head h2{font-family:Georgia,serif;font-weight:400;font-size:30px}
-.close{border:0;background:none;font-size:30px}
-.cart-line{display:grid;grid-template-columns:75px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid #ddd5c8;padding:14px 0}
-.cart-line img{width:75px;height:80px;object-fit:cover}
-.cart-line strong{font-size:14px}
-.qty{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:13px}
-.qty button{border:1px solid #ccc;background:white;padding:4px 9px}
-.total{display:flex;justify-content:space-between;font-weight:bold;padding:22px 0;font-size:18px}
-.panel form{display:grid;gap:12px}
-.panel form h2{font-family:Georgia,serif;font-weight:400;margin:10px 0}
-.panel input,.panel textarea{width:100%;padding:13px;border:1px solid #d4cec1;background:white;outline:none}
-.panel textarea{min-height:75px;resize:vertical}
-.panel form .gold-btn{width:100%;margin-top:5px}
-.notice{font-size:12px;color:#777;line-height:1.6}
-#checkoutMessage{margin-top:15px;font-size:13px;line-height:1.6}
-@media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:550px){
- header{padding:18px 5%}
- nav a{margin-left:10px;font-size:11px}
- .hero{min-height:430px;padding:45px 7%}
- .section{padding:55px 5%}
- .products{gap:12px}
- .product img{height:190px}
- .product-info{padding:12px}
- .product-info h3{font-size:17px}
- footer{padding:35px 6%}
+.panel{background:var(--ivory);height:100%;width:min(500px,100%);margin-left:auto;padding:25px;overflow:auto}
+.panel-head{display:flex;justify-content:space-between;margin-bottom:25px}
+.close{font-size:28px;background:none}
+.cart-line{display:grid;grid-template-columns:70px 1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid #ddd}
+.cart-line img{width:70px;height:75px;object-fit:cover}
+.qty{display:flex;gap:10px;align-items:center;margin-top:9px}
+.qty button{padding:5px 9px;border:1px solid #ccc;background:white}
+.total{display:flex;justify-content:space-between;padding:20px 0;font-weight:bold}
+form{display:grid;gap:12px}
+input,textarea,select{width:100%;padding:13px;border:1px solid #d4cec1;background:white}
+textarea{min-height:75px;resize:vertical}
+.hidden{display:none!important}
+.page{min-height:75vh;padding:45px 7%}
+.page-title{font:normal 36px Georgia,serif;margin-bottom:25px}
+.card{background:white;padding:22px;margin-bottom:20px}
+.card h3{font:normal 23px Georgia,serif;margin-bottom:17px}
+.form-small{max-width:430px;margin:30px auto}
+.message{margin:15px 0;font-size:14px;line-height:1.6}
+.error{color:#a83232}.success{color:#287744}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0}
+.stat{background:white;padding:20px;border:1px solid #eee}
+.stat small{color:#777}
+.stat strong{display:block;font:normal 28px Georgia,serif;margin-top:10px}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:white;font-size:13px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #eee;vertical-align:top}
+th{background:#eee9df}
+.status{display:inline-block;padding:5px 8px;background:#eee9df;font-size:11px}
+.product-admin{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
+.product-admin img{width:48px;height:48px;object-fit:cover}
+footer a{color:var(--gold)}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){
+header{padding:17px 5%}nav{gap:12px}.hero{min-height:400px;padding:40px 7%}
+.section,.page{padding:45px 5%}.products{gap:12px}
+.product img{height:180px}.product-info{padding:12px}
+.product-info h3{font-size:17px}.admin-grid{grid-template-columns:1fr}
+.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:22px}
 }
 </style>
 </head>
-
 <body>
+
 <header>
-  <div class="logo">OY <span>ACCESSORIES</span></div>
+  <a class="logo" href="#home">OY <span>ACCESSORIES</span></a>
   <nav>
+    <a href="#home">HOME</a>
     <a href="#shop">SHOP</a>
-    <a href="#contact">CONTACT</a>
-    <button class="cart-button" id="openCart">CART (<span id="cartCount">0</span>)</button>
+    <a href="#track">TRACK ORDER</a>
+    <button class="outline-btn" id="openCart">CART (<span id="cartCount">0</span>)</button>
   </nav>
 </header>
 
-<main>
-<section class="hero">
+<main id="storePage">
+<section class="hero" id="home">
   <div class="hero-content">
     <small>OY ACCESSORIES COLLECTION</small>
     <h1>Timeless Details.<br>Modern Elegance.</h1>
     <p>Discover carefully selected accessories designed to complete your everyday style.</p>
-    <a class="gold-btn" href="#shop">DISCOVER COLLECTION</a>
+    <a class="gold-btn" href="#shop" style="margin-top:25px">DISCOVER COLLECTION</a>
   </div>
 </section>
 
@@ -118,9 +125,7 @@ footer strong{color:var(--gold)}
     <h2>Discover Our Products</h2>
   </div>
   <div class="categories" id="categories"></div>
-  <div class="products" id="products">
-    <div class="loading">Loading products...</div>
-  </div>
+  <div class="products" id="products"><div class="loading">Loading products...</div></div>
 </section>
 
 <section class="section about">
@@ -128,52 +133,142 @@ footer strong{color:var(--gold)}
     <small>OUR PHILOSOPHY</small>
     <h2>Less, But Better.</h2>
   </div>
-  <p>At OY Accessories, we believe that the smallest details make the biggest difference. Explore accessories that bring elegance and personality to your everyday look.</p>
+  <p>At OY Accessories, we believe that the smallest details make the biggest difference.</p>
 </section>
 </main>
 
+<!-- CUSTOMER TRACKING -->
+<section id="trackPage" class="page hidden">
+  <div class="form-small card">
+    <h1 class="page-title">Track Your Order</h1>
+    <p style="margin-bottom:18px;color:#666">Enter your order reference and the phone number used at checkout.</p>
+    <form id="trackForm">
+      <input name="reference" placeholder="Order reference (OY-...)" required>
+      <input name="phone" placeholder="Phone number" required>
+      <button class="gold-btn">TRACK ORDER</button>
+    </form>
+    <div id="trackResult" class="message" role="status"></div>
+  </div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLoginPage" class="page hidden">
+  <div class="form-small card">
+    <h1 class="page-title">Admin Login</h1>
+    <p style="margin-bottom:18px;color:#666">Sign in to manage OY Accessories.</p>
+    <form id="loginForm">
+      <input name="email" type="email" placeholder="Admin email" required>
+      <input name="password" type="password" placeholder="Password" required>
+      <button class="gold-btn">SIGN IN</button>
+    </form>
+    <div id="loginMessage" class="message" role="status"></div>
+    <a href="#home" style="font-size:13px;color:#777">← Back to store</a>
+  </div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="dashboardPage" class="page hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap">
+    <div>
+      <small style="color:#a48650;letter-spacing:3px">OY ACCESSORIES</small>
+      <h1 class="page-title" style="margin:8px 0">Admin Dashboard</h1>
+      <p id="adminEmail" style="color:#777;font-size:13px"></p>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="outline-btn" id="refreshDashboard">REFRESH</button>
+      <button class="dark-btn" id="logoutButton">LOG OUT</button>
+    </div>
+  </div>
+
+  <div id="adminMessage" class="message" role="status"></div>
+
+  <div class="stats">
+    <div class="stat"><small>Total Orders</small><strong id="statOrders">0</strong></div>
+    <div class="stat"><small>New Orders</small><strong id="statNew">0</strong></div>
+    <div class="stat"><small>Products</small><strong id="statProducts">0</strong></div>
+    <div class="stat"><small>Sales (DH)</small><strong id="statSales">0</strong></div>
+  </div>
+
+  <div class="card">
+    <h3>Orders & Customers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Reference</th><th>Customer</th><th>Phone</th>
+          <th>Total</th><th>Date</th><th>Status</th><th>Update</th>
+        </tr></thead>
+        <tbody id="ordersTable"><tr><td colspan="7">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    <div class="card">
+      <h3 id="productFormTitle">Add New Product</h3>
+      <form id="productForm">
+        <input name="name" placeholder="Product name" required>
+        <input name="price" type="number" min="0" step="0.01" placeholder="Price (DH)" required>
+        <input name="stock" type="number" min="0" step="1" placeholder="Stock quantity" required>
+        <input name="category" placeholder="Category (Watches, Rings...)" required>
+        <input name="image_url" type="url" placeholder="Product image URL (optional)">
+        <textarea name="description" placeholder="Product description"></textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="gold-btn" id="saveProductButton">SAVE PRODUCT</button>
+          <button type="button" class="outline-btn hidden" id="cancelEdit">CANCEL</button>
+        </div>
+      </form>
+      <div id="productMessage" class="message"></div>
+    </div>
+
+    <div class="card">
+      <h3>Products & Stock</h3>
+      <div id="adminProducts">Loading products...</div>
+    </div>
+  </div>
+</section>
+
 <footer id="contact">
-  <div>
-    <div class="logo">OY <span>ACCESSORIES</span></div>
-    <p>Modern accessories. Timeless details.</p>
-  </div>
-  <div>
-    <strong>Contact</strong>
-    <p>For orders and questions, contact us on WhatsApp.</p>
-  </div>
-  <p>© <span id="year"></span> OY Accessories</p>
+  <div><div class="logo">OY <span>ACCESSORIES</span></div><p>Modern accessories. Timeless details.</p></div>
+  <div><strong>Contact</strong><p>For orders and questions, contact us on WhatsApp.</p></div>
+  <div><p><a href="#admin">Admin</a> · <a href="#track">Track order</a></p><p>© <span id="year"></span> OY Accessories</p></div>
 </footer>
 
-<a class="whatsapp" id="whatsappLink" target="_blank" rel="noopener">WhatsApp us</a>
+<a id="whatsappLink" target="_blank" rel="noopener" style="position:fixed;bottom:20px;right:20px;background:#1d9d58;color:white;padding:14px 20px;border-radius:30px;z-index:5;font-size:13px;font-weight:bold">WhatsApp us</a>
 
+<!-- CART -->
 <div class="overlay" id="cartOverlay">
-<aside class="panel">
-  <div class="panel-head">
-    <h2>Your cart</h2>
-    <button class="close" id="closeCart">&times;</button>
-  </div>
-  <div id="cartItems"></div>
-  <div class="total"><span>Total</span><span id="cartTotal">0.00 DH</span></div>
-  <form id="checkout">
-    <h2>Delivery details</h2>
-    <input name="firstName" placeholder="First name" required>
-    <input name="lastName" placeholder="Last name" required>
-    <input name="phone" placeholder="Phone number" required>
-    <input name="city" placeholder="City" required>
-    <textarea name="address" placeholder="Full delivery address" required></textarea>
-    <textarea name="notes" placeholder="Additional notes (optional)"></textarea>
-    <button class="gold-btn" type="submit">CONFIRM ORDER</button>
-    <p class="notice">Your order will be saved securely before opening WhatsApp.</p>
-  </form>
-  <p id="checkoutMessage" role="status"></p>
-</aside>
+  <aside class="panel">
+    <div class="panel-head">
+      <h2 style="font:normal 30px Georgia,serif">Your Cart</h2>
+      <button class="close" id="closeCart">&times;</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="total"><span>Total</span><span id="cartTotal">0.00 DH</span></div>
+    <form id="checkout">
+      <h2 style="font:normal 25px Georgia,serif">Delivery Details</h2>
+      <input name="firstName" placeholder="First name" required>
+      <input name="lastName" placeholder="Last name" required>
+      <input name="phone" placeholder="Phone number" required>
+      <input name="city" placeholder="City" required>
+      <textarea name="address" placeholder="Full delivery address" required></textarea>
+      <textarea name="notes" placeholder="Additional notes (optional)"></textarea>
+      <button class="gold-btn" type="submit">CONFIRM ORDER</button>
+      <p style="font-size:12px;color:#777">Your order is saved securely before opening WhatsApp.</p>
+    </form>
+    <p id="checkoutMessage" class="message" role="status"></p>
+  </aside>
 </div>
 
 <script>
-// SUPABASE CONNECTION
+// ======================================
+// SUPABASE CONFIGURATION
+// ======================================
 const SUPABASE_URL = "https://ibmcpnlsejnyigqthpsh.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_oD9Gx4FvatYYmxXW_Q4G9w_JgKYzSRm";
 const STORE_WHATSAPP_NUMBER = "212660120463";
+
+// This is the authorized admin account ID.
+const ADMIN_USER_ID = "18d60409-56d0-478a-80f8-2fa70ec2305c";
 
 const db = window.supabase.createClient(
   SUPABASE_URL,
@@ -183,45 +278,62 @@ const db = window.supabase.createClient(
 let products = [];
 let cart = JSON.parse(localStorage.getItem("oy-cart") || "[]");
 let activeCategory = "All";
+let editingProductId = null;
+let previousOrderCount = 0;
 
-const money = n => `${Number(n).toFixed(2)} DH`;
+const money = n => `${Number(n || 0).toFixed(2)} DH`;
 const fallbackImage = "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=700&q=80";
 
-function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("whatsappLink").href =
-  `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
+document.getElementById("whatsappLink").href = `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
 
+// ======================================
+// PAGE NAVIGATION
+// ======================================
+function showPage() {
+  const hash = location.hash || "#home";
+  document.getElementById("storePage").classList.toggle("hidden", hash !== "#home" && hash !== "#shop");
+  document.getElementById("trackPage").classList.toggle("hidden", hash !== "#track");
+  document.getElementById("adminLoginPage").classList.toggle("hidden", hash !== "#admin");
+  document.getElementById("dashboardPage").classList.toggle("hidden", hash !== "#dashboard");
+
+  if (hash === "#admin") checkExistingSession();
+  if (hash === "#dashboard") loadDashboard();
+  if (hash === "#track") document.getElementById("trackResult").textContent = "";
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", showPage);
+
+// ======================================
+// STORE PRODUCTS
+// ======================================
 async function loadProducts() {
   const container = document.getElementById("products");
   container.innerHTML = '<div class="loading">Loading products...</div>';
 
-  const { data, error } = await db
-    .from("products")
+  const { data, error } = await db.from("products")
     .select("id,name,description,price,image_url,category,stock,is_active")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
 
   if (error) {
     container.innerHTML = '<div class="empty">Could not load products. Please try again later.</div>';
-    console.error("Products error:", error);
+    console.error(error);
     return;
   }
 
   products = data || [];
 
-  // Refresh saved cart using the latest database products
-  cart = cart
-    .map(item => {
-      const current = products.find(p => p.id === item.id);
-      return current ? { ...current, qty: Math.min(item.qty, Number(current.stock) || 0) } : null;
-    })
-    .filter(item => item && item.qty > 0);
+  cart = cart.map(item => {
+    const current = products.find(p => p.id === item.id);
+    return current ? {...current, qty:Math.min(item.qty, Number(current.stock) || 0)} : null;
+  }).filter(item => item && item.qty > 0);
 
   saveCart();
   renderCategories();
@@ -229,43 +341,34 @@ async function loadProducts() {
 }
 
 function renderCategories() {
-  const dbCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
-  const categories = ["All", ...dbCategories];
-
-  if (activeCategory !== "All" && !dbCategories.includes(activeCategory)) {
-    activeCategory = "All";
-  }
+  const categories = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
+  if (!categories.includes(activeCategory)) activeCategory = "All";
 
   document.getElementById("categories").innerHTML = categories.map(c =>
     `<button class="chip ${c === activeCategory ? "active" : ""}" data-category="${esc(c)}">${esc(c)}</button>`
   ).join("");
 
   document.querySelectorAll("[data-category]").forEach(button => {
-    button.addEventListener("click", () => {
+    button.onclick = () => {
       activeCategory = button.dataset.category;
       renderCategories();
       renderProducts();
-    });
+    };
   });
 }
 
 function renderProducts() {
-  const list = products.filter(p =>
-    activeCategory === "All" || p.category === activeCategory
-  );
+  const list = products.filter(p => activeCategory === "All" || p.category === activeCategory);
 
   document.getElementById("products").innerHTML = list.map(p => `
     <article class="product">
-      <img src="${esc(p.image_url || fallbackImage)}"
-           alt="${esc(p.name)}"
-           loading="lazy"
-           onerror="this.src='${fallbackImage}'">
+      <img src="${esc(p.image_url || fallbackImage)}" alt="${esc(p.name)}"
+        onerror="this.src='${fallbackImage}'" loading="lazy">
       <div class="product-info">
         <small>${esc(p.category || "Accessories")}</small>
         <h3>${esc(p.name)}</h3>
         <div class="price">${money(p.price)}</div>
-        <button data-add="${esc(p.id)}"
-          ${Number(p.stock) <= 0 ? "disabled" : ""}>
+        <button data-add="${esc(p.id)}" ${Number(p.stock) <= 0 ? "disabled" : ""}>
           ${Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
         </button>
       </div>
@@ -273,10 +376,13 @@ function renderProducts() {
   `).join("") || '<div class="empty">No products available yet.</div>';
 
   document.querySelectorAll("[data-add]").forEach(button => {
-    button.addEventListener("click", () => addToCart(button.dataset.add));
+    button.onclick = () => addToCart(button.dataset.add);
   });
 }
 
+// ======================================
+// CART
+// ======================================
 function saveCart() {
   localStorage.setItem("oy-cart", JSON.stringify(cart));
   renderCartCount();
@@ -286,18 +392,13 @@ function saveCart() {
 function addToCart(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
-
   const item = cart.find(p => p.id === id);
-  const currentQty = item ? item.qty : 0;
-
-  if (currentQty >= Number(product.stock)) {
-    alert("Sorry, there is not enough stock available.");
+  if ((item ? item.qty : 0) >= Number(product.stock)) {
+    alert("Not enough stock available.");
     return;
   }
-
   if (item) item.qty++;
-  else cart.push({ ...product, qty: 1 });
-
+  else cart.push({...product, qty:1});
   saveCart();
   openCart();
 }
@@ -330,36 +431,26 @@ function renderCart() {
   document.getElementById("cartTotal").textContent =
     money(cart.reduce((sum, p) => sum + p.price * p.qty, 0));
 
-  document.querySelectorAll("[data-inc]").forEach(button => {
-    button.onclick = () => {
-      const p = cart.find(x => x.id === button.dataset.inc);
-      const product = products.find(x => x.id === button.dataset.inc);
-      if (!p || !product) return;
-
-      if (p.qty >= Number(product.stock)) {
-        alert("Sorry, there is not enough stock available.");
-        return;
-      }
-      p.qty++;
-      saveCart();
-    };
+  document.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => {
+    const item = cart.find(p => p.id === b.dataset.inc);
+    const product = products.find(p => p.id === b.dataset.inc);
+    if (!item || !product) return;
+    if (item.qty >= Number(product.stock)) return alert("Not enough stock.");
+    item.qty++;
+    saveCart();
   });
 
-  document.querySelectorAll("[data-dec]").forEach(button => {
-    button.onclick = () => {
-      const p = cart.find(x => x.id === button.dataset.dec);
-      if (!p) return;
-      p.qty--;
-      if (p.qty <= 0) cart = cart.filter(x => x.id !== button.dataset.dec);
-      saveCart();
-    };
+  document.querySelectorAll("[data-dec]").forEach(b => b.onclick = () => {
+    const item = cart.find(p => p.id === b.dataset.dec);
+    if (!item) return;
+    item.qty--;
+    if (item.qty <= 0) cart = cart.filter(p => p.id !== b.dataset.dec);
+    saveCart();
   });
 
-  document.querySelectorAll("[data-remove]").forEach(button => {
-    button.onclick = () => {
-      cart = cart.filter(x => x.id !== button.dataset.remove);
-      saveCart();
-    };
+  document.querySelectorAll("[data-remove]").forEach(b => b.onclick = () => {
+    cart = cart.filter(p => p.id !== b.dataset.remove);
+    saveCart();
   });
 }
 
@@ -369,20 +460,19 @@ function openCart() {
 function closeCart() {
   document.getElementById("cartOverlay").style.display = "none";
 }
-
 document.getElementById("openCart").onclick = openCart;
 document.getElementById("closeCart").onclick = closeCart;
-
-document.getElementById("cartOverlay").addEventListener("click", e => {
+document.getElementById("cartOverlay").onclick = e => {
   if (e.target.id === "cartOverlay") closeCart();
-});
+};
 
-// CHECKOUT: save order through the secure database function
+// ======================================
+// CHECKOUT
+// ======================================
 document.getElementById("checkout").addEventListener("submit", async e => {
   e.preventDefault();
-
   const msg = document.getElementById("checkoutMessage");
-  const submitButton = e.target.querySelector('button[type="submit"]');
+  const button = e.target.querySelector('button[type="submit"]');
 
   if (!cart.length) {
     msg.textContent = "Your cart is empty.";
@@ -391,53 +481,39 @@ document.getElementById("checkout").addEventListener("submit", async e => {
 
   const f = Object.fromEntries(new FormData(e.target).entries());
   const customerName = `${f.firstName} ${f.lastName}`.trim();
+  const items = cart.map(p => ({product_id:p.id, quantity:p.qty}));
 
-  const items = cart.map(p => ({
-    product_id: p.id,
-    quantity: p.qty
-  }));
-
-  submitButton.disabled = true;
-  submitButton.textContent = "SAVING ORDER...";
-
-  // Open a blank tab immediately to avoid popup blocking
+  button.disabled = true;
+  button.textContent = "SAVING ORDER...";
   const waWindow = window.open("about:blank", "_blank");
 
   try {
-    const { data, error } = await db.rpc("place_order", {
-      p_customer_name: customerName,
-      p_phone: f.phone,
-      p_city: f.city,
-      p_address: f.address,
-      p_notes: f.notes || "",
-      p_items: items
+    const {data, error} = await db.rpc("place_order", {
+      p_customer_name:customerName,
+      p_phone:f.phone,
+      p_city:f.city,
+      p_address:f.address,
+      p_notes:f.notes || "",
+      p_items:items
     });
-
     if (error) throw error;
 
-    const order = data;
     const lines = cart.map(p =>
       `- ${p.name} x${p.qty}: ${money(p.price * p.qty)}`
     ).join("\n");
 
     const orderText =
-      `NEW ORDER - OY ACCESSORIES\n` +
-      `Reference: ${order.reference}\n` +
-      `Customer: ${customerName}\n` +
-      `Phone: ${f.phone}\n` +
-      `City: ${f.city}\n` +
-      `Address: ${f.address}\n` +
-      `Products:\n${lines}\n` +
-      `Total: ${money(order.total)}\n` +
-      `Notes: ${f.notes || "None"}`;
+      `NEW ORDER - OY ACCESSORIES\nReference: ${data.reference}\n` +
+      `Customer: ${customerName}\nPhone: ${f.phone}\nCity: ${f.city}\n` +
+      `Address: ${f.address}\nProducts:\n${lines}\n` +
+      `Total: ${money(data.total)}\nNotes: ${f.notes || "None"}`;
 
-    const whatsappUrl =
-      `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
+    const waUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
 
-    msg.textContent = `Order ${order.reference} saved successfully. Opening WhatsApp...`;
+    msg.innerHTML = `Order saved successfully!<br><strong>Your tracking number: ${esc(data.reference)}</strong><br>Save this number to track your order.`;
 
-    if (waWindow) waWindow.location.href = whatsappUrl;
-    else window.location.href = whatsappUrl;
+    if (waWindow) waWindow.location.href = waUrl;
+    else window.location.href = waUrl;
 
     cart = [];
     saveCart();
@@ -445,18 +521,330 @@ document.getElementById("checkout").addEventListener("submit", async e => {
 
   } catch (err) {
     if (waWindow) waWindow.close();
-    console.error("Checkout error:", err);
-    msg.textContent =
-      "We couldn't save your order. Please try again. " + (err.message || "");
+    console.error(err);
+    msg.textContent = "We couldn't save your order. " + (err.message || "");
   } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "CONFIRM ORDER";
+    button.disabled = false;
+    button.textContent = "CONFIRM ORDER";
   }
 });
 
+// ======================================
+// CUSTOMER ORDER TRACKING
+// ======================================
+document.getElementById("trackForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const result = document.getElementById("trackResult");
+  const f = Object.fromEntries(new FormData(e.target).entries());
+
+  result.textContent = "Searching for your order...";
+
+  const {data, error} = await db.rpc("track_order", {
+    p_reference:f.reference.trim(),
+    p_phone:f.phone.trim()
+  });
+
+  if (error) {
+    result.innerHTML = '<span class="error">Could not check this order. Please try again.</span>';
+    console.error(error);
+    return;
+  }
+
+  if (!data || !data.success) {
+    result.innerHTML = '<span class="error">Order not found. Check your reference and phone number.</span>';
+    return;
+  }
+
+  const statusLabels = {
+    new:"New order",
+    confirmed:"Confirmed",
+    shipped:"Out for delivery",
+    delivered:"Delivered",
+    cancelled:"Cancelled"
+  };
+
+  result.innerHTML = `
+    <div class="card" style="margin-top:15px">
+      <h3>Order found</h3>
+      <p>Reference: <strong>${esc(data.reference)}</strong></p>
+      <p>Status: <strong>${esc(statusLabels[data.status] || data.status)}</strong></p>
+      <p>Total: <strong>${money(data.total)}</strong></p>
+      <p>Date: ${new Date(data.created_at).toLocaleString()}</p>
+    </div>`;
+});
+
+// ======================================
+// ADMIN AUTHENTICATION
+// ======================================
+function adminMessage(text, type="") {
+  const el = document.getElementById("adminMessage");
+  el.textContent = text;
+  el.className = "message " + type;
+}
+
+async function checkExistingSession() {
+  const {data} = await db.auth.getUser();
+  if (data.user && data.user.id === ADMIN_USER_ID) {
+    location.hash = "#dashboard";
+  }
+}
+
+document.getElementById("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = document.getElementById("loginMessage");
+  const f = Object.fromEntries(new FormData(e.target).entries());
+  msg.textContent = "Signing in...";
+
+  const {data, error} = await db.auth.signInWithPassword({
+    email:f.email,
+    password:f.password
+  });
+
+  if (error) {
+    msg.textContent = "Login failed: " + error.message;
+    msg.className = "message error";
+    return;
+  }
+
+  if (!data.user || data.user.id !== ADMIN_USER_ID) {
+    await db.auth.signOut();
+    msg.textContent = "This account is not authorized as administrator.";
+    msg.className = "message error";
+    return;
+  }
+
+  msg.textContent = "Login successful.";
+  location.hash = "#dashboard";
+});
+
+document.getElementById("logoutButton").onclick = async () => {
+  await db.auth.signOut();
+  location.hash = "#admin";
+};
+
+async function requireAdmin() {
+  const {data, error} = await db.auth.getUser();
+  if (error || !data.user || data.user.id !== ADMIN_USER_ID) {
+    await db.auth.signOut();
+    location.hash = "#admin";
+    return null;
+  }
+  document.getElementById("adminEmail").textContent = data.user.email;
+  return data.user;
+}
+
+// ======================================
+// ADMIN DASHBOARD
+// ======================================
+async function loadDashboard() {
+  const user = await requireAdmin();
+  if (!user) return;
+
+  adminMessage("Loading dashboard...");
+  await Promise.all([loadAdminOrders(), loadAdminProducts()]);
+  adminMessage("Dashboard updated.", "success");
+}
+
+async function loadAdminOrders() {
+  const tbody = document.getElementById("ordersTable");
+  tbody.innerHTML = '<tr><td colspan="7">Loading orders...</td></tr>';
+
+  const {data, error} = await db.from("orders")
+    .select("id,reference,customer_name,phone,city,address,total,status,created_at")
+    .order("created_at", {ascending:false});
+
+  if (error) {
+    tbody.innerHTML = '<tr><td colspan="7">Could not load orders.</td></tr>';
+    console.error(error);
+    return;
+  }
+
+  const orders = data || [];
+  document.getElementById("statOrders").textContent = orders.length;
+  document.getElementById("statNew").textContent =
+    orders.filter(o => !o.status || o.status === "new").length;
+  document.getElementById("statSales").textContent =
+    orders.filter(o => o.status !== "cancelled").reduce((s,o) => s + Number(o.total || 0), 0).toFixed(0);
+
+  tbody.innerHTML = orders.map(o => `
+    <tr>
+      <td><strong>${esc(o.reference)}</strong></td>
+      <td>${esc(o.customer_name)}<br><small>${esc(o.city)}</small></td>
+      <td>${esc(o.phone)}</td>
+      <td>${money(o.total)}</td>
+      <td>${new Date(o.created_at).toLocaleDateString()}</td>
+      <td><span class="status">${esc(o.status || "new")}</span></td>
+      <td>
+        <select data-status="${esc(o.id)}">
+          <option value="new" ${o.status==="new"?"selected":""}>New</option>
+          <option value="confirmed" ${o.status==="confirmed"?"selected":""}>Confirmed</option>
+          <option value="shipped" ${o.status==="shipped"?"selected":""}>Shipped</option>
+          <option value="delivered" ${o.status==="delivered"?"selected":""}>Delivered</option>
+          <option value="cancelled" ${o.status==="cancelled"?"selected":""}>Cancelled</option>
+        </select>
+        <button class="dark-btn small-btn" data-update="${esc(o.id)}">Save</button>
+      </td>
+    </tr>
+  `).join("") || '<tr><td colspan="7">No orders yet.</td></tr>';
+
+  document.querySelectorAll("[data-update]").forEach(button => {
+    button.onclick = async () => {
+      const id = button.dataset.update;
+      const status = document.querySelector(`[data-status="${id}"]`).value;
+      button.disabled = true;
+      const {error} = await db.from("orders").update({status}).eq("id", id);
+      button.disabled = false;
+      if (error) {
+        adminMessage("Could not update order: " + error.message, "error");
+      } else {
+        adminMessage("Order status updated.", "success");
+        await loadAdminOrders();
+      }
+    };
+  });
+}
+
+async function loadAdminProducts() {
+  const container = document.getElementById("adminProducts");
+  container.textContent = "Loading products...";
+
+  const {data, error} = await db.from("products")
+    .select("*")
+    .order("created_at", {ascending:false});
+
+  if (error) {
+    container.textContent = "Could not load products: " + error.message;
+    console.error(error);
+    return;
+  }
+
+  document.getElementById("statProducts").textContent = (data || []).length;
+
+  container.innerHTML = (data || []).map(p => `
+    <div class="product-admin">
+      <img src="${esc(p.image_url || fallbackImage)}" alt="">
+      <div style="flex:1">
+        <strong>${esc(p.name)}</strong>
+        <div style="font-size:12px;color:#777">${money(p.price)} · Stock: ${Number(p.stock)} · ${p.is_active?"Active":"Hidden"}</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="outline-btn small-btn" data-edit="${esc(p.id)}">Edit</button>
+        <button class="dark-btn small-btn" data-toggle="${esc(p.id)}" data-active="${p.is_active}">
+          ${p.is_active?"Hide":"Show"}
+        </button>
+      </div>
+    </div>
+  `).join("") || "No products yet.";
+
+  document.querySelectorAll("[data-edit]").forEach(button => {
+    button.onclick = () => editProduct(button.dataset.edit, data);
+  });
+
+  document.querySelectorAll("[data-toggle]").forEach(button => {
+    button.onclick = async () => {
+      const id = button.dataset.toggle;
+      const currentlyActive = button.dataset.active === "true";
+      const {error} = await db.from("products")
+        .update({is_active:!currentlyActive}).eq("id", id);
+
+      if (error) {
+        adminMessage("Could not change product visibility: " + error.message, "error");
+      } else {
+        adminMessage("Product visibility updated.", "success");
+        await loadAdminProducts();
+        await loadProducts();
+      }
+    };
+  });
+}
+
+function editProduct(id, list) {
+  const p = list.find(x => x.id === id);
+  if (!p) return;
+
+  editingProductId = id;
+  const form = document.getElementById("productForm");
+  form.elements.name.value = p.name || "";
+  form.elements.price.value = p.price || 0;
+  form.elements.stock.value = p.stock || 0;
+  form.elements.category.value = p.category || "";
+  form.elements.image_url.value = p.image_url || "";
+  form.elements.description.value = p.description || "";
+
+  document.getElementById("productFormTitle").textContent = "Edit Product";
+  document.getElementById("saveProductButton").textContent = "UPDATE PRODUCT";
+  document.getElementById("cancelEdit").classList.remove("hidden");
+  form.scrollIntoView({behavior:"smooth"});
+}
+
+function resetProductForm() {
+  editingProductId = null;
+  document.getElementById("productForm").reset();
+  document.getElementById("productFormTitle").textContent = "Add New Product";
+  document.getElementById("saveProductButton").textContent = "SAVE PRODUCT";
+  document.getElementById("cancelEdit").classList.add("hidden");
+}
+
+document.getElementById("cancelEdit").onclick = resetProductForm;
+
+document.getElementById("productForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = document.getElementById("productMessage");
+  const f = Object.fromEntries(new FormData(e.target).entries());
+
+  const record = {
+    name:f.name.trim(),
+    slug:f.name.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
+    price:Number(f.price),
+    stock:Number(f.stock),
+    category:f.category.trim(),
+    image_url:f.image_url.trim(),
+    description:f.description.trim()
+  };
+
+  if (!record.name || !Number.isFinite(record.price) || record.price < 0 ||
+      !Number.isInteger(record.stock) || record.stock < 0) {
+    msg.textContent = "Please check the product details.";
+    msg.className = "message error";
+    return;
+  }
+
+  const button = document.getElementById("saveProductButton");
+  button.disabled = true;
+  msg.textContent = "Saving product...";
+
+  let result;
+  if (editingProductId) {
+    result = await db.from("products").update(record).eq("id", editingProductId);
+  } else {
+    result = await db.from("products").insert({...record,is_active:true});
+  }
+
+  button.disabled = false;
+
+  if (result.error) {
+    msg.textContent = "Could not save product: " + result.error.message;
+    msg.className = "message error";
+    return;
+  }
+
+  msg.textContent = "Product saved successfully.";
+  msg.className = "message success";
+  resetProductForm();
+  await loadAdminProducts();
+  await loadProducts();
+});
+
+document.getElementById("refreshDashboard").onclick = loadDashboard;
+
+// ======================================
+// INITIALIZE
+// ======================================
 renderCartCount();
 renderCart();
 loadProducts();
+showPage();
 </script>
 </body>
 </html>
+

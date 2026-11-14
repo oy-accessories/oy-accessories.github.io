@@ -1,67 +1,161 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Discover premium accessories at OY Accessories.">
-  <title>OY Accessories | Timeless Details</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    :root{--black:#111;--ivory:#f5f0e8;--gold:#c5a46d;--muted:#8d877e;--line:#e8e0d5}
-    *{box-sizing:border-box}body{margin:0;background:var(--ivory);color:var(--black);font-family:Arial,Helvetica,sans-serif}
-    button,input,select,textarea{font:inherit}button{cursor:pointer}
-    header{position:sticky;top:0;z-index:5;background:#111;color:#fff;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .logo{font-family:Georgia,serif;font-size:25px;letter-spacing:3px}.logo span{color:var(--gold)}
-    nav{display:flex;gap:20px;align-items:center}nav a{color:#eee;text-decoration:none;font-size:13px}
-    .cart-btn,.gold-btn{border:0;background:var(--gold);color:#111;padding:12px 17px;font-weight:bold;border-radius:2px}
-    .hero{min-height:430px;padding:70px 8%;display:flex;align-items:center;background:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.18)),url('https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85') center/cover;color:white}
-    .hero-inner{max-width:560px}.eyebrow{color:var(--gold);letter-spacing:4px;text-transform:uppercase;font-size:11px}
-    h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(42px,7vw,76px);line-height:1.02;margin:15px 0}
-    .hero p{line-height:1.8;color:#eee;max-width:450px}.section{padding:55px 6%}.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:25px}
-    h2{font-family:Georgia,serif;font-weight:400;font-size:34px;margin:8px 0}.categories{display:flex;gap:9px;flex-wrap:wrap;margin:20px 0 30px}
-    .chip{border:1px solid #cfc5b7;background:transparent;padding:10px 15px;color:#333}.chip.active,.chip:hover{background:#111;color:#fff;border-color:#111}
-    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.product{background:#fff;padding-bottom:15px}
-    .product img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#ddd;display:block}.product-info{padding:13px 14px}
-    .product small{color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-size:10px}.product h3{font-family:Georgia,serif;font-weight:400;margin:8px 0}.price{font-weight:bold}.product button{width:100%;margin-top:12px;background:#111;color:#fff;border:0;padding:11px}
-    .empty{padding:35px;background:#fff;text-align:center;color:#777;grid-column:1/-1}
-    .overlay{display:none;position:fixed;inset:0;background:#0008;z-index:10}.panel{position:absolute;right:0;top:0;height:100%;width:min(480px,100%);background:var(--ivory);padding:25px;overflow:auto}
-    .panel-head{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:none;font-size:27px}.cart-line{display:grid;grid-template-columns:70px 1fr auto;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}.cart-line img{width:70px;height:85px;object-fit:cover}
-    .qty{display:flex;align-items:center;gap:10px;margin-top:8px}.qty button{border:1px solid var(--line);background:#fff;padding:4px 9px}
-    .total{display:flex;justify-content:space-between;padding:20px 0;font-size:18px;font-weight:bold}
-    form{display:grid;gap:11px;margin-top:15px}input,textarea{width:100%;padding:12px;border:1px solid #d9d0c4;background:#fff}textarea{min-height:75px}
-    .notice{font-size:12px;color:#777;line-height:1.5}.whatsapp{position:fixed;right:20px;bottom:20px;background:#168b4b;color:white;text-decoration:none;padding:14px 18px;border-radius:30px;z-index:6;font-weight:bold}
-    footer{background:#111;color:#eee;padding:35px 6%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}footer p{color:#aaa;font-size:13px}
-    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}nav a{display:none}}
-    @media(max-width:520px){header{padding:14px 4%}.logo{font-size:20px}.hero{min-height:390px;padding:50px 7%}.section{padding:40px 4%}.grid{gap:10px}.product-info{padding:10px}.product h3{font-size:16px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Discover premium accessories at OY Accessories.">
+<title>OY Accessories | Timeless Details</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --black:#11110f;
+  --dark:#191916;
+  --ivory:#f7f4ed;
+  --gold:#c6a66b;
+  --muted:#aaa69c;
+  --white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--ivory);color:var(--black)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+header{background:var(--black);color:white;padding:22px 7%;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:25px;font-weight:800;letter-spacing:3px}
+.logo span{color:var(--gold);font-weight:400}
+nav a{color:white;text-decoration:none;margin-left:25px;font-size:13px;letter-spacing:1px}
+nav a:hover{color:var(--gold)}
+.hero{min-height:510px;background:linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.18)),url("https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1800&q=85") center/cover;display:flex;align-items:center;padding:70px 9%;color:white}
+.hero-content{max-width:520px}
+.hero small{color:var(--gold);letter-spacing:4px;text-transform:uppercase}
+.hero h1{font-family:Georgia,serif;font-size:clamp(42px,6vw,72px);font-weight:400;line-height:1.08;margin:20px 0}
+.hero p{color:#e0ded8;line-height:1.8;max-width:420px}
+.gold-btn{display:inline-block;background:var(--gold);color:var(--black);border:0;padding:15px 28px;font-weight:bold;letter-spacing:1px;text-decoration:none;margin-top:25px}
+.gold-btn:hover{background:#ddc18d}
+.section{padding:75px 7%}
+.section-head{text-align:center;margin-bottom:35px}
+.section-head small{color:#a48650;letter-spacing:3px;text-transform:uppercase}
+.section-head h2{font-family:Georgia,serif;font-size:38px;font-weight:400;margin-top:12px}
+.categories{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:35px}
+.chip{background:transparent;border:1px solid #d4cec1;padding:10px 17px;border-radius:30px;color:#333}
+.chip:hover,.chip.active{background:var(--black);color:white;border-color:var(--black)}
+.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.product{background:white;overflow:hidden;transition:transform .2s}
+.product:hover{transform:translateY(-5px)}
+.product img{width:100%;height:260px;object-fit:cover;background:#e9e5dc}
+.product-info{padding:18px}
+.product-info small{color:#a48650;text-transform:uppercase;letter-spacing:1px;font-size:11px}
+.product-info h3{font-family:Georgia,serif;font-size:20px;font-weight:400;margin:9px 0}
+.price{font-weight:bold;margin:12px 0}
+.product-info button{width:100%;padding:12px;background:var(--black);color:white;border:0;letter-spacing:1px;font-size:12px}
+.product-info button:hover{background:var(--gold);color:var(--black)}
+.product-info button:disabled{opacity:.45;cursor:not-allowed}
+.empty{text-align:center;padding:45px;color:#777;grid-column:1/-1}
+.loading{text-align:center;padding:45px;color:#777}
+.about{background:#eae5da;text-align:center}
+.about p{max-width:650px;margin:20px auto;line-height:1.9;color:#555}
+footer{background:var(--black);color:white;padding:45px 7%;display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
+footer p{color:var(--muted);margin-top:12px;font-size:13px;line-height:1.7}
+footer strong{color:var(--gold)}
+.whatsapp{position:fixed;bottom:22px;right:22px;background:#1d9d58;color:white;padding:14px 20px;border-radius:30px;text-decoration:none;z-index:5;font-size:13px;font-weight:bold}
+.cart-button{background:transparent;border:1px solid var(--gold);color:white;padding:10px 16px}
+.overlay{display:none;position:fixed;inset:0;background:#0009;z-index:10}
+.panel{background:var(--ivory);height:100%;width:min(500px,100%);margin-left:auto;padding:25px;overflow-y:auto}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.panel-head h2{font-family:Georgia,serif;font-weight:400;font-size:30px}
+.close{border:0;background:none;font-size:30px}
+.cart-line{display:grid;grid-template-columns:75px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid #ddd5c8;padding:14px 0}
+.cart-line img{width:75px;height:80px;object-fit:cover}
+.cart-line strong{font-size:14px}
+.qty{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:13px}
+.qty button{border:1px solid #ccc;background:white;padding:4px 9px}
+.total{display:flex;justify-content:space-between;font-weight:bold;padding:22px 0;font-size:18px}
+.panel form{display:grid;gap:12px}
+.panel form h2{font-family:Georgia,serif;font-weight:400;margin:10px 0}
+.panel input,.panel textarea{width:100%;padding:13px;border:1px solid #d4cec1;background:white;outline:none}
+.panel textarea{min-height:75px;resize:vertical}
+.panel form .gold-btn{width:100%;margin-top:5px}
+.notice{font-size:12px;color:#777;line-height:1.6}
+#checkoutMessage{margin-top:15px;font-size:13px;line-height:1.6}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:550px){
+ header{padding:18px 5%}
+ nav a{margin-left:10px;font-size:11px}
+ .hero{min-height:430px;padding:45px 7%}
+ .section{padding:55px 5%}
+ .products{gap:12px}
+ .product img{height:190px}
+ .product-info{padding:12px}
+ .product-info h3{font-size:17px}
+ footer{padding:35px 6%}
+}
+</style>
 </head>
+
 <body>
 <header>
   <div class="logo">OY <span>ACCESSORIES</span></div>
-  <nav><a href="#home">Home</a><a href="#shop">Shop</a><a href="#categories">Collections</a><a href="#contact">Contact</a></nav>
-  <button class="cart-btn" id="openCart">CART (<span id="cartCount">0</span>)</button>
+  <nav>
+    <a href="#shop">SHOP</a>
+    <a href="#contact">CONTACT</a>
+    <button class="cart-button" id="openCart">CART (<span id="cartCount">0</span>)</button>
+  </nav>
 </header>
+
 <main>
-  <section class="hero" id="home"><div class="hero-inner">
-    <div class="eyebrow">The details make the difference</div>
-    <h1>Timeless style.<br>Everyday luxury.</h1>
-    <p>Discover carefully selected accessories designed to complete your look, from everyday essentials to statement pieces.</p>
-    <a class="gold-btn" href="#shop" style="display:inline-block;text-decoration:none">SHOP COLLECTION</a>
-  </div></section>
-  <section class="section" id="shop">
-    <div class="section-head"><div><div class="eyebrow">Our selection</div><h2>Shop the collection</h2></div></div>
-    <div class="categories" id="categories"></div>
-    <div class="grid" id="products"></div>
-  </section>
+<section class="hero">
+  <div class="hero-content">
+    <small>OY ACCESSORIES COLLECTION</small>
+    <h1>Timeless Details.<br>Modern Elegance.</h1>
+    <p>Discover carefully selected accessories designed to complete your everyday style.</p>
+    <a class="gold-btn" href="#shop">DISCOVER COLLECTION</a>
+  </div>
+</section>
+
+<section class="section" id="shop">
+  <div class="section-head">
+    <small>THE COLLECTION</small>
+    <h2>Discover Our Products</h2>
+  </div>
+  <div class="categories" id="categories"></div>
+  <div class="products" id="products">
+    <div class="loading">Loading products...</div>
+  </div>
+</section>
+
+<section class="section about">
+  <div class="section-head">
+    <small>OUR PHILOSOPHY</small>
+    <h2>Less, But Better.</h2>
+  </div>
+  <p>At OY Accessories, we believe that the smallest details make the biggest difference. Explore accessories that bring elegance and personality to your everyday look.</p>
+</section>
 </main>
-<footer id="contact"><div><div class="logo">OY <span>ACCESSORIES</span></div><p>Modern accessories. Timeless details.</p></div><div><strong>Contact</strong><p>For orders and questions, contact us on WhatsApp.</p></div><p>© <span id="year"></span> OY Accessories</p></footer>
+
+<footer id="contact">
+  <div>
+    <div class="logo">OY <span>ACCESSORIES</span></div>
+    <p>Modern accessories. Timeless details.</p>
+  </div>
+  <div>
+    <strong>Contact</strong>
+    <p>For orders and questions, contact us on WhatsApp.</p>
+  </div>
+  <p>© <span id="year"></span> OY Accessories</p>
+</footer>
+
 <a class="whatsapp" id="whatsappLink" target="_blank" rel="noopener">WhatsApp us</a>
 
-<div class="overlay" id="cartOverlay"><aside class="panel">
-  <div class="panel-head"><h2>Your cart</h2><button class="close" id="closeCart">&times;</button></div>
-  <div id="cartItems"></div><div class="total"><span>Total</span><span id="cartTotal">0 DH</span></div>
-  <h2 style="font-size:25px">Delivery details</h2>
+<div class="overlay" id="cartOverlay">
+<aside class="panel">
+  <div class="panel-head">
+    <h2>Your cart</h2>
+    <button class="close" id="closeCart">&times;</button>
+  </div>
+  <div id="cartItems"></div>
+  <div class="total"><span>Total</span><span id="cartTotal">0.00 DH</span></div>
   <form id="checkout">
+    <h2>Delivery details</h2>
     <input name="firstName" placeholder="First name" required>
     <input name="lastName" placeholder="Last name" required>
     <input name="phone" placeholder="Phone number" required>
@@ -69,84 +163,300 @@
     <textarea name="address" placeholder="Full delivery address" required></textarea>
     <textarea name="notes" placeholder="Additional notes (optional)"></textarea>
     <button class="gold-btn" type="submit">CONFIRM ORDER</button>
-    <p class="notice">Your order will be saved when the Supabase connection and database setup are completed. WhatsApp opens with your order details for you to send.</p>
+    <p class="notice">Your order will be saved securely before opening WhatsApp.</p>
   </form>
   <p id="checkoutMessage" role="status"></p>
-</aside></div>
+</aside>
+</div>
+
 <script>
-  // Add your Supabase Project URL and Publishable Key after the database setup step.
-  const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
-  const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
-  const STORE_WHATSAPP_NUMBER = "212XXXXXXXXX"; // International format, without + or spaces.
-  let db = null;
-  if (window.supabase && SUPABASE_URL.startsWith("https://") && !SUPABASE_PUBLISHABLE_KEY.startsWith("YOUR_")) {
-    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+// SUPABASE CONNECTION
+const SUPABASE_URL = "https://ibmcpnlsejnyigqthpsh.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_oD9Gx4FvatYYmxXW_Q4G9w_JgKYzSRm";
+const STORE_WHATSAPP_NUMBER = "212660120463";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+let products = [];
+let cart = JSON.parse(localStorage.getItem("oy-cart") || "[]");
+let activeCategory = "All";
+
+const money = n => `${Number(n).toFixed(2)} DH`;
+const fallbackImage = "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=700&q=80";
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+document.getElementById("whatsappLink").href =
+  `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
+
+async function loadProducts() {
+  const container = document.getElementById("products");
+  container.innerHTML = '<div class="loading">Loading products...</div>';
+
+  const { data, error } = await db
+    .from("products")
+    .select("id,name,description,price,image_url,category,stock,is_active")
+    .eq("is_active", true)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    container.innerHTML = '<div class="empty">Could not load products. Please try again later.</div>';
+    console.error("Products error:", error);
+    return;
   }
 
-  const categories = ["All","Watches","Rings","Necklaces","Bracelets","Sunglasses","Bags","Wallets","Men's Accessories","Women's Accessories"];
-  const products = [
-    {id:"p1",name:"Classic Gold Watch",category:"Watches",price:349,image:"https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=700&q=80"},
-    {id:"p2",name:"Minimal Gold Ring",category:"Rings",price:129,image:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=700&q=80"},
-    {id:"p3",name:"Everyday Necklace",category:"Necklaces",price:159,image:"https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=700&q=80"},
-    {id:"p4",name:"Modern Bracelet",category:"Bracelets",price:119,image:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=700&q=80"},
-    {id:"p5",name:"Classic Sunglasses",category:"Sunglasses",price:199,image:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80"},
-    {id:"p6",name:"Everyday Handbag",category:"Bags",price:399,image:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=80"},
-    {id:"p7",name:"Leather Wallet",category:"Wallets",price:179,image:"https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80"},
-    {id:"p8",name:"Silver Statement Ring",category:"Women's Accessories",price:139,image:"https://images.unsplash.com/photo-1603561596112-0a132b757442?auto=format&fit=crop&w=700&q=80"}
-  ];
-  let cart = JSON.parse(localStorage.getItem("oy-cart") || "[]");
-  let activeCategory = "All";
-  const money = n => `${n.toFixed(2)} DH`;
-  const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  document.getElementById("year").textContent = new Date().getFullYear();
-  document.getElementById("whatsappLink").href = `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
+  products = data || [];
 
-  function renderCategories(){
-    document.getElementById("categories").innerHTML = categories.map(c=>`<button class="chip ${c===activeCategory?"active":""}" data-category="${esc(c)}">${esc(c)}</button>`).join("");
-    document.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{activeCategory=b.dataset.category;renderCategories();renderProducts()}));
+  // Refresh saved cart using the latest database products
+  cart = cart
+    .map(item => {
+      const current = products.find(p => p.id === item.id);
+      return current ? { ...current, qty: Math.min(item.qty, Number(current.stock) || 0) } : null;
+    })
+    .filter(item => item && item.qty > 0);
+
+  saveCart();
+  renderCategories();
+  renderProducts();
+}
+
+function renderCategories() {
+  const dbCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
+  const categories = ["All", ...dbCategories];
+
+  if (activeCategory !== "All" && !dbCategories.includes(activeCategory)) {
+    activeCategory = "All";
   }
-  function renderProducts(){
-    const list = products.filter(p=>activeCategory==="All"||p.category===activeCategory);
-    document.getElementById("products").innerHTML = list.map(p=>`<article class="product"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy"><div class="product-info"><small>${esc(p.category)}</small><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><button data-add="${p.id}">ADD TO CART</button></div></article>`).join("") || '<div class="empty">No products in this category yet.</div>';
-    document.querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
-  }
-  function saveCart(){localStorage.setItem("oy-cart",JSON.stringify(cart));renderCartCount();renderCart()}
-  function addToCart(id){const p=products.find(x=>x.id===id);const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({...p,qty:1});saveCart();openCart()}
-  function renderCartCount(){document.getElementById("cartCount").textContent=cart.reduce((s,p)=>s+p.qty,0)}
-  function renderCart(){
-    document.getElementById("cartItems").innerHTML=cart.length?cart.map(p=>`<div class="cart-line"><img src="${p.image}" alt=""><div><strong>${esc(p.name)}</strong><div>${money(p.price)}</div><div class="qty"><button data-dec="${p.id}">−</button>${p.qty}<button data-inc="${p.id}">+</button><button data-remove="${p.id}" style="margin-left:5px">Remove</button></div></div><strong>${money(p.price*p.qty)}</strong></div>`).join(""):'<div class="empty">Your cart is empty.</div>';
-    document.getElementById("cartTotal").textContent=money(cart.reduce((s,p)=>s+p.price*p.qty,0));
-    document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{cart.find(p=>p.id===b.dataset.inc).qty++;saveCart()});
-    document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{const p=cart.find(p=>p.id===b.dataset.dec);p.qty--;if(p.qty<=0)cart=cart.filter(x=>x.id!==p.id);saveCart()});
-    document.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>{cart=cart.filter(p=>p.id!==b.dataset.remove);saveCart()});
-  }
-  function openCart(){document.getElementById("cartOverlay").style.display="block"}
-  function closeCart(){document.getElementById("cartOverlay").style.display="none"}
-  document.getElementById("openCart").onclick=openCart;document.getElementById("closeCart").onclick=closeCart;
-  document.getElementById("cartOverlay").addEventListener("click",e=>{if(e.target.id==="cartOverlay")closeCart()});
-  document.getElementById("checkout").addEventListener("submit",async e=>{
-    e.preventDefault();const msg=document.getElementById("checkoutMessage");
-    if(!cart.length){msg.textContent="Your cart is empty.";return}
-    const f=Object.fromEntries(new FormData(e.target).entries());
-    const total=cart.reduce((s,p)=>s+p.price*p.qty,0);
-    const lines=cart.map(p=>`- ${p.name} x${p.qty}: ${money(p.price*p.qty)}`).join("\n");
-    const orderText=`NEW ORDER - OY ACCESSORIES\nCustomer: ${f.firstName} ${f.lastName}\nPhone: ${f.phone}\nCity: ${f.city}\nAddress: ${f.address}\nProducts:\n${lines}\nTotal: ${money(total)}\nNotes: ${f.notes||"None"}`;
-    if(db){
-      try{
-        const {data,error}=await db.from("orders").insert([{customer_first_name:f.firstName,customer_last_name:f.lastName,phone:f.phone,city:f.city,address:f.address,notes:f.notes,total_amount:total,status:"pending"}]).select().single();
-        if(error) throw error;
-        const items=cart.map(p=>({order_id:data.id,product_name:p.name,quantity:p.qty,unit_price:p.price}));
-        const {error:itemError}=await db.from("order_items").insert(items);
-        if(itemError) throw itemError;
-        msg.textContent=`Order ${data.id} saved. Opening WhatsApp...`;
-      }catch(err){msg.textContent="We couldn't save your order yet. Please contact the store on WhatsApp. "+err.message;return}
-    }else{
-      msg.textContent="Supabase is not connected yet. Opening WhatsApp with your order.";
-    }
-    window.open(`https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`,"_blank");
-    cart=[];saveCart();e.target.reset();
+
+  document.getElementById("categories").innerHTML = categories.map(c =>
+    `<button class="chip ${c === activeCategory ? "active" : ""}" data-category="${esc(c)}">${esc(c)}</button>`
+  ).join("");
+
+  document.querySelectorAll("[data-category]").forEach(button => {
+    button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      renderCategories();
+      renderProducts();
+    });
   });
-  renderCategories();renderProducts();renderCartCount();renderCart();
+}
+
+function renderProducts() {
+  const list = products.filter(p =>
+    activeCategory === "All" || p.category === activeCategory
+  );
+
+  document.getElementById("products").innerHTML = list.map(p => `
+    <article class="product">
+      <img src="${esc(p.image_url || fallbackImage)}"
+           alt="${esc(p.name)}"
+           loading="lazy"
+           onerror="this.src='${fallbackImage}'">
+      <div class="product-info">
+        <small>${esc(p.category || "Accessories")}</small>
+        <h3>${esc(p.name)}</h3>
+        <div class="price">${money(p.price)}</div>
+        <button data-add="${esc(p.id)}"
+          ${Number(p.stock) <= 0 ? "disabled" : ""}>
+          ${Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
+        </button>
+      </div>
+    </article>
+  `).join("") || '<div class="empty">No products available yet.</div>';
+
+  document.querySelectorAll("[data-add]").forEach(button => {
+    button.addEventListener("click", () => addToCart(button.dataset.add));
+  });
+}
+
+function saveCart() {
+  localStorage.setItem("oy-cart", JSON.stringify(cart));
+  renderCartCount();
+  renderCart();
+}
+
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+
+  const item = cart.find(p => p.id === id);
+  const currentQty = item ? item.qty : 0;
+
+  if (currentQty >= Number(product.stock)) {
+    alert("Sorry, there is not enough stock available.");
+    return;
+  }
+
+  if (item) item.qty++;
+  else cart.push({ ...product, qty: 1 });
+
+  saveCart();
+  openCart();
+}
+
+function renderCartCount() {
+  document.getElementById("cartCount").textContent =
+    cart.reduce((sum, p) => sum + p.qty, 0);
+}
+
+function renderCart() {
+  document.getElementById("cartItems").innerHTML = cart.length
+    ? cart.map(p => `
+      <div class="cart-line">
+        <img src="${esc(p.image_url || fallbackImage)}" alt="">
+        <div>
+          <strong>${esc(p.name)}</strong>
+          <div>${money(p.price)}</div>
+          <div class="qty">
+            <button data-dec="${esc(p.id)}">−</button>
+            ${p.qty}
+            <button data-inc="${esc(p.id)}">+</button>
+            <button data-remove="${esc(p.id)}">Remove</button>
+          </div>
+        </div>
+        <strong>${money(p.price * p.qty)}</strong>
+      </div>
+    `).join("")
+    : '<div class="empty">Your cart is empty.</div>';
+
+  document.getElementById("cartTotal").textContent =
+    money(cart.reduce((sum, p) => sum + p.price * p.qty, 0));
+
+  document.querySelectorAll("[data-inc]").forEach(button => {
+    button.onclick = () => {
+      const p = cart.find(x => x.id === button.dataset.inc);
+      const product = products.find(x => x.id === button.dataset.inc);
+      if (!p || !product) return;
+
+      if (p.qty >= Number(product.stock)) {
+        alert("Sorry, there is not enough stock available.");
+        return;
+      }
+      p.qty++;
+      saveCart();
+    };
+  });
+
+  document.querySelectorAll("[data-dec]").forEach(button => {
+    button.onclick = () => {
+      const p = cart.find(x => x.id === button.dataset.dec);
+      if (!p) return;
+      p.qty--;
+      if (p.qty <= 0) cart = cart.filter(x => x.id !== button.dataset.dec);
+      saveCart();
+    };
+  });
+
+  document.querySelectorAll("[data-remove]").forEach(button => {
+    button.onclick = () => {
+      cart = cart.filter(x => x.id !== button.dataset.remove);
+      saveCart();
+    };
+  });
+}
+
+function openCart() {
+  document.getElementById("cartOverlay").style.display = "block";
+}
+function closeCart() {
+  document.getElementById("cartOverlay").style.display = "none";
+}
+
+document.getElementById("openCart").onclick = openCart;
+document.getElementById("closeCart").onclick = closeCart;
+
+document.getElementById("cartOverlay").addEventListener("click", e => {
+  if (e.target.id === "cartOverlay") closeCart();
+});
+
+// CHECKOUT: save order through the secure database function
+document.getElementById("checkout").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const msg = document.getElementById("checkoutMessage");
+  const submitButton = e.target.querySelector('button[type="submit"]');
+
+  if (!cart.length) {
+    msg.textContent = "Your cart is empty.";
+    return;
+  }
+
+  const f = Object.fromEntries(new FormData(e.target).entries());
+  const customerName = `${f.firstName} ${f.lastName}`.trim();
+
+  const items = cart.map(p => ({
+    product_id: p.id,
+    quantity: p.qty
+  }));
+
+  submitButton.disabled = true;
+  submitButton.textContent = "SAVING ORDER...";
+
+  // Open a blank tab immediately to avoid popup blocking
+  const waWindow = window.open("about:blank", "_blank");
+
+  try {
+    const { data, error } = await db.rpc("place_order", {
+      p_customer_name: customerName,
+      p_phone: f.phone,
+      p_city: f.city,
+      p_address: f.address,
+      p_notes: f.notes || "",
+      p_items: items
+    });
+
+    if (error) throw error;
+
+    const order = data;
+    const lines = cart.map(p =>
+      `- ${p.name} x${p.qty}: ${money(p.price * p.qty)}`
+    ).join("\n");
+
+    const orderText =
+      `NEW ORDER - OY ACCESSORIES\n` +
+      `Reference: ${order.reference}\n` +
+      `Customer: ${customerName}\n` +
+      `Phone: ${f.phone}\n` +
+      `City: ${f.city}\n` +
+      `Address: ${f.address}\n` +
+      `Products:\n${lines}\n` +
+      `Total: ${money(order.total)}\n` +
+      `Notes: ${f.notes || "None"}`;
+
+    const whatsappUrl =
+      `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
+
+    msg.textContent = `Order ${order.reference} saved successfully. Opening WhatsApp...`;
+
+    if (waWindow) waWindow.location.href = whatsappUrl;
+    else window.location.href = whatsappUrl;
+
+    cart = [];
+    saveCart();
+    e.target.reset();
+
+  } catch (err) {
+    if (waWindow) waWindow.close();
+    console.error("Checkout error:", err);
+    msg.textContent =
+      "We couldn't save your order. Please try again. " + (err.message || "");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "CONFIRM ORDER";
+  }
+});
+
+renderCartCount();
+renderCart();
+loadProducts();
 </script>
 </body>
 </html>

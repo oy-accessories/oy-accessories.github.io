@@ -582,6 +582,48 @@ function adminMessage(text, type="") {
   el.className = "message " + type;
 }
 
+let knownOrderIds = new Set();
+let orderMonitorTimer = null;
+
+async function checkForNewOrders() {
+  if (location.hash !== "#dashboard") return;
+
+  const { data, error } = await db.from("orders")
+    .select("id,reference,customer_name,total")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Order notification error:", error);
+    return;
+  }
+
+  const orders = data || [];
+  const newOrders = orders.filter(o => !knownOrderIds.has(o.id));
+
+  knownOrderIds = new Set(orders.map(o => o.id));
+
+  if (newOrders.length > 0) {
+    const refs = newOrders.map(o => o.reference).join(", ");
+    adminMessage("🔔 NEW ORDER! " + refs, "success");
+    await loadAdminOrders();
+  }
+}
+
+async function startOrderMonitor() {
+  const { data, error } = await db.from("orders").select("id");
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  knownOrderIds = new Set((data || []).map(o => o.id));
+
+  if (orderMonitorTimer) clearInterval(orderMonitorTimer);
+
+  orderMonitorTimer = setInterval(checkForNewOrders, 15000);
+}
+
 async function checkExistingSession() {
   const {data} = await db.auth.getUser();
   if (data.user && data.user.id === ADMIN_USER_ID) {

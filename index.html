@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +80,20 @@ padding:13px 0;border-bottom:1px solid #ddd
 .cart-line img{width:70px;height:75px;object-fit:cover}
 .qty{display:flex;gap:10px;align-items:center;margin-top:9px;flex-wrap:wrap}
 .qty button{padding:5px 9px;border:1px solid #ccc;background:white}
-.total{display:flex;justify-content:space-between;padding:20px 0;font-weight:bold}
+.total{display:flex;justify-content:space-between;padding:12px 0;font-weight:bold}
+.price-summary{border-top:1px solid #ddd;margin-top:15px;padding-top:12px}
+.summary-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:14px}
+.summary-row.final{font-weight:bold;font-size:18px;border-top:1px solid #ddd;margin-top:7px;padding-top:13px}
+.delivery-options{display:grid;gap:10px;margin:8px 0 15px}
+.delivery-option{
+display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding:15px;background:white;border:1px solid #d4cec1;cursor:pointer
+}
+.delivery-option:has(input:checked){border:2px solid var(--gold);background:#fffdf8}
+.delivery-option span{display:grid;gap:5px}
+.delivery-option small{color:#777;font-size:12px}
+.delivery-option input{width:18px;height:18px;accent-color:#a48650}
+.payment-note{padding:12px;background:#eee9df;font-size:13px;line-height:1.6}
 form{display:grid;gap:12px}
 input,textarea,select{
 width:100%;padding:13px;border:1px solid #d4cec1;background:white;
@@ -277,7 +291,7 @@ nav a{font-size:11px}
 <thead>
 <tr>
 <th>Reference</th><th>Customer</th><th>Phone</th>
-<th>Total</th><th>Date</th><th>Status</th><th>Update</th>
+<th>Subtotal / Delivery / Total</th><th>Date</th><th>Status</th><th>Update</th>
 </tr>
 </thead>
 <tbody id="ordersTable">
@@ -356,19 +370,97 @@ WhatsApp us
 <h2 style="font:normal 30px Georgia,serif">Your Cart</h2>
 <button class="close" id="closeCart">&times;</button>
 </div>
+
 <div id="cartItems"></div>
-<div class="total"><span>Total</span><span id="cartTotal">0.00 DH</span></div>
+
+<div class="price-summary">
+<div class="summary-row">
+<span>Subtotal</span>
+<strong id="cartSubtotal">0.00 DH</strong>
+</div>
+<div class="summary-row">
+<span>Delivery fee</span>
+<strong id="deliveryFee">—</strong>
+</div>
+<div class="summary-row final">
+<span>Total</span>
+<strong id="cartTotal">0.00 DH</strong>
+</div>
+</div>
+
 <form id="checkout">
-<h2 style="font:normal 25px Georgia,serif">Delivery Details</h2>
+<h2 style="font:normal 25px Georgia,serif;margin-top:15px">Delivery Details</h2>
+
 <input name="firstName" placeholder="First name" required>
 <input name="lastName" placeholder="Last name" required>
 <input name="phone" placeholder="Phone number" required>
-<input name="city" placeholder="City" required>
+
+<strong>Choose your delivery location</strong>
+
+<div class="delivery-options">
+<label class="delivery-option">
+<span>
+<strong>Casablanca</strong>
+<small>Delivery fee: 20 DH</small>
+</span>
+<input type="radio" name="deliveryType" value="Casablanca" required>
+</label>
+
+<label class="delivery-option">
+<span>
+<strong>Autre ville</strong>
+<small>Delivery fee: 35 DH</small>
+</span>
+<input type="radio" name="deliveryType" value="other" required>
+</label>
+</div>
+
+<div id="otherCityContainer" class="hidden">
+<label for="otherCity"><strong>Select your city</strong></label>
+<select id="otherCity" name="otherCity">
+<option value="">Choose your city</option>
+<option>Rabat</option>
+<option>Salé</option>
+<option>Témara</option>
+<option>Mohammedia</option>
+<option>Marrakech</option>
+<option>Agadir</option>
+<option>Tanger</option>
+<option>Tétouan</option>
+<option>Fès</option>
+<option>Meknès</option>
+<option>Oujda</option>
+<option>Kénitra</option>
+<option>El Jadida</option>
+<option>Safi</option>
+<option>Essaouira</option>
+<option>Beni Mellal</option>
+<option>Khouribga</option>
+<option>Settat</option>
+<option>Berrechid</option>
+<option>Nador</option>
+<option>Al Hoceima</option>
+<option>Larache</option>
+<option>Taza</option>
+<option>Ouarzazate</option>
+<option>Laâyoune</option>
+<option>Dakhla</option>
+<option>Guelmim</option>
+</select>
+</div>
+
 <textarea name="address" placeholder="Full delivery address" required></textarea>
 <textarea name="notes" placeholder="Additional notes (optional)"></textarea>
+
+<div class="payment-note">
+<strong>Payment method: Cash on Delivery</strong><br>
+You will pay when you receive your order.
+</div>
+
 <button class="gold-btn" type="submit">CONFIRM ORDER</button>
 <p style="font-size:12px;color:#777">Your order is saved securely before opening WhatsApp.</p>
 </form>
+
 <p id="checkoutMessage" class="message" role="status"></p>
 </aside>
 </div>
@@ -473,6 +565,44 @@ element.className = "message " + type;
 document.getElementById("year").textContent = new Date().getFullYear();
 document.getElementById("whatsappLink").href =
 `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
+
+// ======================================
+// DELIVERY LOCATION AND FEES
+// ======================================
+
+function getSelectedCity() {
+const type = document.querySelector('input[name="deliveryType"]:checked')?.value;
+
+if (type === "Casablanca") return "Casablanca";
+
+if (type === "other") {
+return document.getElementById("otherCity").value;
+}
+
+return "";
+}
+
+function getDeliveryFee(city) {
+if (!city) return 0;
+return city === "Casablanca" ? 20 : 35;
+}
+
+function updateDeliveryLocation() {
+const type = document.querySelector('input[name="deliveryType"]:checked')?.value;
+const otherContainer = document.getElementById("otherCityContainer");
+const otherCity = document.getElementById("otherCity");
+
+otherContainer.classList.toggle("hidden",type !== "other");
+otherCity.required = type === "other";
+
+renderCart();
+}
+
+document.querySelectorAll('input[name="deliveryType"]').forEach(radio => {
+radio.addEventListener("change",updateDeliveryLocation);
+});
+
+document.getElementById("otherCity").addEventListener("change",renderCart);
 
 // ======================================
 // PAGE NAVIGATION
@@ -729,8 +859,17 @@ ${p.qty}
 `).join("")
 : '<div class="empty">Your cart is empty.</div>';
 
-document.getElementById("cartTotal").textContent =
-money(cart.reduce((sum,p) => sum + Number(p.price)*Number(p.qty),0));
+const subtotal = cart.reduce(
+(sum,p) => sum + Number(p.price)*Number(p.qty),0
+);
+
+const city = getSelectedCity();
+const fee = getDeliveryFee(city);
+const total = subtotal + fee;
+
+document.getElementById("cartSubtotal").textContent = money(subtotal);
+document.getElementById("deliveryFee").textContent = city ? money(fee) : "—";
+document.getElementById("cartTotal").textContent = money(total);
 
 document.querySelectorAll("[data-inc]").forEach(b => {
 b.onclick = () => {
@@ -792,6 +931,13 @@ return;
 
 const f = Object.fromEntries(new FormData(e.target).entries());
 const customerName = `${f.firstName} ${f.lastName}`.trim();
+const city = getSelectedCity();
+
+if (!city) {
+showMessage(msg,"Please choose your delivery location and city.","error");
+return;
+}
+
 const items = cart.map(p => ({
 product_id:p.id,
 quantity:p.qty
@@ -806,7 +952,7 @@ try {
 const {data,error} = await db.rpc("place_order",{
 p_customer_name:customerName,
 p_phone:f.phone,
-p_city:f.city,
+p_city:city,
 p_address:f.address,
 p_notes:f.notes || "",
 p_items:items
@@ -821,9 +967,13 @@ const lines = cart.map(p =>
 
 const orderText =
 `NEW ORDER - OY ACCESSORIES\nReference: ${data.reference}\n`+
-`Customer: ${customerName}\nPhone: ${f.phone}\nCity: ${f.city}\n`+
+`Customer: ${customerName}\nPhone: ${f.phone}\nCity: ${city}\n`+
 `Address: ${f.address}\nProducts:\n${lines}\n`+
-`Total: ${money(data.total)}\nNotes: ${f.notes || "None"}`;
+`Subtotal: ${money(data.subtotal)}\n`+
+`Delivery fee: ${money(data.delivery_fee)}\n`+
+`Total: ${money(data.total)}\n`+
+`Payment: Cash on Delivery\n`+
+`Notes: ${f.notes || "None"}`;
 
 const waUrl =
 `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
@@ -837,6 +987,7 @@ else window.location.href = waUrl;
 cart = [];
 saveCart();
 e.target.reset();
+updateDeliveryLocation();
 
 } catch(err) {
 if (waWindow) waWindow.close();
@@ -881,11 +1032,17 @@ delivered:"Delivered",
 cancelled:"Cancelled"
 };
 
+const deliveryFee = Number(data.delivery_fee || 0);
+const subtotal = Number(data.total || 0) - deliveryFee;
+
 result.innerHTML = `
 <div class="card" style="margin-top:15px">
 <h3>Order found</h3>
 <p>Reference: <strong>${esc(data.reference)}</strong></p>
 <p>Status: <strong>${esc(statusLabels[data.status] || data.status)}</strong></p>
+<p>City: ${esc(data.city || "")}</p>
+<p>Subtotal: <strong>${money(subtotal)}</strong></p>
+<p>Delivery fee: <strong>${money(deliveryFee)}</strong></p>
 <p>Total: <strong>${money(data.total)}</strong></p>
 <p>Date: ${new Date(data.created_at).toLocaleString()}</p>
 </div>`;
@@ -1040,7 +1197,7 @@ const tbody = document.getElementById("ordersTable");
 tbody.innerHTML = '<tr><td colspan="7">Loading orders...</td></tr>';
 
 const {data,error} = await db.from("orders")
-.select("id,reference,customer_name,phone,city,address,total,status,created_at")
+.select("id,reference,customer_name,phone,city,address,total,delivery_fee,status,created_at")
 .order("created_at",{ascending:false});
 
 if (error) {
@@ -1059,12 +1216,20 @@ document.getElementById("statSales").textContent =
 orders.filter(o => o.status !== "cancelled")
 .reduce((s,o) => s+Number(o.total || 0),0).toFixed(0);
 
-tbody.innerHTML = orders.map(o => `
+tbody.innerHTML = orders.map(o => {
+const deliveryFee = Number(o.delivery_fee || 0);
+const subtotal = Number(o.total || 0) - deliveryFee;
+
+return `
 <tr>
 <td><strong>${esc(o.reference)}</strong></td>
 <td>${esc(o.customer_name)}<br><small>${esc(o.city)}</small></td>
 <td>${esc(o.phone)}</td>
-<td>${money(o.total)}</td>
+<td>
+Subtotal: ${money(subtotal)}<br>
+Delivery: ${money(deliveryFee)}<br>
+<strong>Total: ${money(o.total)}</strong>
+</td>
 <td>${new Date(o.created_at).toLocaleDateString()}</td>
 <td><span class="status">${esc(o.status || "pending")}</span></td>
 <td>
@@ -1077,8 +1242,8 @@ tbody.innerHTML = orders.map(o => `
 </select>
 <button class="dark-btn small-btn" data-update="${esc(o.id)}">Save</button>
 </td>
-</tr>
-`).join("") || '<tr><td colspan="7">No orders yet.</td></tr>';
+</tr>`;
+}).join("") || '<tr><td colspan="7">No orders yet.</td></tr>';
 
 document.querySelectorAll("[data-update]").forEach(button => {
 button.onclick = async () => {
@@ -1228,6 +1393,8 @@ document.getElementById("imagePreviews").innerHTML = "";
 
 function renderImagePreviews() {
 const container = document.getElementById("imagePreviews");
+clearPreviewUrls();
+
 const urls = selectedImageFiles.map(file => {
 const url = URL.createObjectURL(file);
 previewObjectUrls.push(url);

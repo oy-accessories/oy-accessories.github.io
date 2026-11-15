@@ -51,7 +51,7 @@ display:flex;align-items:center;padding:65px 9%;color:white
 .chip.active,.chip:hover{background:var(--black);color:white}
 .products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
 .product{background:white;min-width:0}
-.product img{width:100%;height:250px;object-fit:cover;background:#eee}
+.product img{width:100%;height:250px;object-fit:cover;background:#eee;cursor:pointer}
 .product-info{padding:17px}
 .product-info small{color:#a48650;text-transform:uppercase;font-size:11px}
 .product-info h3{font:normal 20px Georgia,serif;margin:9px 0}
@@ -112,11 +112,43 @@ gap:12px;padding:12px 0;border-bottom:1px solid #eee
 }
 .product-admin img{width:48px;height:48px;object-fit:cover;flex-shrink:0}
 .product-admin-actions{display:flex;gap:5px;flex-wrap:wrap}
-#productImagePreview{
-width:150px;height:150px;object-fit:cover;border-radius:10px;
-margin:10px 0;border:1px solid #ddd
+#imagePreviews{
+display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0
 }
+.image-thumb{
+position:relative;border:2px solid transparent;padding:2px;
+background:white;cursor:pointer;min-width:0
+}
+.image-thumb.selected{border-color:var(--gold)}
+.image-thumb img{width:100%;height:75px;object-fit:cover;display:block}
+.image-thumb span{
+display:block;text-align:center;font-size:10px;padding:4px 0;color:#555
+}
+.image-thumb.selected span{color:#9a753d;font-weight:bold}
 .ai-note{font-size:12px;color:#777;line-height:1.6}
+.gallery-main{
+width:100%;max-height:380px;object-fit:contain;background:#eee;display:block
+}
+.gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 0}
+.gallery-thumbs img{
+width:65px;height:65px;object-fit:cover;cursor:pointer;
+border:2px solid transparent;flex-shrink:0
+}
+.gallery-thumbs img.selected{border-color:var(--gold)}
+.detail-panel{
+background:var(--ivory);width:min(650px,100%);max-height:90vh;
+overflow:auto;padding:22px;margin:auto;position:relative
+}
+.detail-overlay{
+display:none;position:fixed;inset:0;background:#000b;z-index:30;
+align-items:center;justify-content:center;padding:15px
+}
+.detail-close{
+position:absolute;right:15px;top:10px;background:white;
+border:0;border-radius:50%;width:35px;height:35px;font-size:23px;z-index:2
+}
+.gallery-controls{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
+.gallery-controls button{padding:9px 15px;background:var(--black);color:white}
 @media(max-width:900px){
 .products{grid-template-columns:repeat(2,1fr)}
 .stats{grid-template-columns:repeat(2,1fr)}
@@ -141,6 +173,9 @@ nav a{font-size:11px}
 .product-admin-actions{width:100%}
 .product-admin-actions button{flex:1}
 .panel{padding:18px}
+#imagePreviews{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.image-thumb img{height:58px}
+.detail-panel{padding:15px}
 }
 </style>
 </head>
@@ -263,14 +298,15 @@ nav a{font-size:11px}
 <input name="stock" type="number" min="0" step="1" placeholder="Stock quantity" required>
 <input name="category" placeholder="Category (French)" required>
 
-<label for="productImageFile"><strong>Product Image</strong></label>
-<input id="productImageFile" type="file" accept="image/jpeg,image/png,image/webp">
-
-<img id="productImagePreview" style="display:none" alt="Product preview">
+<label for="productImageFile"><strong>Product Images (Maximum 5)</strong></label>
+<input id="productImageFile" type="file" accept="image/jpeg,image/png,image/webp" multiple>
 
 <p class="ai-note">
-Choose an image from your computer or phone. AI can suggest a product name, category and description based on the image.
+Choose up to 5 JPG, PNG or WEBP images from your computer or phone.
+Select a thumbnail below to make it the main product image.
 </p>
+
+<div id="imagePreviews"></div>
 
 <button type="button" class="outline-btn" id="generateAiButton">
 GENERATE WITH AI
@@ -338,6 +374,25 @@ WhatsApp us
 </aside>
 </div>
 
+<!-- PRODUCT DETAILS GALLERY -->
+<div class="detail-overlay" id="productDetailOverlay">
+<div class="detail-panel">
+<button class="detail-close" id="closeProductDetail">&times;</button>
+<img id="detailMainImage" class="gallery-main" src="" alt="Product image">
+<div class="gallery-controls">
+<button id="previousImage">PREVIOUS</button>
+<span id="galleryCounter" style="align-self:center;font-size:13px"></span>
+<button id="nextImage">NEXT</button>
+</div>
+<div id="detailThumbnails" class="gallery-thumbs"></div>
+<h2 id="detailName" style="font:normal 27px Georgia,serif;margin:12px 0"></h2>
+<p id="detailCategory" style="color:#a48650;font-size:12px;text-transform:uppercase"></p>
+<p id="detailPrice" style="font-weight:bold;margin:12px 0"></p>
+<p id="detailDescription" style="line-height:1.8;white-space:pre-line;color:#555"></p>
+<button id="detailAddToCart" class="gold-btn" style="width:100%;margin-top:20px">ADD TO CART</button>
+</div>
+</div>
+
 <script>
 // ======================================
 // SUPABASE CONFIGURATION
@@ -351,6 +406,7 @@ const ADMIN_USER_ID = "18d60409-56d0-478a-80f8-2fa70ec2305c";
 const STORAGE_BUCKET = "product-images";
 const AI_FUNCTION_NAME = "swift-function";
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+const MAX_PRODUCT_IMAGES = 5;
 
 const db = window.supabase.createClient(
 SUPABASE_URL,
@@ -370,11 +426,20 @@ cart = [];
 let activeCategory = "All";
 let editingProductId = null;
 let editingProductImageUrl = "";
+let editingProductImages = [];
 let editingProductIsActive = false;
-let previewObjectUrl = null;
+
+let selectedImageFiles = [];
+let selectedMainImageIndex = 0;
+let previewObjectUrls = [];
+
 let knownOrderIds = new Set();
 let orderMonitorTimer = null;
 let dashboardLoading = false;
+
+let detailProduct = null;
+let detailImages = [];
+let detailImageIndex = 0;
 
 const money = n => `${Number(n || 0).toFixed(2)} DH`;
 
@@ -385,6 +450,20 @@ function esc(value) {
 return String(value ?? "").replace(/[&<>"']/g, c => ({
 "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
 }[c]));
+}
+
+function productImages(product) {
+let images = Array.isArray(product.image_urls)
+? product.image_urls.filter(Boolean)
+: [];
+
+if (!images.length && product.image_url) {
+images = [product.image_url];
+}
+
+if (!images.length) images = [fallbackImage];
+
+return [...new Set(images)].slice(0,MAX_PRODUCT_IMAGES);
 }
 
 function showMessage(element, message, type="") {
@@ -428,7 +507,7 @@ const container = document.getElementById("products");
 container.innerHTML = '<div class="loading">Loading products...</div>';
 
 const {data,error} = await db.from("products")
-.select("id,name,description,price,image_url,category,stock,is_active")
+.select("id,name,description,price,image_url,image_urls,category,stock,is_active")
 .eq("is_active",true)
 .order("created_at",{ascending:false});
 
@@ -480,27 +559,123 @@ const list = products.filter(p =>
 activeCategory === "All" || p.category === activeCategory
 );
 
-document.getElementById("products").innerHTML = list.map(p => `
+document.getElementById("products").innerHTML = list.map(p => {
+const images = productImages(p);
+return `
 <article class="product">
-<img src="${esc(p.image_url || fallbackImage)}"
+<img src="${esc(images[0])}"
 alt="${esc(p.name)}" loading="lazy"
+data-details="${esc(p.id)}"
 onerror="this.onerror=null;this.src='${fallbackImage}'">
 <div class="product-info">
 <small>${esc(p.category || "Accessories")}</small>
 <h3>${esc(p.name)}</h3>
 <div class="price">${money(p.price)}</div>
+${images.length > 1
+? `<p style="font-size:11px;color:#888;margin-bottom:10px">${images.length} photos · View gallery</p>`
+: ""}
 <button data-add="${esc(p.id)}"
 ${Number(p.stock) <= 0 ? "disabled" : ""}>
 ${Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
 </button>
 </div>
-</article>
-`).join("") || '<div class="empty">No products available yet.</div>';
+</article>`;
+}).join("") || '<div class="empty">No products available yet.</div>';
 
 document.querySelectorAll("[data-add]").forEach(button => {
 button.onclick = () => addToCart(button.dataset.add);
 });
+
+document.querySelectorAll("[data-details]").forEach(image => {
+image.onclick = () => openProductDetails(image.dataset.details);
+});
 }
+
+// ======================================
+// PRODUCT GALLERY
+// ======================================
+
+function openProductDetails(id) {
+const p = products.find(x => x.id === id);
+if (!p) return;
+
+detailProduct = p;
+detailImages = productImages(p);
+detailImageIndex = 0;
+
+document.getElementById("detailName").textContent = p.name || "";
+document.getElementById("detailCategory").textContent = p.category || "";
+document.getElementById("detailPrice").textContent = money(p.price);
+document.getElementById("detailDescription").textContent = p.description || "";
+
+document.getElementById("detailAddToCart").disabled = Number(p.stock) <= 0;
+document.getElementById("detailAddToCart").textContent =
+Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART";
+
+renderDetailGallery();
+
+document.getElementById("productDetailOverlay").style.display = "flex";
+}
+
+function renderDetailGallery() {
+if (!detailImages.length) return;
+
+document.getElementById("detailMainImage").src =
+detailImages[detailImageIndex];
+
+document.getElementById("galleryCounter").textContent =
+`${detailImageIndex+1} / ${detailImages.length}`;
+
+document.getElementById("detailThumbnails").innerHTML =
+detailImages.map((url,index) => `
+<img src="${esc(url)}"
+class="${index === detailImageIndex ? "selected" : ""}"
+data-gallery-index="${index}" alt="Product photo ${index+1}">
+`).join("");
+
+document.querySelectorAll("[data-gallery-index]").forEach(image => {
+image.onclick = () => {
+detailImageIndex = Number(image.dataset.galleryIndex);
+renderDetailGallery();
+};
+});
+
+document.getElementById("previousImage").disabled =
+detailImages.length <= 1;
+document.getElementById("nextImage").disabled =
+detailImages.length <= 1;
+}
+
+document.getElementById("previousImage").onclick = () => {
+if (!detailImages.length) return;
+detailImageIndex = (detailImageIndex - 1 + detailImages.length) % detailImages.length;
+renderDetailGallery();
+};
+
+document.getElementById("nextImage").onclick = () => {
+if (!detailImages.length) return;
+detailImageIndex = (detailImageIndex + 1) % detailImages.length;
+renderDetailGallery();
+};
+
+function closeProductDetails() {
+document.getElementById("productDetailOverlay").style.display = "none";
+detailProduct = null;
+}
+
+document.getElementById("closeProductDetail").onclick = closeProductDetails;
+
+document.getElementById("productDetailOverlay").onclick = e => {
+if (e.target.id === "productDetailOverlay") closeProductDetails();
+};
+
+document.getElementById("detailAddToCart").onclick = () => {
+if (detailProduct) {
+const id = detailProduct.id;
+closeProductDetails();
+addToCart(id);
+}
+};
 
 // ======================================
 // CART
@@ -539,7 +714,7 @@ function renderCart() {
 document.getElementById("cartItems").innerHTML = cart.length
 ? cart.map(p => `
 <div class="cart-line">
-<img src="${esc(p.image_url || fallbackImage)}" alt="">
+<img src="${esc(productImages(p)[0])}" alt="">
 <div>
 <strong>${esc(p.name)}</strong>
 <div>${money(p.price)}</div>
@@ -953,11 +1128,12 @@ document.getElementById("statProducts").textContent = list.length;
 
 container.innerHTML = list.map(p => `
 <div class="product-admin">
-<img src="${esc(p.image_url || fallbackImage)}" alt="">
+<img src="${esc(productImages(p)[0])}" alt="">
 <div style="flex:1;min-width:120px">
 <strong>${esc(p.name)}</strong>
 <div style="font-size:12px;color:#777">
 ${money(p.price)} · Stock: ${Number(p.stock)} ·
+${productImages(p).length} photo(s) ·
 ${p.is_active ? "Published" : "Draft / Hidden"}
 </div>
 </div>
@@ -999,52 +1175,81 @@ await loadProducts();
 }
 
 // ======================================
-// IMAGE PREVIEW
+// IMAGE SELECTION AND PREVIEWS
 // ======================================
 
-function clearImagePreview() {
-const preview = document.getElementById("productImagePreview");
-
-if (previewObjectUrl) {
-URL.revokeObjectURL(previewObjectUrl);
-previewObjectUrl = null;
+function clearPreviewUrls() {
+previewObjectUrls.forEach(url => URL.revokeObjectURL(url));
+previewObjectUrls = [];
 }
 
-preview.removeAttribute("src");
-preview.style.display = "none";
+function clearImageSelection() {
+clearPreviewUrls();
+selectedImageFiles = [];
+selectedMainImageIndex = 0;
+document.getElementById("imagePreviews").innerHTML = "";
+}
+
+function renderImagePreviews() {
+const container = document.getElementById("imagePreviews");
+const urls = selectedImageFiles.map(file => {
+const url = URL.createObjectURL(file);
+previewObjectUrls.push(url);
+return url;
+});
+
+container.innerHTML = urls.map((url,index) => `
+<button type="button"
+class="image-thumb ${index === selectedMainImageIndex ? "selected" : ""}"
+data-select-main="${index}">
+<img src="${url}" alt="Selected image ${index+1}">
+<span>${index === selectedMainImageIndex ? "MAIN IMAGE" : "Image "+(index+1)}</span>
+</button>
+`).join("");
+
+container.querySelectorAll("[data-select-main]").forEach(button => {
+button.onclick = () => {
+selectedMainImageIndex = Number(button.dataset.selectMain);
+renderImagePreviews();
+};
+});
 }
 
 document.getElementById("productImageFile").addEventListener("change",e => {
-const file = e.target.files && e.target.files[0];
-const preview = document.getElementById("productImagePreview");
+const files = Array.from(e.target.files || []);
 const status = document.getElementById("aiStatus");
 
-if (!file) {
-clearImagePreview();
+clearImageSelection();
+
+if (!files.length) return;
+
+if (files.length > MAX_PRODUCT_IMAGES) {
+e.target.value = "";
+showMessage(status,"You can select a maximum of 5 images.","error");
 return;
 }
 
+for (const file of files) {
 if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
 e.target.value = "";
-clearImagePreview();
-showMessage(status,"Please choose a JPG, PNG or WEBP image.","error");
+clearImageSelection();
+showMessage(status,"All images must be JPG, PNG or WEBP.","error");
 return;
 }
 
 if (file.size > MAX_IMAGE_SIZE) {
 e.target.value = "";
-clearImagePreview();
-showMessage(status,"Image is too large. Maximum size is 5 MB.","error");
+clearImageSelection();
+showMessage(status,"Each image must be smaller than 5 MB.","error");
 return;
 }
+}
 
-if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+selectedImageFiles = files;
+selectedMainImageIndex = 0;
+renderImagePreviews();
 
-previewObjectUrl = URL.createObjectURL(file);
-preview.src = previewObjectUrl;
-preview.style.display = "block";
-
-showMessage(status,"Image selected successfully.","success");
+showMessage(status,`${files.length} image(s) selected. Click a thumbnail to choose the main image.`,"success");
 });
 
 // ======================================
@@ -1077,30 +1282,20 @@ reader.readAsDataURL(file);
 // ======================================
 
 document.getElementById("generateAiButton").onclick = async () => {
-const fileInput = document.getElementById("productImageFile");
-const file = fileInput.files && fileInput.files[0];
 const button = document.getElementById("generateAiButton");
 const status = document.getElementById("aiStatus");
 
-if (!file) {
-showMessage(status,"Please select a product image first.","error");
-fileInput.click();
+if (!selectedImageFiles.length) {
+showMessage(status,"Please select at least one product image first.","error");
+document.getElementById("productImageFile").click();
 return;
 }
 
-if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
-showMessage(status,"Please use JPG, PNG or WEBP.","error");
-return;
-}
-
-if (file.size > MAX_IMAGE_SIZE) {
-showMessage(status,"Image must be smaller than 5 MB.","error");
-return;
-}
+const file = selectedImageFiles[selectedMainImageIndex] || selectedImageFiles[0];
 
 button.disabled = true;
 button.textContent = "ANALYZING IMAGE...";
-showMessage(status,"AI is analyzing your product image. Please wait...");
+showMessage(status,"AI is analyzing the main product image. Please wait...");
 
 try {
 const imageBase64 = await fileToBase64(file);
@@ -1169,6 +1364,7 @@ if (!p) return;
 
 editingProductId = id;
 editingProductImageUrl = p.image_url || "";
+editingProductImages = productImages(p).filter(url => url !== fallbackImage);
 editingProductIsActive = !!p.is_active;
 
 const form = document.getElementById("productForm");
@@ -1180,14 +1376,30 @@ form.elements.category.value = p.category || "";
 form.elements.description.value = p.description || "";
 
 document.getElementById("productImageFile").value = "";
-clearImagePreview();
+clearImageSelection();
 
-const preview = document.getElementById("productImagePreview");
+const container = document.getElementById("imagePreviews");
 
-if (editingProductImageUrl) {
-preview.src = editingProductImageUrl;
-preview.style.display = "block";
-}
+container.innerHTML = editingProductImages.map((url,index) => `
+<button type="button"
+class="image-thumb ${index === 0 ? "selected" : ""}"
+data-existing-main="${index}">
+<img src="${esc(url)}" alt="Current product image ${index+1}">
+<span>${index === 0 ? "MAIN IMAGE" : "Image "+(index+1)}</span>
+</button>
+`).join("");
+
+container.querySelectorAll("[data-existing-main]").forEach(button => {
+button.onclick = () => {
+const index = Number(button.dataset.existingMain);
+editingProductImages = [
+editingProductImages[index],
+...editingProductImages.filter((_,i) => i !== index)
+];
+editingProductImageUrl = editingProductImages[0] || "";
+editProductPreviewOnly();
+};
+});
 
 document.getElementById("productFormTitle").textContent = "Edit Product";
 document.getElementById("saveProductButton").textContent = "UPDATE PRODUCT";
@@ -1195,7 +1407,7 @@ document.getElementById("cancelEdit").classList.remove("hidden");
 
 showMessage(
 document.getElementById("aiStatus"),
-"Choose a new image to replace the current one, or keep the existing image."
+"Choose up to 5 new images to replace the current gallery, or keep the existing images."
 );
 
 document.getElementById("productMessage").textContent = "";
@@ -1204,16 +1416,42 @@ form.scrollIntoView({behavior:"smooth",block:"start"});
 form.elements.name.focus();
 }
 
+function editProductPreviewOnly() {
+const container = document.getElementById("imagePreviews");
+
+container.innerHTML = editingProductImages.map((url,index) => `
+<button type="button"
+class="image-thumb ${index === 0 ? "selected" : ""}"
+data-existing-main="${index}">
+<img src="${esc(url)}" alt="Current product image ${index+1}">
+<span>${index === 0 ? "MAIN IMAGE" : "Image "+(index+1)}</span>
+</button>
+`).join("");
+
+container.querySelectorAll("[data-existing-main]").forEach(button => {
+button.onclick = () => {
+const index = Number(button.dataset.existingMain);
+editingProductImages = [
+editingProductImages[index],
+...editingProductImages.filter((_,i) => i !== index)
+];
+editingProductImageUrl = editingProductImages[0] || "";
+editProductPreviewOnly();
+};
+});
+}
+
 function resetProductForm() {
 editingProductId = null;
 editingProductImageUrl = "";
+editingProductImages = [];
 editingProductIsActive = false;
 
 const form = document.getElementById("productForm");
 form.reset();
 
 document.getElementById("productImageFile").value = "";
-clearImagePreview();
+clearImageSelection();
 
 document.getElementById("productFormTitle").textContent = "Add New Product";
 document.getElementById("saveProductButton").textContent = "SAVE AS DRAFT";
@@ -1229,7 +1467,7 @@ document.getElementById("cancelEdit").onclick = resetProductForm;
 // ======================================
 
 async function uploadProductImage(file) {
-if (!file) return null;
+if (!file) throw new Error("No image selected.");
 
 if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
 throw new Error("Unsupported image format.");
@@ -1284,11 +1522,9 @@ e.preventDefault();
 const form = e.target;
 const msg = document.getElementById("productMessage");
 const button = document.getElementById("saveProductButton");
-const fileInput = document.getElementById("productImageFile");
-const file = fileInput.files && fileInput.files[0];
-
 const isEditing = !!editingProductId;
 const productIdBeingEdited = editingProductId;
+const files = [...selectedImageFiles];
 
 const f = Object.fromEntries(new FormData(form).entries());
 
@@ -1305,36 +1541,46 @@ showMessage(msg,"Please check the product details.","error");
 return;
 }
 
-if (!isEditing && !file) {
-showMessage(msg,"Please select a product image before saving a new product.","error");
-fileInput.focus();
+if (!isEditing && !files.length) {
+showMessage(msg,"Please select at least one product image.","error");
+document.getElementById("productImageFile").focus();
 return;
 }
 
-if (file && !["image/jpeg","image/png","image/webp"].includes(file.type)) {
-showMessage(msg,"Please choose a JPG, PNG or WEBP image.","error");
-return;
-}
-
-if (file && file.size > MAX_IMAGE_SIZE) {
-showMessage(msg,"Image must be smaller than 5 MB.","error");
+if (files.length > MAX_PRODUCT_IMAGES) {
+showMessage(msg,"You can upload a maximum of 5 images.","error");
 return;
 }
 
 button.disabled = true;
 button.textContent = isEditing ? "UPDATING..." : "SAVING...";
-showMessage(msg,"Saving product and uploading image. Please wait...");
+showMessage(msg,"Uploading product images and saving product. Please wait...");
 
 try {
-let imageUrl = editingProductImageUrl;
+let imageUrls = [];
 
-if (file) {
-imageUrl = await uploadProductImage(file);
+if (files.length) {
+const uploadedUrls = await Promise.all(
+files.map(file => uploadProductImage(file))
+);
+
+const mainUrl = uploadedUrls[selectedMainImageIndex] || uploadedUrls[0];
+
+imageUrls = [
+mainUrl,
+...uploadedUrls.filter(url => url !== mainUrl)
+];
+} else {
+imageUrls = editingProductImages.length
+? [...editingProductImages]
+: (editingProductImageUrl ? [editingProductImageUrl] : []);
 }
 
-if (!imageUrl) {
-throw new Error("A product image is required.");
+if (!imageUrls.length) {
+throw new Error("At least one product image is required.");
 }
+
+const imageUrl = imageUrls[0];
 
 const slug = name
 .normalize("NFD")
@@ -1350,6 +1596,7 @@ price,
 stock,
 category,
 image_url:imageUrl,
+image_urls:imageUrls,
 description
 };
 

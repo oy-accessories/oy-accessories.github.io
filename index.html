@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1143,6 +1142,7 @@ ${p.is_active ? "Published" : "Draft / Hidden"}
 data-active="${p.is_active}">
 ${p.is_active ? "Hide" : "Publish"}
 </button>
+<button class="danger-btn small-btn" data-delete="${esc(p.id)}">Delete</button>
 </div>
 </div>
 `).join("") || "No products yet.";
@@ -1170,6 +1170,42 @@ adminMessage(currentlyActive ? "Product hidden." : "Product published.","success
 await loadAdminProducts();
 await loadProducts();
 }
+};
+});
+
+// DELETE PRODUCT
+container.querySelectorAll("[data-delete]").forEach(button => {
+button.onclick = async () => {
+const id = button.dataset.delete;
+const product = list.find(p => p.id === id);
+
+if (!product) return;
+
+const confirmed = confirm(
+`Are you sure you want to permanently delete "${product.name}"?\n\nThis action cannot be undone.`
+);
+
+if (!confirmed) return;
+
+button.disabled = true;
+button.textContent = "Deleting...";
+
+const {error} = await db.from("products")
+.delete()
+.eq("id",id);
+
+if (error) {
+console.error("Product delete error:",error);
+adminMessage("Could not delete product: "+error.message,"error");
+button.disabled = false;
+button.textContent = "Delete";
+return;
+}
+
+adminMessage("Product deleted successfully.","success");
+
+await loadAdminProducts();
+await loadProducts();
 };
 });
 }
@@ -1649,4 +1685,3 @@ showPage();
 </script>
 </body>
 </html>
-```

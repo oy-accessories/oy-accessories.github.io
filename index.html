@@ -1525,6 +1525,92 @@ return data.user;
 }
 
 // ======================================
+// OY NOTIFICATIONS FUNCTIONS
+// ======================================
+
+async function loadNotifications() {
+  const list = document.getElementById("notificationsList");
+  const count = document.getElementById("unreadCount");
+
+  if (!list || !count) return;
+
+  const { data, error } = await db
+    .from("notifications")
+    .select("id,reference,title,body,is_read,created_at")
+    .order("created_at", { ascending: false })
+    .limit(30);
+
+  if (error) {
+    console.error("Notifications error:", error);
+    list.innerHTML = `
+      <div class="notification-empty">
+        Could not load notifications.
+      </div>`;
+    return;
+  }
+
+  const notifications = data || [];
+  const unread = notifications.filter(n => !n.is_read).length;
+
+  count.textContent = unread;
+
+  if (!notifications.length) {
+    list.innerHTML = `
+      <div class="notification-empty">
+        No notifications yet.
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = notifications.map(n => `
+    <div class="notification-item ${n.is_read ? "" : "unread"}">
+      <div>
+        <strong>${esc(n.title || "New Order")}</strong>
+        <p>${esc(n.body || ("Order: " + (n.reference || "")))}</p>
+        <small>${new Date(n.created_at).toLocaleString()}</small>
+      </div>
+
+      ${n.is_read ? "" : `
+        <button class="outline-btn small-btn mark-notification-read"
+          data-id="${esc(n.id)}">
+          MARK AS READ
+        </button>
+      `}
+    </div>
+  `).join("");
+}
+
+async function markNotificationRead(id) {
+  const { error } = await db
+    .from("notifications")
+    .update({ is_read: true })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Mark notification error:", error);
+    return;
+  }
+
+  await loadNotifications();
+}
+
+function setupNotificationEvents() {
+  const bell = document.getElementById("notificationBell");
+  const list = document.getElementById("notificationsList");
+
+  bell.onclick = loadNotifications;
+
+  list.onclick = async function(event) {
+    const button = event.target.closest(".mark-notification-read");
+
+    if (!button) return;
+
+    button.disabled = true;
+    await markNotificationRead(button.dataset.id);
+  };
+}
+
+// ======================================
 // ORDER MONITOR
 // ======================================
 async function checkForNewOrders() {
@@ -1666,21 +1752,31 @@ document.getElementById("monthFilter").addEventListener("change",renderSelectedM
 // ADMIN DASHBOARD
 // ======================================
 async function loadDashboard() {
-if (dashboardLoading) return;
-dashboardLoading = true;
+  if (dashboardLoading) return;
+  dashboardLoading = true;
 
-try {
-const user = await requireAdmin();
-if (!user) return;
-adminMessage("Loading dashboard...");
-await Promise.all([loadAdminOrders(),loadAdminProducts()]);
-await startOrderMonitor();
-adminMessage("Dashboard updated.","success");
-} finally {
-dashboardLoading = false;
-}
-}
+  try {
+    const user = await requireAdmin();
+    if (!user) return;
 
+    adminMessage("Loading dashboard...");
+
+    setupNotificationEvents();
+
+    await Promise.all([
+      loadAdminOrders(),
+      loadAdminProducts(),
+      loadNotifications()
+    ]);
+
+    await startOrderMonitor();
+
+    adminMessage("Dashboard updated.","success");
+
+  } finally {
+    dashboardLoading = false;
+  }
+}
 async function loadAdminOrders() {
 const tbody = document.getElementById("ordersTable");
 tbody.innerHTML = '<tr><td colspan="7">Loading orders...</td></tr>';

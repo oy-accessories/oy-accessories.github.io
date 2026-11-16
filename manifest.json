@@ -1,0 +1,25 @@
+
+{
+  "id": "/#admin",
+  "name": "OY Admin",
+  "short_name": "OY Admin",
+  "description": "OY Accessories Admin Dashboard",
+  "start_url": "/#admin",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ed",
+  "theme_color": "#11110f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/oy-admin-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/oy-admin-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

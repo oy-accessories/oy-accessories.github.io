@@ -733,16 +733,24 @@ transform:none!important;
 
 <div id="adminMessage" class="message" role="status"></div>
 <div class="card notification-card">
-  <div class="notification-header">
-    <h3 style="margin:0;border:0;padding:0">
-      Notifications
-    </h3>
+ <div class="notification-header">
+  <h3 style="margin:0;border:0;padding:0">
+    Notifications
+  </h3>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="gold-btn" type="button" id="enablePushButton">
+      🔔 ENABLE PUSH
+    </button>
 
     <button class="outline-btn notification-bell" id="notificationBell">
-      🔔 NOTIFICATIONS
+      NOTIFICATIONS
       <span class="notification-count" id="unreadCount">0</span>
     </button>
   </div>
+</div>
+
+<p id="pushStatus" class="message" role="status"></p>
 
   <div id="notificationsList" style="margin-top:18px">
     <div class="notification-empty">
@@ -1057,6 +1065,92 @@ if (!images.length && product.image_url) images = [product.image_url];
 if (!images.length) images = [fallbackImage];
 return [...new Set(images)].slice(0,MAX_PRODUCT_IMAGES);
 }
+
+// ======================================
+// OY ACCESSORIES — PUSH NOTIFICATIONS
+// ======================================
+
+const VAPID_PUBLIC_KEY = "BD7J5ck4tSIGAtMYjWTDG-FxNTA4VACGuBTHF_FY9YTmOg7EUtKoAmWBfQw8DVNg7FVlJA1wdnpSCfZcQGGlfLc";
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = atob(base64);
+  return Uint8Array.from(rawData, char => char.charCodeAt(0));
+}
+
+async function enablePushNotifications() {
+  const status = document.getElementById("pushStatus");
+  const button = document.getElementById("enablePushButton");
+
+  try {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      throw new Error("Push notifications are not supported on this device.");
+    }
+
+    if (!("Notification" in window)) {
+      throw new Error("Notifications are not supported.");
+    }
+
+    button.disabled = true;
+    status.textContent = "Activating notifications...";
+
+    const { data: authData, error: authError } = await db.auth.getUser();
+
+    if (authError || !authData.user) {
+      throw new Error("Please log in as admin first.");
+    }
+
+    const permission = await Notification.requestPermission();
+
+    if (permission !== "granted") {
+      throw new Error("Notification permission was not granted.");
+    }
+
+    const registration = await navigator.serviceWorker.ready;
+
+    let subscription = await registration.pushManager.getSubscription();
+
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+
+    const subscriptionData = subscription.toJSON();
+
+    const { error: saveError } = await db
+      .from("push_subscriptions")
+      .upsert({
+        endpoint: subscriptionData.endpoint,
+        p256dh: subscriptionData.keys.p256dh,
+        auth: subscriptionData.keys.auth,
+        user_id: authData.user.id
+      }, {
+        onConflict: "endpoint"
+      });
+
+    if (saveError) throw saveError;
+
+    status.textContent = "Push notifications activated successfully!";
+    status.className = "message success";
+
+  } catch (error) {
+    console.error("Push notification error:", error);
+    status.textContent = error.message || "Could not activate notifications.";
+    status.className = "message error";
+
+  } finally {
+    button.disabled = false;
+  }
+}
+
+document.getElementById("enablePushButton")
+  ?.addEventListener("click", enablePushNotifications);
 
 function showMessage(element,message,type="") {
 element.textContent = message;

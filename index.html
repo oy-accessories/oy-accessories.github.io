@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -181,19 +182,49 @@ border:0;border-radius:50%;width:35px;height:35px;font-size:23px;z-index:2
 .gallery-controls button{padding:9px 15px;background:var(--black);color:white}
 
 /* ======================================
-   OY LUXURY ADMIN DASHBOARD
+   OY LUXURY ADMIN DASHBOARD BACKGROUND
 ====================================== */
 #dashboardPage{
-background:#f4f1e9;
+position:relative;
+isolation:isolate;
+overflow:hidden;
+background-color:#e9e3d7;
+background-image:
+radial-gradient(ellipse at 12% 8%,rgba(198,166,107,.23),transparent 35%),
+radial-gradient(ellipse at 90% 38%,rgba(25,23,18,.09),transparent 38%),
+linear-gradient(135deg,#f7f3e9 0%,#e8e0d1 48%,#f5f0e6 100%);
 padding:38px 5%;
 min-height:100vh;
 }
+#dashboardPage:before{
+content:"";
+position:absolute;
+inset:0;
+z-index:-1;
+pointer-events:none;
+opacity:.22;
+background-image:
+linear-gradient(45deg,transparent 48%,rgba(166,132,75,.12) 49%,rgba(166,132,75,.12) 50%,transparent 51%),
+linear-gradient(-45deg,transparent 48%,rgba(166,132,75,.08) 49%,rgba(166,132,75,.08) 50%,transparent 51%);
+background-size:34px 34px;
+}
 #dashboardPage > div:first-child{
-background:#151410;
+background:linear-gradient(120deg,#11110f,#242119 65%,#171510);
 color:#fff;
 padding:28px;
 border:1px solid #c6a66b;
-box-shadow:0 12px 35px #00000012;
+box-shadow:0 15px 40px #00000020;
+position:relative;
+}
+#dashboardPage > div:first-child:after{
+content:"OY";
+position:absolute;
+right:28px;
+top:50%;
+transform:translateY(-50%);
+font:normal 100px Georgia,serif;
+color:rgba(198,166,107,.07);
+pointer-events:none;
 }
 #dashboardPage .page-title{
 color:#f4ead7;
@@ -203,7 +234,7 @@ letter-spacing:.5px;
 #adminEmail{color:#c6a66b!important}
 #dashboardPage .stats{gap:18px;margin:25px 0}
 #dashboardPage .stat{
-background:linear-gradient(145deg,#201e19,#11110f);
+background:linear-gradient(145deg,#252219,#11110f);
 color:#f5ead7;
 border:1px solid #b9975b;
 border-radius:5px;
@@ -211,6 +242,15 @@ padding:24px;
 box-shadow:0 8px 22px #00000012;
 position:relative;
 overflow:hidden;
+}
+#dashboardPage .stat:after{
+content:"";
+position:absolute;
+width:100px;height:100px;
+right:-35px;bottom:-50px;
+border:1px solid rgba(198,166,107,.22);
+border-radius:50%;
+box-shadow:0 0 0 12px rgba(198,166,107,.035),0 0 0 25px rgba(198,166,107,.025);
 }
 #dashboardPage .stat small{
 color:#c6a66b;
@@ -223,11 +263,11 @@ color:#fff;
 font:normal 32px Georgia,serif;
 }
 #dashboardPage .card{
-background:#fffefa;
-border:1px solid #e8dfcf;
+background:rgba(255,254,250,.96);
+border:1px solid #e0d3bc;
 border-radius:5px;
 padding:25px;
-box-shadow:0 8px 25px #00000008;
+box-shadow:0 8px 25px #0000000c;
 }
 #dashboardPage .card h3{
 color:#211e17;
@@ -281,6 +321,127 @@ color:#c6a66b;
 border-color:#c6a66b;
 }
 
+/* ======================================
+   MONTHLY ANALYTICS
+====================================== */
+.monthly-card{
+background:linear-gradient(145deg,#fffefa,#f5efe3)!important;
+border:1px solid #cbb486!important;
+position:relative;
+overflow:hidden;
+}
+.monthly-heading{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+.monthly-heading h3{
+margin:0!important;
+border:0!important;
+padding:0!important;
+}
+.month-select-wrap{
+display:flex;
+align-items:center;
+gap:10px;
+color:#80643b;
+font-size:12px;
+font-weight:bold;
+letter-spacing:.7px;
+}
+.month-select-wrap select{
+width:auto;
+min-width:170px;
+color:#29251d;
+font-weight:normal;
+}
+.monthly-stats{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:12px;
+margin:20px 0 25px;
+}
+.monthly-stat{
+background:#191814;
+border:1px solid #b9975b;
+padding:18px;
+min-width:0;
+}
+.monthly-stat small{
+display:block;
+color:#c6a66b;
+font-size:10px;
+letter-spacing:1px;
+text-transform:uppercase;
+}
+.monthly-stat strong{
+display:block;
+color:#fff;
+font:normal 25px Georgia,serif;
+margin-top:10px;
+overflow-wrap:anywhere;
+}
+.monthly-chart-title{
+font:normal 19px Georgia,serif;
+color:#29251d;
+margin:25px 0 15px;
+}
+.monthly-chart{
+display:grid;
+grid-template-columns:repeat(6,minmax(0,1fr));
+align-items:end;
+gap:12px;
+min-height:190px;
+padding:20px 10px 0;
+border-bottom:1px solid #d8c9ad;
+}
+.month-bar-item{
+height:170px;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+gap:8px;
+min-width:0;
+}
+.month-bar-value{
+font-size:10px;
+color:#72552b;
+font-weight:bold;
+text-align:center;
+overflow-wrap:anywhere;
+}
+.month-bar{
+width:min(42px,75%);
+min-height:3px;
+background:linear-gradient(180deg,#dfc28b,#a9874d);
+border:1px solid #b8955b;
+border-bottom:0;
+border-radius:3px 3px 0 0;
+transition:height .25s ease;
+}
+.month-bar-label{
+font-size:10px;
+color:#665d4d;
+text-align:center;
+white-space:nowrap;
+}
+.monthly-empty{
+text-align:center;
+color:#8a806e;
+font-size:13px;
+padding:25px 10px;
+grid-column:1/-1;
+}
+.monthly-footnote{
+font-size:11px;
+color:#827966;
+line-height:1.6;
+margin-top:15px;
+}
 @media(max-width:900px){
 .products{grid-template-columns:repeat(2,1fr)}
 .stats{grid-template-columns:repeat(2,1fr)}
@@ -308,13 +469,23 @@ nav a{font-size:11px}
 #imagePreviews{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
 .image-thumb img{height:58px}
 .detail-panel{padding:15px}
-
 #dashboardPage{padding:20px 4%}
 #dashboardPage > div:first-child{padding:19px}
 #dashboardPage .page-title{font-size:29px}
 #dashboardPage .stat{padding:16px 12px}
 #dashboardPage .stat strong{font-size:25px}
 #dashboardPage .card{padding:16px}
+.monthly-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.monthly-stat{padding:14px 11px}
+.monthly-stat strong{font-size:21px}
+.monthly-chart{gap:5px;padding-left:0;padding-right:0}
+.month-bar-item{height:150px}
+.month-bar{width:65%}
+.month-bar-value{font-size:9px}
+.month-bar-label{font-size:9px}
+.monthly-heading{align-items:flex-start}
+.month-select-wrap{width:100%;align-items:flex-start;flex-direction:column}
+.month-select-wrap select{width:100%}
 }
 
 /* ======================================
@@ -501,6 +672,46 @@ transform:none!important;
 <div class="stat"><small>Pending Orders</small><strong id="statNew">0</strong></div>
 <div class="stat"><small>Products</small><strong id="statProducts">0</strong></div>
 <div class="stat"><small>Sales (DH)</small><strong id="statSales">0</strong></div>
+</div>
+
+<!-- MONTHLY ANALYTICS -->
+<div class="card monthly-card">
+<div class="monthly-heading">
+<h3>Monthly Analytics</h3>
+<label class="month-select-wrap">
+<span>SELECT MONTH</span>
+<select id="monthFilter">
+<option value="">Loading months...</option>
+</select>
+</label>
+</div>
+
+<div class="monthly-stats">
+<div class="monthly-stat">
+<small>Monthly Sales</small>
+<strong id="monthSales">0.00 DH</strong>
+</div>
+<div class="monthly-stat">
+<small>Total Orders</small>
+<strong id="monthOrders">0</strong>
+</div>
+<div class="monthly-stat">
+<small>Delivered Orders</small>
+<strong id="monthDelivered">0</strong>
+</div>
+<div class="monthly-stat">
+<small>Cancelled Orders</small>
+<strong id="monthCancelled">0</strong>
+</div>
+</div>
+
+<h4 class="monthly-chart-title">Sales — Last 6 Months</h4>
+<div id="monthlyChart" class="monthly-chart">
+<div class="monthly-empty">Loading monthly sales...</div>
+</div>
+<p class="monthly-footnote">
+Monthly sales exclude cancelled orders. Figures are calculated from the order totals saved in your database.
+</p>
 </div>
 
 <div class="card">
@@ -719,6 +930,7 @@ const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 let products = [];
 let cart = [];
+let dashboardOrders = [];
 
 try {
 cart = JSON.parse(localStorage.getItem("oy-cart") || "[]");
@@ -1266,6 +1478,108 @@ orderMonitorTimer = setInterval(checkForNewOrders,15000);
 }
 
 // ======================================
+// MONTHLY ANALYTICS FUNCTIONS
+// ======================================
+function getMonthKey(dateValue) {
+const date = new Date(dateValue);
+if (Number.isNaN(date.getTime())) return "";
+return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}`;
+}
+
+function formatMonthLabel(monthKey) {
+const [year,month] = monthKey.split("-").map(Number);
+return new Date(year,month-1,1).toLocaleDateString("en-US",{
+month:"long",
+year:"numeric"
+});
+}
+
+function getMonthOrders(monthKey) {
+return dashboardOrders.filter(order => getMonthKey(order.created_at) === monthKey);
+}
+
+function renderMonthlyAnalytics(orders) {
+dashboardOrders = orders || [];
+
+const select = document.getElementById("monthFilter");
+if (!select) return;
+
+const currentMonth = getMonthKey(new Date());
+const availableMonths = [...new Set([
+currentMonth,
+...dashboardOrders.map(order => getMonthKey(order.created_at)).filter(Boolean)
+])].sort().reverse();
+
+const previousValue = select.value;
+select.innerHTML = availableMonths.map(month => `
+<option value="${esc(month)}">${esc(formatMonthLabel(month))}</option>
+`).join("");
+
+select.value = availableMonths.includes(previousValue)
+? previousValue
+: currentMonth;
+
+renderSelectedMonth();
+renderMonthlyChart();
+}
+
+function renderSelectedMonth() {
+const select = document.getElementById("monthFilter");
+const selectedMonth = select.value;
+const orders = getMonthOrders(selectedMonth);
+
+const sales = orders
+.filter(order => order.status !== "cancelled")
+.reduce((sum,order) => sum + Number(order.total || 0),0);
+
+const delivered = orders.filter(order => order.status === "delivered").length;
+const cancelled = orders.filter(order => order.status === "cancelled").length;
+
+document.getElementById("monthSales").textContent = money(sales);
+document.getElementById("monthOrders").textContent = orders.length;
+document.getElementById("monthDelivered").textContent = delivered;
+document.getElementById("monthCancelled").textContent = cancelled;
+}
+
+function renderMonthlyChart() {
+const container = document.getElementById("monthlyChart");
+const now = new Date();
+const months = [];
+
+for (let i = 5; i >= 0; i--) {
+const date = new Date(now.getFullYear(),now.getMonth()-i,1);
+const key = getMonthKey(date);
+const monthOrders = getMonthOrders(key);
+const sales = monthOrders
+.filter(order => order.status !== "cancelled")
+.reduce((sum,order) => sum + Number(order.total || 0),0);
+
+months.push({
+key,
+label:date.toLocaleDateString("en-US",{month:"short"}),
+sales
+});
+}
+
+const maxSales = Math.max(...months.map(month => month.sales),1);
+
+container.innerHTML = months.map(month => {
+const height = month.sales > 0
+? Math.max(5,(month.sales/maxSales)*105)
+: 3;
+
+return `
+<div class="month-bar-item">
+<span class="month-bar-value">${month.sales.toFixed(0)} DH</span>
+<div class="month-bar" style="height:${height}px" title="${esc(formatMonthLabel(month.key))}: ${money(month.sales)}"></div>
+<span class="month-bar-label">${esc(month.label)}</span>
+</div>`;
+}).join("");
+}
+
+document.getElementById("monthFilter").addEventListener("change",renderSelectedMonth);
+
+// ======================================
 // ADMIN DASHBOARD
 // ======================================
 async function loadDashboard() {
@@ -1299,10 +1613,15 @@ return;
 }
 
 const orders = data || [];
+dashboardOrders = orders;
+
 document.getElementById("statOrders").textContent = orders.length;
 document.getElementById("statNew").textContent = orders.filter(o => o.status === "pending").length;
 document.getElementById("statSales").textContent =
 orders.filter(o => o.status !== "cancelled").reduce((s,o) => s+Number(o.total || 0),0).toFixed(0);
+
+// Update the monthly selector, selected month and six-month chart.
+renderMonthlyAnalytics(orders);
 
 tbody.innerHTML = orders.map(o => {
 const deliveryFee = Number(o.delivery_fee || 0);

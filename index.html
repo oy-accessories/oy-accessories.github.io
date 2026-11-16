@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="OY Admin">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -179,6 +179,108 @@ border:0;border-radius:50%;width:35px;height:35px;font-size:23px;z-index:2
 }
 .gallery-controls{display:flex;justify-content:space-between;gap:10px;margin:8px 0}
 .gallery-controls button{padding:9px 15px;background:var(--black);color:white}
+
+/* ======================================
+   OY LUXURY ADMIN DASHBOARD
+====================================== */
+#dashboardPage{
+background:#f4f1e9;
+padding:38px 5%;
+min-height:100vh;
+}
+#dashboardPage > div:first-child{
+background:#151410;
+color:#fff;
+padding:28px;
+border:1px solid #c6a66b;
+box-shadow:0 12px 35px #00000012;
+}
+#dashboardPage .page-title{
+color:#f4ead7;
+font-size:38px;
+letter-spacing:.5px;
+}
+#adminEmail{color:#c6a66b!important}
+#dashboardPage .stats{gap:18px;margin:25px 0}
+#dashboardPage .stat{
+background:linear-gradient(145deg,#201e19,#11110f);
+color:#f5ead7;
+border:1px solid #b9975b;
+border-radius:5px;
+padding:24px;
+box-shadow:0 8px 22px #00000012;
+position:relative;
+overflow:hidden;
+}
+#dashboardPage .stat small{
+color:#c6a66b;
+text-transform:uppercase;
+letter-spacing:1.5px;
+font-size:10px;
+}
+#dashboardPage .stat strong{
+color:#fff;
+font:normal 32px Georgia,serif;
+}
+#dashboardPage .card{
+background:#fffefa;
+border:1px solid #e8dfcf;
+border-radius:5px;
+padding:25px;
+box-shadow:0 8px 25px #00000008;
+}
+#dashboardPage .card h3{
+color:#211e17;
+border-bottom:1px solid #e9dfce;
+padding-bottom:15px;
+font-size:23px;
+}
+#dashboardPage th{
+background:#191814;
+color:#d8bd89;
+font-size:10px;
+text-transform:uppercase;
+letter-spacing:1px;
+white-space:nowrap;
+}
+#dashboardPage td{padding:15px 12px;color:#403b31}
+#dashboardPage tr:hover td{background:#faf6ed}
+#dashboardPage input,
+#dashboardPage textarea,
+#dashboardPage select{
+border:1px solid #ded5c5;
+background:#fff;
+border-radius:3px;
+padding:13px;
+}
+#dashboardPage input:focus,
+#dashboardPage textarea:focus,
+#dashboardPage select:focus{
+outline:none;
+border-color:#b8955b;
+box-shadow:0 0 0 3px #c6a66b20;
+}
+#dashboardPage .product-admin{
+padding:16px 0;
+border-bottom:1px solid #eee7da;
+}
+#dashboardPage .product-admin img{
+width:58px;
+height:58px;
+border-radius:3px;
+}
+#dashboardPage .status{
+background:#f1e8d7;
+color:#765a2d;
+border:1px solid #e2d1b0;
+border-radius:3px;
+}
+#dashboardPage button{border-radius:3px}
+#dashboardPage .outline-btn{
+color:#c6a66b;
+border-color:#c6a66b;
+}
+
 @media(max-width:900px){
 .products{grid-template-columns:repeat(2,1fr)}
 .stats{grid-template-columns:repeat(2,1fr)}
@@ -206,118 +308,102 @@ nav a{font-size:11px}
 #imagePreviews{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
 .image-thumb img{height:58px}
 .detail-panel{padding:15px}
-}
 
+#dashboardPage{padding:20px 4%}
+#dashboardPage > div:first-child{padding:19px}
+#dashboardPage .page-title{font-size:29px}
+#dashboardPage .stat{padding:16px 12px}
+#dashboardPage .stat strong{font-size:25px}
+#dashboardPage .card{padding:16px}
+}
 
 /* ======================================
    OY ACCESSORIES — LUXURY BUTTON SYSTEM
-   Global button styling: storefront + cart + checkout + admin
 ====================================== */
-button,
-.btn,
-a.gold-btn,
-a.outline-btn {
-  font-family: inherit;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background .25s ease, color .25s ease, border-color .25s ease,
-              box-shadow .25s ease, transform .25s ease;
-  -webkit-tap-highlight-color: transparent;
+button,.btn,a.gold-btn,a.outline-btn{
+font-family:inherit;
+border-radius:3px;
+cursor:pointer;
+transition:background .25s ease,color .25s ease,border-color .25s ease,
+box-shadow .25s ease,transform .25s ease;
+-webkit-tap-highlight-color:transparent;
 }
-
-button:not(.close):not(.detail-close),
-.btn {
-  letter-spacing: .7px;
+button:not(.close):not(.detail-close),.btn{letter-spacing:.7px}
+.gold-btn,a.gold-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+background:linear-gradient(135deg,#dfc28b 0%,#c6a66b 48%,#a9874d 100%);
+color:#11110f;
+border:1px solid #c6a66b;
+padding:13px 23px;
+font-size:12px;
+font-weight:700;
+letter-spacing:1.25px;
+text-decoration:none;
+box-shadow:0 5px 14px rgba(166,132,75,.16);
 }
-
-.gold-btn,
-a.gold-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #dfc28b 0%, #c6a66b 48%, #a9874d 100%);
-  color: #11110f;
-  border: 1px solid #c6a66b;
-  padding: 13px 23px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.25px;
-  text-decoration: none;
-  box-shadow: 0 5px 14px rgba(166, 132, 75, .16);
+.gold-btn:hover,a.gold-btn:hover{
+background:linear-gradient(135deg,#ead4a8 0%,#d4b77f 48%,#b8955b 100%);
+border-color:#dfc28b;
+box-shadow:0 8px 20px rgba(166,132,75,.25);
+transform:translateY(-2px);
 }
-
-.gold-btn:hover,
-a.gold-btn:hover {
-  background: linear-gradient(135deg, #ead4a8 0%, #d4b77f 48%, #b8955b 100%);
-  border-color: #dfc28b;
-  box-shadow: 0 8px 20px rgba(166, 132, 75, .25);
-  transform: translateY(-2px);
+.outline-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:7px;
+background:transparent;
+color:#b8955b;
+border:1px solid #c6a66b;
+padding:10px 17px;
+font-size:11px;
+font-weight:700;
+letter-spacing:1px;
+text-decoration:none;
 }
-
-.outline-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: transparent;
-  color: #b8955b;
-  border: 1px solid #c6a66b;
-  padding: 10px 17px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-decoration: none;
+.outline-btn:hover{
+background:#c6a66b;
+color:#11110f;
+border-color:#c6a66b;
+box-shadow:0 5px 14px rgba(166,132,75,.16);
+transform:translateY(-2px);
 }
-
-.outline-btn:hover {
-  background: #c6a66b;
-  color: #11110f;
-  border-color: #c6a66b;
-  box-shadow: 0 5px 14px rgba(166, 132, 75, .16);
-  transform: translateY(-2px);
+button:not(.gold-btn):not(.outline-btn):not(.close):not(.detail-close){
+border:1px solid #c6a66b;
+border-radius:3px;
+background:#171613;
+color:#ead7b1;
+padding:10px 15px;
+font-size:11px;
+font-weight:700;
+letter-spacing:.8px;
+transition:background .25s ease,color .25s ease,border-color .25s ease,
+box-shadow .25s ease,transform .25s ease;
 }
-
-/* Other functional buttons used in cart, gallery and admin */
-button:not(.gold-btn):not(.outline-btn):not(.close):not(.detail-close) {
-  border: 1px solid #c6a66b;
-  border-radius: 3px;
-  background: #171613;
-  color: #ead7b1;
-  padding: 10px 15px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .8px;
-  transition: background .25s ease, color .25s ease, border-color .25s ease,
-              box-shadow .25s ease, transform .25s ease;
+button:not(.gold-btn):not(.outline-btn):not(.close):not(.detail-close):hover{
+background:#c6a66b;
+color:#11110f;
+border-color:#dfc28b;
+box-shadow:0 5px 14px rgba(166,132,75,.18);
+transform:translateY(-1px);
 }
-
-button:not(.gold-btn):not(.outline-btn):not(.close):not(.detail-close):hover {
-  background: #c6a66b;
-  color: #11110f;
-  border-color: #dfc28b;
-  box-shadow: 0 5px 14px rgba(166, 132, 75, .18);
-  transform: translateY(-1px);
+button:active,.btn:active,a.gold-btn:active,a.outline-btn:active{
+transform:translateY(0) scale(.98);
 }
-
-button:active, .btn:active, a.gold-btn:active, a.outline-btn:active {
-  transform: translateY(0) scale(.98);
+button:disabled{
+opacity:.55;
+cursor:not-allowed;
+transform:none!important;
+box-shadow:none!important;
 }
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
+.close,.detail-close{
+border:0!important;
+box-shadow:none!important;
+transform:none!important;
 }
-
-/* Keep the small close controls discreet */
-.close, .detail-close {
-  border: 0 !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
 </style>
 </head>
 
@@ -437,7 +523,6 @@ button:disabled {
 <div class="admin-grid">
 <div class="card">
 <h3 id="productFormTitle">Add New Product</h3>
-
 <form id="productForm">
 <input name="name" placeholder="Product name (French)" required>
 <input name="price" type="number" min="0" step="0.01" placeholder="Price (DH)" required>
@@ -541,7 +626,6 @@ WhatsApp us
 
 <form id="checkout">
 <h2 style="font:normal 25px Georgia,serif;margin-top:15px">Delivery Details</h2>
-
 <input name="firstName" placeholder="First name" required>
 <input name="lastName" placeholder="Last name" required>
 <input name="phone" placeholder="Phone number" required>
@@ -570,33 +654,15 @@ WhatsApp us
 <label for="otherCity"><strong>Select your city</strong></label>
 <select id="otherCity" name="otherCity">
 <option value="">Choose your city</option>
-<option>Rabat</option>
-<option>Salé</option>
-<option>Témara</option>
-<option>Mohammedia</option>
-<option>Marrakech</option>
-<option>Agadir</option>
-<option>Tanger</option>
-<option>Tétouan</option>
-<option>Fès</option>
-<option>Meknès</option>
-<option>Oujda</option>
-<option>Kénitra</option>
-<option>El Jadida</option>
-<option>Safi</option>
-<option>Essaouira</option>
-<option>Beni Mellal</option>
-<option>Khouribga</option>
-<option>Settat</option>
-<option>Berrechid</option>
-<option>Nador</option>
-<option>Al Hoceima</option>
-<option>Larache</option>
-<option>Taza</option>
-<option>Ouarzazate</option>
-<option>Laâyoune</option>
-<option>Dakhla</option>
-<option>Guelmim</option>
+<option>Rabat</option><option>Salé</option><option>Témara</option>
+<option>Mohammedia</option><option>Marrakech</option><option>Agadir</option>
+<option>Tanger</option><option>Tétouan</option><option>Fès</option>
+<option>Meknès</option><option>Oujda</option><option>Kénitra</option>
+<option>El Jadida</option><option>Safi</option><option>Essaouira</option>
+<option>Beni Mellal</option><option>Khouribga</option><option>Settat</option>
+<option>Berrechid</option><option>Nador</option><option>Al Hoceima</option>
+<option>Larache</option><option>Taza</option><option>Ouarzazate</option>
+<option>Laâyoune</option><option>Dakhla</option><option>Guelmim</option>
 </select>
 </div>
 
@@ -617,7 +683,6 @@ You will pay when you receive your order.
 </aside>
 </div>
 
-<!-- PRODUCT DETAILS GALLERY -->
 <div class="detail-overlay" id="productDetailOverlay">
 <div class="detail-panel">
 <button class="detail-close" id="closeProductDetail">&times;</button>
@@ -640,7 +705,6 @@ You will pay when you receive your order.
 // ======================================
 // SUPABASE CONFIGURATION
 // ======================================
-
 const SUPABASE_URL = "https://ibmcpnlsejnyigqthpsh.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_oD9Gx4FvatYYmxXW_Q4G9w_JgKYzSRm";
 const STORE_WHATSAPP_NUMBER = "212660120463";
@@ -651,10 +715,7 @@ const AI_FUNCTION_NAME = "swift-function";
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const MAX_PRODUCT_IMAGES = 5;
 
-const db = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
-);
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 
 let products = [];
 let cart = [];
@@ -662,9 +723,7 @@ let cart = [];
 try {
 cart = JSON.parse(localStorage.getItem("oy-cart") || "[]");
 if (!Array.isArray(cart)) cart = [];
-} catch {
-cart = [];
-}
+} catch { cart = []; }
 
 let activeCategory = "All";
 let editingProductId = null;
@@ -699,38 +758,26 @@ function productImages(product) {
 let images = Array.isArray(product.image_urls)
 ? product.image_urls.filter(Boolean)
 : [];
-
-if (!images.length && product.image_url) {
-images = [product.image_url];
-}
-
+if (!images.length && product.image_url) images = [product.image_url];
 if (!images.length) images = [fallbackImage];
-
 return [...new Set(images)].slice(0,MAX_PRODUCT_IMAGES);
 }
 
-function showMessage(element, message, type="") {
+function showMessage(element,message,type="") {
 element.textContent = message;
 element.className = "message " + type;
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("whatsappLink").href =
-`https://wa.me/${STORE_WHATSAPP_NUMBER}`;
+document.getElementById("whatsappLink").href = `https://wa.me/${STORE_WHATSAPP_NUMBER}`;
 
 // ======================================
 // DELIVERY LOCATION AND FEES
 // ======================================
-
 function getSelectedCity() {
 const type = document.querySelector('input[name="deliveryType"]:checked')?.value;
-
 if (type === "Casablanca") return "Casablanca";
-
-if (type === "other") {
-return document.getElementById("otherCity").value;
-}
-
+if (type === "other") return document.getElementById("otherCity").value;
 return "";
 }
 
@@ -748,46 +795,36 @@ function updateDeliveryLocation() {
 const type = document.querySelector('input[name="deliveryType"]:checked')?.value;
 const otherContainer = document.getElementById("otherCityContainer");
 const otherCity = document.getElementById("otherCity");
-
 otherContainer.classList.toggle("hidden",type !== "other");
 otherCity.required = type === "other";
-
 renderCart();
 }
 
 document.querySelectorAll('input[name="deliveryType"]').forEach(radio => {
 radio.addEventListener("change",updateDeliveryLocation);
 });
-
 document.getElementById("otherCity").addEventListener("change",renderCart);
 
 // ======================================
 // PAGE NAVIGATION
 // ======================================
-
 function showPage() {
 const hash = location.hash || "#home";
-
-document.getElementById("storePage").classList.toggle(
-"hidden", hash !== "#home" && hash !== "#shop"
-);
-document.getElementById("trackPage").classList.toggle("hidden", hash !== "#track");
-document.getElementById("adminLoginPage").classList.toggle("hidden", hash !== "#admin");
-document.getElementById("dashboardPage").classList.toggle("hidden", hash !== "#dashboard");
+document.getElementById("storePage").classList.toggle("hidden",hash !== "#home" && hash !== "#shop");
+document.getElementById("trackPage").classList.toggle("hidden",hash !== "#track");
+document.getElementById("adminLoginPage").classList.toggle("hidden",hash !== "#admin");
+document.getElementById("dashboardPage").classList.toggle("hidden",hash !== "#dashboard");
 
 if (hash === "#admin") checkExistingSession();
 if (hash === "#dashboard") loadDashboard();
 if (hash === "#track") document.getElementById("trackResult").textContent = "";
-
 window.scrollTo(0,0);
 }
-
-window.addEventListener("hashchange", showPage);
+window.addEventListener("hashchange",showPage);
 
 // ======================================
 // STORE PRODUCTS
 // ======================================
-
 async function loadProducts() {
 const container = document.getElementById("products");
 container.innerHTML = '<div class="loading">Loading products...</div>';
@@ -798,19 +835,15 @@ const {data,error} = await db.from("products")
 .order("created_at",{ascending:false});
 
 if (error) {
-container.innerHTML =
-'<div class="empty">Could not load products. Please try again later.</div>';
+container.innerHTML = '<div class="empty">Could not load products. Please try again later.</div>';
 console.error(error);
 return;
 }
 
 products = data || [];
-
 cart = cart.map(item => {
 const current = products.find(p => p.id === item.id);
-return current
-? {...current,qty:Math.min(Number(item.qty)||1,Number(current.stock)||0)}
-: null;
+return current ? {...current,qty:Math.min(Number(item.qty)||1,Number(current.stock)||0)} : null;
 }).filter(item => item && item.qty > 0);
 
 saveCart();
@@ -819,16 +852,11 @@ renderProducts();
 }
 
 function renderCategories() {
-const categories = [
-"All",
-...new Set(products.map(p => p.category).filter(Boolean))
-];
-
+const categories = ["All",...new Set(products.map(p => p.category).filter(Boolean))];
 if (!categories.includes(activeCategory)) activeCategory = "All";
 
 document.getElementById("categories").innerHTML = categories.map(c => `
-<button class="chip ${c === activeCategory ? "active" : ""}"
-data-category="${esc(c)}">${esc(c)}</button>
+<button class="chip ${c === activeCategory ? "active" : ""}" data-category="${esc(c)}">${esc(c)}</button>
 `).join("");
 
 document.querySelectorAll("[data-category]").forEach(button => {
@@ -841,27 +869,21 @@ renderProducts();
 }
 
 function renderProducts() {
-const list = products.filter(p =>
-activeCategory === "All" || p.category === activeCategory
-);
+const list = products.filter(p => activeCategory === "All" || p.category === activeCategory);
 
 document.getElementById("products").innerHTML = list.map(p => {
 const images = productImages(p);
 return `
 <article class="product">
-<img src="${esc(images[0])}"
-alt="${esc(p.name)}" loading="lazy"
+<img src="${esc(images[0])}" alt="${esc(p.name)}" loading="lazy"
 data-details="${esc(p.id)}"
 onerror="this.onerror=null;this.src='${fallbackImage}'">
 <div class="product-info">
 <small>${esc(p.category || "Accessories")}</small>
 <h3>${esc(p.name)}</h3>
 <div class="price">${money(p.price)}</div>
-${images.length > 1
-? `<p style="font-size:11px;color:#888;margin-bottom:10px">${images.length} photos · View gallery</p>`
-: ""}
-<button data-add="${esc(p.id)}"
-${Number(p.stock) <= 0 ? "disabled" : ""}>
+${images.length > 1 ? `<p style="font-size:11px;color:#888;margin-bottom:10px">${images.length} photos · View gallery</p>` : ""}
+<button data-add="${esc(p.id)}" ${Number(p.stock) <= 0 ? "disabled" : ""}>
 ${Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
 </button>
 </div>
@@ -871,7 +893,6 @@ ${Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART"}
 document.querySelectorAll("[data-add]").forEach(button => {
 button.onclick = () => addToCart(button.dataset.add);
 });
-
 document.querySelectorAll("[data-details]").forEach(image => {
 image.onclick = () => openProductDetails(image.dataset.details);
 });
@@ -880,11 +901,9 @@ image.onclick = () => openProductDetails(image.dataset.details);
 // ======================================
 // PRODUCT GALLERY
 // ======================================
-
 function openProductDetails(id) {
 const p = products.find(x => x.id === id);
 if (!p) return;
-
 detailProduct = p;
 detailImages = productImages(p);
 detailImageIndex = 0;
@@ -893,29 +912,18 @@ document.getElementById("detailName").textContent = p.name || "";
 document.getElementById("detailCategory").textContent = p.category || "";
 document.getElementById("detailPrice").textContent = money(p.price);
 document.getElementById("detailDescription").textContent = p.description || "";
-
 document.getElementById("detailAddToCart").disabled = Number(p.stock) <= 0;
-document.getElementById("detailAddToCart").textContent =
-Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART";
-
+document.getElementById("detailAddToCart").textContent = Number(p.stock) <= 0 ? "OUT OF STOCK" : "ADD TO CART";
 renderDetailGallery();
-
 document.getElementById("productDetailOverlay").style.display = "flex";
 }
 
 function renderDetailGallery() {
 if (!detailImages.length) return;
-
-document.getElementById("detailMainImage").src =
-detailImages[detailImageIndex];
-
-document.getElementById("galleryCounter").textContent =
-`${detailImageIndex+1} / ${detailImages.length}`;
-
-document.getElementById("detailThumbnails").innerHTML =
-detailImages.map((url,index) => `
-<img src="${esc(url)}"
-class="${index === detailImageIndex ? "selected" : ""}"
+document.getElementById("detailMainImage").src = detailImages[detailImageIndex];
+document.getElementById("galleryCounter").textContent = `${detailImageIndex+1} / ${detailImages.length}`;
+document.getElementById("detailThumbnails").innerHTML = detailImages.map((url,index) => `
+<img src="${esc(url)}" class="${index === detailImageIndex ? "selected" : ""}"
 data-gallery-index="${index}" alt="Product photo ${index+1}">
 `).join("");
 
@@ -925,11 +933,8 @@ detailImageIndex = Number(image.dataset.galleryIndex);
 renderDetailGallery();
 };
 });
-
-document.getElementById("previousImage").disabled =
-detailImages.length <= 1;
-document.getElementById("nextImage").disabled =
-detailImages.length <= 1;
+document.getElementById("previousImage").disabled = detailImages.length <= 1;
+document.getElementById("nextImage").disabled = detailImages.length <= 1;
 }
 
 document.getElementById("previousImage").onclick = () => {
@@ -937,7 +942,6 @@ if (!detailImages.length) return;
 detailImageIndex = (detailImageIndex - 1 + detailImages.length) % detailImages.length;
 renderDetailGallery();
 };
-
 document.getElementById("nextImage").onclick = () => {
 if (!detailImages.length) return;
 detailImageIndex = (detailImageIndex + 1) % detailImages.length;
@@ -948,13 +952,10 @@ function closeProductDetails() {
 document.getElementById("productDetailOverlay").style.display = "none";
 detailProduct = null;
 }
-
 document.getElementById("closeProductDetail").onclick = closeProductDetails;
-
 document.getElementById("productDetailOverlay").onclick = e => {
 if (e.target.id === "productDetailOverlay") closeProductDetails();
 };
-
 document.getElementById("detailAddToCart").onclick = () => {
 if (detailProduct) {
 const id = detailProduct.id;
@@ -966,7 +967,6 @@ addToCart(id);
 // ======================================
 // CART
 // ======================================
-
 function saveCart() {
 localStorage.setItem("oy-cart",JSON.stringify(cart));
 renderCartCount();
@@ -976,29 +976,23 @@ renderCart();
 function addToCart(id) {
 const product = products.find(p => p.id === id);
 if (!product) return;
-
 const item = cart.find(p => p.id === id);
-
 if ((item ? item.qty : 0) >= Number(product.stock)) {
 alert("Not enough stock available.");
 return;
 }
-
 if (item) item.qty++;
 else cart.push({...product,qty:1});
-
 saveCart();
 openCart();
 }
 
 function renderCartCount() {
-document.getElementById("cartCount").textContent =
-cart.reduce((sum,p) => sum + (Number(p.qty)||0),0);
+document.getElementById("cartCount").textContent = cart.reduce((sum,p) => sum + (Number(p.qty)||0),0);
 }
 
 function renderCart() {
-document.getElementById("cartItems").innerHTML = cart.length
-? cart.map(p => `
+document.getElementById("cartItems").innerHTML = cart.length ? cart.map(p => `
 <div class="cart-line">
 <img src="${esc(productImages(p)[0])}" alt="">
 <div>
@@ -1013,8 +1007,7 @@ ${p.qty}
 </div>
 <strong>${money(p.price * p.qty)}</strong>
 </div>
-`).join("")
-: '<div class="empty">Your cart is empty.</div>';
+`).join("") : '<div class="empty">Your cart is empty.</div>';
 
 const subtotal = getCartSubtotal();
 const city = getSelectedCity();
@@ -1029,8 +1022,11 @@ document.getElementById("cartTotal").textContent = money(total);
 const promoText = qualifiesForFreeDelivery
 ? "Congratulations! Your order qualifies for FREE delivery anywhere in Morocco."
 : `Add ${money(300-subtotal)} more to get FREE delivery anywhere in Morocco.`;
-document.getElementById("cartPromoMessage").innerHTML = `<strong>${qualifiesForFreeDelivery ? "FREE DELIVERY UNLOCKED!" : "FREE DELIVERY FROM 300 DH"}</strong><br>${promoText}`;
-document.getElementById("checkoutPromoMessage").innerHTML = `<strong>${qualifiesForFreeDelivery ? "FREE DELIVERY UNLOCKED!" : "FREE DELIVERY FROM 300 DH"}</strong><br>${promoText}`;
+
+document.getElementById("cartPromoMessage").innerHTML =
+`<strong>${qualifiesForFreeDelivery ? "FREE DELIVERY UNLOCKED!" : "FREE DELIVERY FROM 300 DH"}</strong><br>${promoText}`;
+document.getElementById("checkoutPromoMessage").innerHTML =
+`<strong>${qualifiesForFreeDelivery ? "FREE DELIVERY UNLOCKED!" : "FREE DELIVERY FROM 300 DH"}</strong><br>${promoText}`;
 
 document.querySelectorAll("[data-inc]").forEach(b => {
 b.onclick = () => {
@@ -1042,7 +1038,6 @@ item.qty++;
 saveCart();
 };
 });
-
 document.querySelectorAll("[data-dec]").forEach(b => {
 b.onclick = () => {
 const item = cart.find(p => p.id === b.dataset.dec);
@@ -1052,7 +1047,6 @@ if (item.qty <= 0) cart = cart.filter(p => p.id !== b.dataset.dec);
 saveCart();
 };
 });
-
 document.querySelectorAll("[data-remove]").forEach(b => {
 b.onclick = () => {
 cart = cart.filter(p => p.id !== b.dataset.remove);
@@ -1061,16 +1055,10 @@ saveCart();
 });
 }
 
-function openCart() {
-document.getElementById("cartOverlay").style.display = "block";
-}
-function closeCart() {
-document.getElementById("cartOverlay").style.display = "none";
-}
-
+function openCart() { document.getElementById("cartOverlay").style.display = "block"; }
+function closeCart() { document.getElementById("cartOverlay").style.display = "none"; }
 document.getElementById("openCart").onclick = openCart;
 document.getElementById("closeCart").onclick = closeCart;
-
 document.getElementById("cartOverlay").onclick = e => {
 if (e.target.id === "cartOverlay") closeCart();
 };
@@ -1078,10 +1066,8 @@ if (e.target.id === "cartOverlay") closeCart();
 // ======================================
 // CHECKOUT
 // ======================================
-
 document.getElementById("checkout").addEventListener("submit",async e => {
 e.preventDefault();
-
 const msg = document.getElementById("checkoutMessage");
 const button = e.target.querySelector('button[type="submit"]');
 
@@ -1099,14 +1085,9 @@ showMessage(msg,"Please choose your delivery location and city.","error");
 return;
 }
 
-const items = cart.map(p => ({
-product_id:p.id,
-quantity:p.qty
-}));
-
+const items = cart.map(p => ({product_id:p.id,quantity:p.qty}));
 button.disabled = true;
 button.textContent = "SAVING ORDER...";
-
 const waWindow = window.open("about:blank","_blank");
 
 try {
@@ -1118,29 +1099,19 @@ p_address:f.address,
 p_notes:f.notes || "",
 p_items:items
 });
-
 if (error) throw error;
 if (!data || !data.reference) throw new Error("No order reference was returned.");
 
-const lines = cart.map(p =>
-`- ${p.name} x${p.qty}: ${money(p.price*p.qty)}`
-).join("\n");
-
+const lines = cart.map(p => `- ${p.name} x${p.qty}: ${money(p.price*p.qty)}`).join("\n");
 const orderText =
 `NEW ORDER - OY ACCESSORIES\nReference: ${data.reference}\n`+
 `Customer: ${customerName}\nPhone: ${f.phone}\nCity: ${city}\n`+
 `Address: ${f.address}\nProducts:\n${lines}\n`+
-`Subtotal: ${money(data.subtotal)}\n`+
-`Delivery fee: ${money(data.delivery_fee)}\n`+
-`Total: ${money(data.total)}\n`+
-`Payment: Cash on Delivery\n`+
-`Notes: ${f.notes || "None"}`;
+`Subtotal: ${money(data.subtotal)}\nDelivery fee: ${money(data.delivery_fee)}\n`+
+`Total: ${money(data.total)}\nPayment: Cash on Delivery\nNotes: ${f.notes || "None"}`;
 
-const waUrl =
-`https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
-
-msg.innerHTML =
-`Order saved successfully!<br><strong>Your tracking number: ${esc(data.reference)}</strong><br>Save this number to track your order.`;
+const waUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
+msg.innerHTML = `Order saved successfully!<br><strong>Your tracking number: ${esc(data.reference)}</strong><br>Save this number to track your order.`;
 
 if (waWindow) waWindow.location.href = waUrl;
 else window.location.href = waUrl;
@@ -1163,13 +1134,10 @@ button.textContent = "CONFIRM ORDER";
 // ======================================
 // CUSTOMER ORDER TRACKING
 // ======================================
-
 document.getElementById("trackForm").addEventListener("submit",async e => {
 e.preventDefault();
-
 const result = document.getElementById("trackResult");
 const f = Object.fromEntries(new FormData(e.target).entries());
-
 result.textContent = "Searching for your order...";
 
 try {
@@ -1177,22 +1145,16 @@ const {data,error} = await db.rpc("track_order",{
 p_reference:f.reference.trim(),
 p_phone:f.phone.trim()
 });
-
 if (error) throw error;
-
 if (!data || !data.success) {
 showMessage(result,"Order not found. Check your reference and phone number.","error");
 return;
 }
 
 const statusLabels = {
-pending:"Pending",
-confirmed:"Confirmed",
-shipped:"Out for delivery",
-delivered:"Delivered",
-cancelled:"Cancelled"
+pending:"Pending",confirmed:"Confirmed",shipped:"Out for delivery",
+delivered:"Delivered",cancelled:"Cancelled"
 };
-
 const deliveryFee = Number(data.delivery_fee || 0);
 const subtotal = Number(data.total || 0) - deliveryFee;
 
@@ -1207,7 +1169,6 @@ result.innerHTML = `
 <p>Total: <strong>${money(data.total)}</strong></p>
 <p>Date: ${new Date(data.created_at).toLocaleString()}</p>
 </div>`;
-
 } catch(err) {
 console.error(err);
 showMessage(result,"Could not check this order. Please try again.","error");
@@ -1217,45 +1178,32 @@ showMessage(result,"Could not check this order. Please try again.","error");
 // ======================================
 // ADMIN AUTHENTICATION
 // ======================================
-
 function adminMessage(message,type="") {
 showMessage(document.getElementById("adminMessage"),message,type);
 }
 
 async function checkExistingSession() {
 const {data} = await db.auth.getUser();
-
-if (data.user && data.user.id === ADMIN_USER_ID) {
-location.hash = "#dashboard";
-}
+if (data.user && data.user.id === ADMIN_USER_ID) location.hash = "#dashboard";
 }
 
 document.getElementById("loginForm").addEventListener("submit",async e => {
 e.preventDefault();
-
 const msg = document.getElementById("loginMessage");
 const button = e.target.querySelector("button");
 const f = Object.fromEntries(new FormData(e.target).entries());
-
 button.disabled = true;
 showMessage(msg,"Signing in...");
 
 try {
-const {data,error} = await db.auth.signInWithPassword({
-email:f.email,
-password:f.password
-});
-
+const {data,error} = await db.auth.signInWithPassword({email:f.email,password:f.password});
 if (error) throw error;
-
 if (!data.user || data.user.id !== ADMIN_USER_ID) {
 await db.auth.signOut();
 throw new Error("This account is not authorized as administrator.");
 }
-
 showMessage(msg,"Login successful.","success");
 location.hash = "#dashboard";
-
 } catch(err) {
 showMessage(msg,"Login failed: "+err.message,"error");
 } finally {
@@ -1272,13 +1220,11 @@ location.hash = "#admin";
 
 async function requireAdmin() {
 const {data,error} = await db.auth.getUser();
-
 if (error || !data.user || data.user.id !== ADMIN_USER_ID) {
 await db.auth.signOut();
 location.hash = "#admin";
 return null;
 }
-
 document.getElementById("adminEmail").textContent = data.user.email;
 return data.user;
 }
@@ -1286,10 +1232,8 @@ return data.user;
 // ======================================
 // ORDER MONITOR
 // ======================================
-
 async function checkForNewOrders() {
 if (location.hash !== "#dashboard") return;
-
 const {data,error} = await db.from("orders")
 .select("id,reference,customer_name,total")
 .order("created_at",{ascending:false});
@@ -1301,7 +1245,6 @@ return;
 
 const orders = data || [];
 const newOrders = orders.filter(o => !knownOrderIds.has(o.id));
-
 knownOrderIds = new Set(orders.map(o => o.id));
 
 if (newOrders.length > 0) {
@@ -1313,23 +1256,18 @@ await loadAdminOrders();
 
 async function startOrderMonitor() {
 const {data,error} = await db.from("orders").select("id");
-
 if (error) {
 console.error(error);
 return;
 }
-
 knownOrderIds = new Set((data || []).map(o => o.id));
-
 if (orderMonitorTimer) clearInterval(orderMonitorTimer);
-
 orderMonitorTimer = setInterval(checkForNewOrders,15000);
 }
 
 // ======================================
 // ADMIN DASHBOARD
 // ======================================
-
 async function loadDashboard() {
 if (dashboardLoading) return;
 dashboardLoading = true;
@@ -1337,17 +1275,10 @@ dashboardLoading = true;
 try {
 const user = await requireAdmin();
 if (!user) return;
-
 adminMessage("Loading dashboard...");
-
-await Promise.all([
-loadAdminOrders(),
-loadAdminProducts()
-]);
-
+await Promise.all([loadAdminOrders(),loadAdminProducts()]);
 await startOrderMonitor();
 adminMessage("Dashboard updated.","success");
-
 } finally {
 dashboardLoading = false;
 }
@@ -1368,29 +1299,20 @@ return;
 }
 
 const orders = data || [];
-
 document.getElementById("statOrders").textContent = orders.length;
-document.getElementById("statNew").textContent =
-orders.filter(o => o.status === "pending").length;
-
+document.getElementById("statNew").textContent = orders.filter(o => o.status === "pending").length;
 document.getElementById("statSales").textContent =
-orders.filter(o => o.status !== "cancelled")
-.reduce((s,o) => s+Number(o.total || 0),0).toFixed(0);
+orders.filter(o => o.status !== "cancelled").reduce((s,o) => s+Number(o.total || 0),0).toFixed(0);
 
 tbody.innerHTML = orders.map(o => {
 const deliveryFee = Number(o.delivery_fee || 0);
 const subtotal = Number(o.total || 0) - deliveryFee;
-
 return `
 <tr>
 <td><strong>${esc(o.reference)}</strong></td>
 <td>${esc(o.customer_name)}<br><small>${esc(o.city)}</small></td>
 <td>${esc(o.phone)}</td>
-<td>
-Subtotal: ${money(subtotal)}<br>
-Delivery: ${money(deliveryFee)}<br>
-<strong>Total: ${money(o.total)}</strong>
-</td>
+<td>Subtotal: ${money(subtotal)}<br>Delivery: ${money(deliveryFee)}<br><strong>Total: ${money(o.total)}</strong></td>
 <td>${new Date(o.created_at).toLocaleDateString()}</td>
 <td><span class="status">${esc(o.status || "pending")}</span></td>
 <td>
@@ -1411,15 +1333,9 @@ button.onclick = async () => {
 const id = button.dataset.update;
 const select = document.querySelector(`[data-status="${id}"]`);
 const status = select.value;
-
 button.disabled = true;
-
-const {error} = await db.from("orders")
-.update({status})
-.eq("id",id);
-
+const {error} = await db.from("orders").update({status}).eq("id",id);
 button.disabled = false;
-
 if (error) {
 adminMessage("Could not update order: "+error.message,"error");
 } else {
@@ -1433,11 +1349,9 @@ await loadAdminOrders();
 // ======================================
 // ADMIN PRODUCTS
 // ======================================
-
 async function loadAdminProducts() {
 const container = document.getElementById("adminProducts");
 container.textContent = "Loading products...";
-
 const {data,error} = await db.from("products")
 .select("*")
 .order("created_at",{ascending:false});
@@ -1457,15 +1371,13 @@ container.innerHTML = list.map(p => `
 <div style="flex:1;min-width:120px">
 <strong>${esc(p.name)}</strong>
 <div style="font-size:12px;color:#777">
-${money(p.price)} · Stock: ${Number(p.stock)} ·
-${productImages(p).length} photo(s) ·
+${money(p.price)} · Stock: ${Number(p.stock)} · ${productImages(p).length} photo(s) ·
 ${p.is_active ? "Published" : "Draft / Hidden"}
 </div>
 </div>
 <div class="product-admin-actions">
 <button class="outline-btn small-btn" data-edit="${esc(p.id)}">Edit</button>
-<button class="dark-btn small-btn" data-toggle="${esc(p.id)}"
-data-active="${p.is_active}">
+<button class="dark-btn small-btn" data-toggle="${esc(p.id)}" data-active="${p.is_active}">
 ${p.is_active ? "Hide" : "Publish"}
 </button>
 <button class="danger-btn small-btn" data-delete="${esc(p.id)}">Delete</button>
@@ -1481,13 +1393,8 @@ container.querySelectorAll("[data-toggle]").forEach(button => {
 button.onclick = async () => {
 const id = button.dataset.toggle;
 const currentlyActive = button.dataset.active === "true";
-
 button.disabled = true;
-
-const {error} = await db.from("products")
-.update({is_active:!currentlyActive})
-.eq("id",id);
-
+const {error} = await db.from("products").update({is_active:!currentlyActive}).eq("id",id);
 if (error) {
 adminMessage("Could not change product visibility: "+error.message,"error");
 button.disabled = false;
@@ -1499,27 +1406,16 @@ await loadProducts();
 };
 });
 
-// DELETE PRODUCT
 container.querySelectorAll("[data-delete]").forEach(button => {
 button.onclick = async () => {
 const id = button.dataset.delete;
 const product = list.find(p => p.id === id);
-
 if (!product) return;
-
-const confirmed = confirm(
-`Are you sure you want to permanently delete "${product.name}"?\n\nThis action cannot be undone.`
-);
-
+const confirmed = confirm(`Are you sure you want to permanently delete "${product.name}"?\n\nThis action cannot be undone.`);
 if (!confirmed) return;
-
 button.disabled = true;
 button.textContent = "Deleting...";
-
-const {error} = await db.from("products")
-.delete()
-.eq("id",id);
-
+const {error} = await db.from("products").delete().eq("id",id);
 if (error) {
 console.error("Product delete error:",error);
 adminMessage("Could not delete product: "+error.message,"error");
@@ -1527,9 +1423,7 @@ button.disabled = false;
 button.textContent = "Delete";
 return;
 }
-
 adminMessage("Product deleted successfully.","success");
-
 await loadAdminProducts();
 await loadProducts();
 };
@@ -1539,7 +1433,6 @@ await loadProducts();
 // ======================================
 // IMAGE SELECTION AND PREVIEWS
 // ======================================
-
 function clearPreviewUrls() {
 previewObjectUrls.forEach(url => URL.revokeObjectURL(url));
 previewObjectUrls = [];
@@ -1555,7 +1448,6 @@ document.getElementById("imagePreviews").innerHTML = "";
 function renderImagePreviews() {
 const container = document.getElementById("imagePreviews");
 clearPreviewUrls();
-
 const urls = selectedImageFiles.map(file => {
 const url = URL.createObjectURL(file);
 previewObjectUrls.push(url);
@@ -1563,9 +1455,7 @@ return url;
 });
 
 container.innerHTML = urls.map((url,index) => `
-<button type="button"
-class="image-thumb ${index === selectedMainImageIndex ? "selected" : ""}"
-data-select-main="${index}">
+<button type="button" class="image-thumb ${index === selectedMainImageIndex ? "selected" : ""}" data-select-main="${index}">
 <img src="${url}" alt="Selected image ${index+1}">
 <span>${index === selectedMainImageIndex ? "MAIN IMAGE" : "Image "+(index+1)}</span>
 </button>
@@ -1582,9 +1472,7 @@ renderImagePreviews();
 document.getElementById("productImageFile").addEventListener("change",e => {
 const files = Array.from(e.target.files || []);
 const status = document.getElementById("aiStatus");
-
 clearImageSelection();
-
 if (!files.length) return;
 
 if (files.length > MAX_PRODUCT_IMAGES) {
@@ -1592,7 +1480,6 @@ e.target.value = "";
 showMessage(status,"You can select a maximum of 5 images.","error");
 return;
 }
-
 for (const file of files) {
 if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
 e.target.value = "";
@@ -1600,7 +1487,6 @@ clearImageSelection();
 showMessage(status,"All images must be JPG, PNG or WEBP.","error");
 return;
 }
-
 if (file.size > MAX_IMAGE_SIZE) {
 e.target.value = "";
 clearImageSelection();
@@ -1608,34 +1494,27 @@ showMessage(status,"Each image must be smaller than 5 MB.","error");
 return;
 }
 }
-
 selectedImageFiles = files;
 selectedMainImageIndex = 0;
 renderImagePreviews();
-
 showMessage(status,`${files.length} image(s) selected. Click a thumbnail to choose the main image.`,"success");
 });
 
 // ======================================
 // IMAGE TO BASE64
 // ======================================
-
 function fileToBase64(file) {
 return new Promise((resolve,reject) => {
 const reader = new FileReader();
-
 reader.onload = () => {
 const result = String(reader.result || "");
 const base64 = result.split(",")[1];
-
 if (!base64) {
 reject(new Error("Could not read the selected image."));
 return;
 }
-
 resolve(base64);
 };
-
 reader.onerror = () => reject(new Error("Could not read image file."));
 reader.readAsDataURL(file);
 });
@@ -1644,11 +1523,9 @@ reader.readAsDataURL(file);
 // ======================================
 // AI PRODUCT SUGGESTIONS
 // ======================================
-
 document.getElementById("generateAiButton").onclick = async () => {
 const button = document.getElementById("generateAiButton");
 const status = document.getElementById("aiStatus");
-
 if (!selectedImageFiles.length) {
 showMessage(status,"Please select at least one product image first.","error");
 document.getElementById("productImageFile").click();
@@ -1656,19 +1533,14 @@ return;
 }
 
 const file = selectedImageFiles[selectedMainImageIndex] || selectedImageFiles[0];
-
 button.disabled = true;
 button.textContent = "ANALYZING IMAGE...";
 showMessage(status,"AI is analyzing the main product image. Please wait...");
 
 try {
 const imageBase64 = await fileToBase64(file);
-
 const {data,error} = await db.functions.invoke(AI_FUNCTION_NAME,{
-body:{
-imageBase64,
-mimeType:file.type
-}
+body:{imageBase64,mimeType:file.type}
 });
 
 if (error) {
@@ -1681,34 +1553,22 @@ if (body.error) detail = body.error;
 } catch {}
 throw new Error(detail);
 }
-
 if (!data || !data.success || !data.suggestions) {
 throw new Error(data?.error || "AI did not return product suggestions.");
 }
 
 const suggestions = data.suggestions;
 const form = document.getElementById("productForm");
-
 if (suggestions.name) form.elements.name.value = suggestions.name;
 if (suggestions.category) form.elements.category.value = suggestions.category;
 
 const description = [
-suggestions.description_fr
-? "Description (Français):\n"+suggestions.description_fr
-: "",
-suggestions.description_ar
-? "الوصف (العربية):\n"+suggestions.description_ar
-: ""
+suggestions.description_fr ? "Description (Français):\n"+suggestions.description_fr : "",
+suggestions.description_ar ? "الوصف (العربية):\n"+suggestions.description_ar : ""
 ].filter(Boolean).join("\n\n");
 
 if (description) form.elements.description.value = description;
-
-showMessage(
-status,
-"AI suggestions generated. Review and edit the information before saving.",
-"success"
-);
-
+showMessage(status,"AI suggestions generated. Review and edit the information before saving.","success");
 } catch(err) {
 console.error("AI generation error:",err);
 showMessage(status,"AI error: "+err.message,"error");
@@ -1721,18 +1581,15 @@ button.textContent = "GENERATE WITH AI";
 // ======================================
 // PRODUCT EDITING
 // ======================================
-
 function editProduct(id,list) {
 const p = list.find(x => x.id === id);
 if (!p) return;
-
 editingProductId = id;
 editingProductImageUrl = p.image_url || "";
 editingProductImages = productImages(p).filter(url => url !== fallbackImage);
 editingProductIsActive = !!p.is_active;
 
 const form = document.getElementById("productForm");
-
 form.elements.name.value = p.name || "";
 form.elements.price.value = p.price ?? "";
 form.elements.stock.value = p.stock ?? 0;
@@ -1741,13 +1598,10 @@ form.elements.description.value = p.description || "";
 
 document.getElementById("productImageFile").value = "";
 clearImageSelection();
-
 const container = document.getElementById("imagePreviews");
 
 container.innerHTML = editingProductImages.map((url,index) => `
-<button type="button"
-class="image-thumb ${index === 0 ? "selected" : ""}"
-data-existing-main="${index}">
+<button type="button" class="image-thumb ${index === 0 ? "selected" : ""}" data-existing-main="${index}">
 <img src="${esc(url)}" alt="Current product image ${index+1}">
 <span>${index === 0 ? "MAIN IMAGE" : "Image "+(index+1)}</span>
 </button>
@@ -1756,10 +1610,7 @@ data-existing-main="${index}">
 container.querySelectorAll("[data-existing-main]").forEach(button => {
 button.onclick = () => {
 const index = Number(button.dataset.existingMain);
-editingProductImages = [
-editingProductImages[index],
-...editingProductImages.filter((_,i) => i !== index)
-];
+editingProductImages = [editingProductImages[index],...editingProductImages.filter((_,i) => i !== index)];
 editingProductImageUrl = editingProductImages[0] || "";
 editProductPreviewOnly();
 };
@@ -1768,25 +1619,16 @@ editProductPreviewOnly();
 document.getElementById("productFormTitle").textContent = "Edit Product";
 document.getElementById("saveProductButton").textContent = "UPDATE PRODUCT";
 document.getElementById("cancelEdit").classList.remove("hidden");
-
-showMessage(
-document.getElementById("aiStatus"),
-"Choose up to 5 new images to replace the current gallery, or keep the existing images."
-);
-
+showMessage(document.getElementById("aiStatus"),"Choose up to 5 new images to replace the current gallery, or keep the existing images.");
 document.getElementById("productMessage").textContent = "";
-
 form.scrollIntoView({behavior:"smooth",block:"start"});
 form.elements.name.focus();
 }
 
 function editProductPreviewOnly() {
 const container = document.getElementById("imagePreviews");
-
 container.innerHTML = editingProductImages.map((url,index) => `
-<button type="button"
-class="image-thumb ${index === 0 ? "selected" : ""}"
-data-existing-main="${index}">
+<button type="button" class="image-thumb ${index === 0 ? "selected" : ""}" data-existing-main="${index}">
 <img src="${esc(url)}" alt="Current product image ${index+1}">
 <span>${index === 0 ? "MAIN IMAGE" : "Image "+(index+1)}</span>
 </button>
@@ -1795,10 +1637,7 @@ data-existing-main="${index}">
 container.querySelectorAll("[data-existing-main]").forEach(button => {
 button.onclick = () => {
 const index = Number(button.dataset.existingMain);
-editingProductImages = [
-editingProductImages[index],
-...editingProductImages.filter((_,i) => i !== index)
-];
+editingProductImages = [editingProductImages[index],...editingProductImages.filter((_,i) => i !== index)];
 editingProductImageUrl = editingProductImages[0] || "";
 editProductPreviewOnly();
 };
@@ -1810,86 +1649,53 @@ editingProductId = null;
 editingProductImageUrl = "";
 editingProductImages = [];
 editingProductIsActive = false;
-
 const form = document.getElementById("productForm");
 form.reset();
-
 document.getElementById("productImageFile").value = "";
 clearImageSelection();
-
 document.getElementById("productFormTitle").textContent = "Add New Product";
 document.getElementById("saveProductButton").textContent = "SAVE AS DRAFT";
 document.getElementById("cancelEdit").classList.add("hidden");
-
 document.getElementById("aiStatus").textContent = "";
 }
-
 document.getElementById("cancelEdit").onclick = resetProductForm;
 
 // ======================================
 // UPLOAD IMAGE TO SUPABASE STORAGE
 // ======================================
-
 async function uploadProductImage(file) {
 if (!file) throw new Error("No image selected.");
+if (!["image/jpeg","image/png","image/webp"].includes(file.type)) throw new Error("Unsupported image format.");
+if (file.size > MAX_IMAGE_SIZE) throw new Error("Image must be smaller than 5 MB.");
 
-if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
-throw new Error("Unsupported image format.");
-}
-
-if (file.size > MAX_IMAGE_SIZE) {
-throw new Error("Image must be smaller than 5 MB.");
-}
-
-const extensions = {
-"image/jpeg":"jpg",
-"image/png":"png",
-"image/webp":"webp"
-};
-
+const extensions = {"image/jpeg":"jpg","image/png":"png","image/webp":"webp"};
 const extension = extensions[file.type];
-const uniqueName =
-typeof crypto.randomUUID === "function"
+const uniqueName = typeof crypto.randomUUID === "function"
 ? crypto.randomUUID()
 : Date.now()+"-"+Math.random().toString(36).slice(2);
-
 const path = `${uniqueName}.${extension}`;
 
-const {error:uploadError} = await db.storage
-.from(STORAGE_BUCKET)
-.upload(path,file,{
-cacheControl:"3600",
-upsert:false,
-contentType:file.type
+const {error:uploadError} = await db.storage.from(STORAGE_BUCKET).upload(path,file,{
+cacheControl:"3600",upsert:false,contentType:file.type
 });
-
 if (uploadError) throw uploadError;
 
-const {data} = db.storage
-.from(STORAGE_BUCKET)
-.getPublicUrl(path);
-
-if (!data || !data.publicUrl) {
-throw new Error("Could not create public image URL.");
-}
-
+const {data} = db.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+if (!data || !data.publicUrl) throw new Error("Could not create public image URL.");
 return data.publicUrl;
 }
 
 // ======================================
 // SAVE PRODUCT
 // ======================================
-
 document.getElementById("productForm").addEventListener("submit",async e => {
 e.preventDefault();
-
 const form = e.target;
 const msg = document.getElementById("productMessage");
 const button = document.getElementById("saveProductButton");
 const isEditing = !!editingProductId;
 const productIdBeingEdited = editingProductId;
 const files = [...selectedImageFiles];
-
 const f = Object.fromEntries(new FormData(form).entries());
 
 const name = String(f.name || "").trim();
@@ -1898,19 +1704,15 @@ const stock = Number(f.stock);
 const category = String(f.category || "").trim();
 const description = String(f.description || "").trim();
 
-if (!name || !category ||
-!Number.isFinite(price) || price < 0 ||
-!Number.isInteger(stock) || stock < 0) {
+if (!name || !category || !Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
 showMessage(msg,"Please check the product details.","error");
 return;
 }
-
 if (!isEditing && !files.length) {
 showMessage(msg,"Please select at least one product image.","error");
 document.getElementById("productImageFile").focus();
 return;
 }
-
 if (files.length > MAX_PRODUCT_IMAGES) {
 showMessage(msg,"You can upload a maximum of 5 images.","error");
 return;
@@ -1922,71 +1724,32 @@ showMessage(msg,"Uploading product images and saving product. Please wait...");
 
 try {
 let imageUrls = [];
-
 if (files.length) {
-const uploadedUrls = await Promise.all(
-files.map(file => uploadProductImage(file))
-);
-
+const uploadedUrls = await Promise.all(files.map(file => uploadProductImage(file)));
 const mainUrl = uploadedUrls[selectedMainImageIndex] || uploadedUrls[0];
-
-imageUrls = [
-mainUrl,
-...uploadedUrls.filter(url => url !== mainUrl)
-];
+imageUrls = [mainUrl,...uploadedUrls.filter(url => url !== mainUrl)];
 } else {
-imageUrls = editingProductImages.length
-? [...editingProductImages]
-: (editingProductImageUrl ? [editingProductImageUrl] : []);
+imageUrls = editingProductImages.length ? [...editingProductImages] : (editingProductImageUrl ? [editingProductImageUrl] : []);
 }
 
-if (!imageUrls.length) {
-throw new Error("At least one product image is required.");
-}
-
+if (!imageUrls.length) throw new Error("At least one product image is required.");
 const imageUrl = imageUrls[0];
 
-const slug = name
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"")
-.toLowerCase()
-.replace(/[^a-z0-9]+/g,"-")
-.replace(/^-|-$/g,"");
+const slug = name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()
+.replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 
-const record = {
-name,
-slug,
-price,
-stock,
-category,
-image_url:imageUrl,
-image_urls:imageUrls,
-description
-};
-
+const record = {name,slug,price,stock,category,image_url:imageUrl,image_urls:imageUrls,description};
 let result;
 
 if (isEditing) {
-result = await db.from("products")
-.update(record)
-.eq("id",productIdBeingEdited);
+result = await db.from("products").update(record).eq("id",productIdBeingEdited);
 } else {
-result = await db.from("products")
-.insert({...record,is_active:false});
+result = await db.from("products").insert({...record,is_active:false});
 }
-
 if (result.error) throw result.error;
 
-showMessage(
-msg,
-isEditing
-? "Product updated successfully."
-: "Product saved as a draft. Publish it from Products & Stock when ready.",
-"success"
-);
-
+showMessage(msg,isEditing ? "Product updated successfully." : "Product saved as a draft. Publish it from Products & Stock when ready.","success");
 resetProductForm();
-
 await loadAdminProducts();
 await loadProducts();
 
@@ -2004,7 +1767,6 @@ document.getElementById("refreshDashboard").onclick = loadDashboard;
 // ======================================
 // INITIALIZE
 // ======================================
-
 renderCartCount();
 renderCart();
 loadProducts();

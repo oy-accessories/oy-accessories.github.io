@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -320,73 +319,7 @@ border-radius:3px;
 color:#c6a66b;
 border-color:#c6a66b;
 }
-/* ======================================
-   OY NOTIFICATIONS
-====================================== */
-.notification-card{
-  background:linear-gradient(145deg,#fffefa,#f5efe3)!important;
-  border:1px solid #cbb486!important;
-}
-.notification-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.notification-bell{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  gap:9px;
-}
-.notification-count{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:22px;
-  height:22px;
-  padding:0 6px;
-  border-radius:20px;
-  background:#a83c35;
-  color:white;
-  font-size:11px;
-}
-.notification-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:15px 0;
-  border-bottom:1px solid #eee7da;
-}
-.notification-item.unread{
-  background:#faf5e9;
-  padding:15px;
-  border-left:3px solid #c6a66b;
-}
-.notification-item p{
-  font-size:13px;
-  color:#665d4d;
-  margin-top:6px;
-}
-.notification-item small{
-  display:block;
-  color:#999;
-  margin-top:6px;
-}
-.notification-empty{
-  text-align:center;
-  padding:25px;
-  color:#888;
-  font-size:13px;
-}
-@media(max-width:600px){
-  .notification-item{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-}
+
 /* ======================================
    MONTHLY ANALYTICS
 ====================================== */
@@ -641,14 +574,70 @@ border:0!important;
 box-shadow:none!important;
 transform:none!important;
 }
+
+/* ======================================
+   DEDICATED PRODUCT PAGES
+====================================== */
+.product-page{max-width:1240px;margin:0 auto;padding:35px 6% 70px;min-height:70vh}
+.product-back{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;color:#80612f;font-size:13px;font-weight:bold}
+.product-detail-layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;align-items:start}
+.product-gallery{min-width:0}
+.product-gallery-main{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid #eee;display:block}
+.product-gallery-thumbs{display:flex;gap:10px;overflow-x:auto;padding:12px 0}
+.product-gallery-thumbs button{padding:0;border:2px solid transparent;background:#fff;flex:0 0 76px}
+.product-gallery-thumbs button.selected{border-color:var(--gold)}
+.product-gallery-thumbs img{width:72px;height:72px;display:block;object-fit:cover}
+.product-detail-info{background:#fff;padding:30px;min-width:0}
+.product-detail-category{color:#a48650;text-transform:uppercase;font-size:11px;letter-spacing:2px}
+.product-detail-title{font:normal clamp(29px,4vw,42px)/1.15 Georgia,serif;margin:13px 0}
+.product-detail-price{font-size:25px;font-weight:bold;margin:18px 0;color:#1b1a17}
+.product-detail-description{white-space:pre-line;color:#625d54;line-height:1.9;margin:20px 0}
+.product-stock-note{font-size:12px;color:#777;margin:12px 0}
+.product-quantity{display:flex;align-items:center;gap:12px;margin:18px 0}
+.product-quantity input{width:90px;text-align:center}
+.product-actions{display:grid;gap:10px;margin-top:20px}
+.product-actions .gold-btn,.product-actions .outline-btn{width:100%;min-height:48px}
+.product-trust-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:25px 0}
+.product-trust-item{background:#f5f1e8;padding:13px;font-size:12px;line-height:1.5;color:#514938}
+.product-trust-item strong{display:block;color:#211f1a;margin-bottom:3px}
+.product-delivery-info{border-top:1px solid #eee;padding-top:18px;color:#6c6558;font-size:13px;line-height:1.8}
+.product-recommendations{margin-top:55px}
+.product-recommendations h2{font:normal 30px Georgia,serif;margin-bottom:22px}
+.product-recommendations .product img{height:190px}
+@media(max-width:760px){
+ .product-page{padding:25px 5% 50px}
+ .product-detail-layout{grid-template-columns:1fr;gap:18px}
+ .product-detail-info{padding:22px 18px}
+ .product-gallery-main{aspect-ratio:1/1}
+ .product-trust-grid{gap:7px}
+ .product-recommendations .products{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .product-recommendations .product img{height:150px}
+}
+
+
+/* ADMIN NOTIFICATIONS */
+.notification-card{border:1px solid #e8dfcf}
+.notification-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+.notification-header h3{margin:0}
+.notification-bell{white-space:nowrap}
+.notification-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;margin-left:5px;border-radius:20px;background:#a9874d;color:#fff;font-size:11px}
+#pushStatus{margin:10px 0}
+#notificationsList{display:grid;gap:9px;margin-top:14px}
+.notification-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px;background:#f7f4ed;border-left:3px solid #d5c5a5}
+.notification-item.unread{background:#f2eadb;border-left-color:#a9874d}
+.notification-item p{font-size:13px;color:#5e584e;line-height:1.5;margin:4px 0}
+.notification-item small{font-size:11px;color:#8b8376}
+.notification-empty{padding:18px;text-align:center;color:#827966;font-size:13px;background:#f7f4ed}
+@media(max-width:600px){.notification-item{align-items:flex-start;flex-direction:column}.notification-item button{width:100%}}
+
 </style>
 </head>
 
 <body>
 
 <div class="shipping-banner">
-<strong>LIVRAISON GRATUITE !</strong>
-<span>Dès 300 DH d'achat — Partout au Maroc</span>
+<strong>100% AUTHENTIQUE · PAIEMENT À LA LIVRAISON</strong>
+<span>Livraison gratuite dès 300 DH d'achat · Livraison 24-48h · Échange facile</span>
 </div>
 
 <header>
@@ -691,6 +680,11 @@ transform:none!important;
 </section>
 </main>
 
+<section id="productPage" class="product-page hidden" aria-live="polite">
+  <a class="product-back" href="#shop">← Retour à la collection</a>
+  <div id="productPageContent"><div class="loading">Chargement du produit...</div></div>
+</section>
+
 <section id="trackPage" class="page hidden">
 <div class="form-small card">
 <h1 class="page-title">Track Your Order</h1>
@@ -732,32 +726,21 @@ transform:none!important;
 </div>
 
 <div id="adminMessage" class="message" role="status"></div>
+
 <div class="card notification-card">
- <div class="notification-header">
-  <h3 style="margin:0;border:0;padding:0">
-    Notifications
-  </h3>
-
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <button class="gold-btn" type="button" id="enablePushButton">
-      🔔 ENABLE PUSH
+  <div class="notification-header">
+    <h3>Notifications</h3>
+    <button class="outline-btn notification-bell" id="notificationBell" type="button">
+      🔔 NOTIFICATIONS <span class="notification-count" id="unreadCount">0</span>
     </button>
-
-    <button class="outline-btn notification-bell" id="notificationBell">
-      NOTIFICATIONS
-      <span class="notification-count" id="unreadCount">0</span>
-    </button>
+  </div>
+  <button class="gold-btn" id="enablePushButton" type="button">ENABLE PUSH NOTIFICATIONS</button>
+  <p id="pushStatus" class="message" role="status"></p>
+  <div id="notificationsList">
+    <div class="notification-empty">Loading notifications...</div>
   </div>
 </div>
 
-<p id="pushStatus" class="message" role="status"></p>
-
-  <div id="notificationsList" style="margin-top:18px">
-    <div class="notification-empty">
-      Loading notifications...
-    </div>
-  </div>
-</div>
 <div class="stats">
 <div class="stat"><small>Total Orders</small><strong id="statOrders">0</strong></div>
 <div class="stat"><small>Pending Orders</small><strong id="statNew">0</strong></div>
@@ -874,7 +857,9 @@ Timeless Details. Everyday Elegance.</p>
 <div>
 <h4>INFORMATIONS</h4>
 <p>Tous nos articles sont en acier inoxydable (Inox).</p>
-<p>Garantie de 6 mois minimum.</p>
+<p>100% Authentique.</p>
+<p>Échange facile.</p>
+<p>Livraison 24-48h.</p>
 <p>Livraison gratuite dès 300 DH d'achat.</p>
 <p>Livraison partout au Maroc.</p>
 <p>Paiement à la livraison.</p>
@@ -1069,15 +1054,11 @@ return [...new Set(images)].slice(0,MAX_PRODUCT_IMAGES);
 // ======================================
 // OY ACCESSORIES — PUSH NOTIFICATIONS
 // ======================================
-
-const VAPID_PUBLIC_KEY = "BD7J5ck4tSIGAtMYjWTDG-FxNTA4VACGuBTHF_FY9YTmOg7EUtKoAmWBfQw8DVNg7FVlJA1wdnpSCfZcQGGlfLc";
+const VAPID_PUBLIC_KEY = "BD7J5ck4tSIGAtMYjWTDG-FxNTA4VACGuBTHF_F9YTmOg7EUtKoAmWBfQw8DVNg7FVlJA1wdnpSCfZcQGGlfLc";
 
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
   const rawData = atob(base64);
   return Uint8Array.from(rawData, char => char.charCodeAt(0));
 }
@@ -1085,72 +1066,96 @@ function urlBase64ToUint8Array(base64String) {
 async function enablePushNotifications() {
   const status = document.getElementById("pushStatus");
   const button = document.getElementById("enablePushButton");
-
   try {
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       throw new Error("Push notifications are not supported on this device.");
     }
-
-    if (!("Notification" in window)) {
-      throw new Error("Notifications are not supported.");
-    }
-
+    if (!("Notification" in window)) throw new Error("Notifications are not supported.");
     button.disabled = true;
     status.textContent = "Activating notifications...";
-
     const { data: authData, error: authError } = await db.auth.getUser();
-
-    if (authError || !authData.user) {
-      throw new Error("Please log in as admin first.");
-    }
-
+    if (authError || !authData.user) throw new Error("Please log in as admin first.");
     const permission = await Notification.requestPermission();
-
-    if (permission !== "granted") {
-      throw new Error("Notification permission was not granted.");
-    }
-
+    if (permission !== "granted") throw new Error("Notification permission was not granted.");
     const registration = await navigator.serviceWorker.ready;
-
     let subscription = await registration.pushManager.getSubscription();
-
     if (!subscription) {
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
       });
     }
-
     const subscriptionData = subscription.toJSON();
-
-    const { error: saveError } = await db
-      .from("push_subscriptions")
-      .upsert({
-        endpoint: subscriptionData.endpoint,
-        p256dh: subscriptionData.keys.p256dh,
-        auth: subscriptionData.keys.auth,
-        user_id: authData.user.id
-      }, {
-        onConflict: "endpoint"
-      });
-
+    const { error: saveError } = await db.from("push_subscriptions").upsert({
+      endpoint: subscriptionData.endpoint,
+      p256dh: subscriptionData.keys.p256dh,
+      auth: subscriptionData.keys.auth,
+      user_id: authData.user.id
+    }, { onConflict: "endpoint" });
     if (saveError) throw saveError;
-
     status.textContent = "Push notifications activated successfully!";
     status.className = "message success";
-
   } catch (error) {
     console.error("Push notification error:", error);
     status.textContent = error.message || "Could not activate notifications.";
     status.className = "message error";
-
   } finally {
     button.disabled = false;
   }
 }
 
-document.getElementById("enablePushButton")
-  ?.addEventListener("click", enablePushNotifications);
+document.getElementById("enablePushButton")?.addEventListener("click", enablePushNotifications);
+
+async function loadNotifications() {
+  const list = document.getElementById("notificationsList");
+  const count = document.getElementById("unreadCount");
+  if (!list || !count) return;
+  const { data, error } = await db.from("notifications")
+    .select("id,reference,title,body,is_read,created_at")
+    .order("created_at", { ascending: false }).limit(30);
+  if (error) {
+    console.error("Notifications error:", error);
+    list.innerHTML = '<div class="notification-empty">Could not load notifications.</div>';
+    return;
+  }
+  const notifications = data || [];
+  count.textContent = notifications.filter(n => !n.is_read).length;
+  if (!notifications.length) {
+    list.innerHTML = '<div class="notification-empty">No notifications yet.</div>';
+    return;
+  }
+  list.innerHTML = notifications.map(n => `
+    <div class="notification-item ${n.is_read ? "" : "unread"}">
+      <div>
+        <strong>${esc(n.title || "New Order")}</strong>
+        <p>${esc(n.body || ("Order: " + (n.reference || "")))}</p>
+        <small>${new Date(n.created_at).toLocaleString()}</small>
+      </div>
+      ${n.is_read ? "" : `<button class="outline-btn small-btn mark-notification-read" data-id="${esc(n.id)}">MARK AS READ</button>`}
+    </div>
+  `).join("");
+}
+
+async function markNotificationRead(id) {
+  const { error } = await db.from("notifications").update({ is_read: true }).eq("id", id);
+  if (error) {
+    console.error("Mark notification error:", error);
+    return;
+  }
+  await loadNotifications();
+}
+
+function setupNotificationEvents() {
+  const bell = document.getElementById("notificationBell");
+  const list = document.getElementById("notificationsList");
+  bell.onclick = loadNotifications;
+  list.onclick = async function(event) {
+    const button = event.target.closest(".mark-notification-read");
+    if (!button) return;
+    button.disabled = true;
+    await markNotificationRead(button.dataset.id);
+  };
+}
 
 function showMessage(element,message,type="") {
 element.textContent = message;
@@ -1197,9 +1202,15 @@ document.getElementById("otherCity").addEventListener("change",renderCart);
 // ======================================
 // PAGE NAVIGATION
 // ======================================
+function isProductRoute() {
+return (location.hash || "").startsWith("#product/");
+}
+
 function showPage() {
 const hash = location.hash || "#home";
-document.getElementById("storePage").classList.toggle("hidden",hash !== "#home" && hash !== "#shop");
+const productRoute = isProductRoute();
+document.getElementById("storePage").classList.toggle("hidden",productRoute || (hash !== "#home" && hash !== "#shop"));
+document.getElementById("productPage").classList.toggle("hidden",!productRoute);
 document.getElementById("trackPage").classList.toggle("hidden",hash !== "#track");
 document.getElementById("adminLoginPage").classList.toggle("hidden",hash !== "#admin");
 document.getElementById("dashboardPage").classList.toggle("hidden",hash !== "#dashboard");
@@ -1207,6 +1218,11 @@ document.getElementById("dashboardPage").classList.toggle("hidden",hash !== "#da
 if (hash === "#admin") checkExistingSession();
 if (hash === "#dashboard") loadDashboard();
 if (hash === "#track") document.getElementById("trackResult").textContent = "";
+if (productRoute) {
+renderProductPageFromRoute();
+} else if (hash === "#home" || hash === "#shop") {
+document.title = "OY Accessories | Timeless Details";
+}
 window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",showPage);
@@ -1219,7 +1235,7 @@ const container = document.getElementById("products");
 container.innerHTML = '<div class="loading">Loading products...</div>';
 
 const {data,error} = await db.from("products")
-.select("id,name,description,price,image_url,image_urls,category,stock,is_active")
+.select("id,name,slug,description,price,image_url,image_urls,category,stock,is_active")
 .eq("is_active",true)
 .order("created_at",{ascending:false});
 
@@ -1238,6 +1254,7 @@ return current ? {...current,qty:Math.min(Number(item.qty)||1,Number(current.sto
 saveCart();
 renderCategories();
 renderProducts();
+if (isProductRoute()) renderProductPageFromRoute();
 }
 
 function renderCategories() {
@@ -1269,7 +1286,7 @@ data-details="${esc(p.id)}"
 onerror="this.onerror=null;this.src='${fallbackImage}'">
 <div class="product-info">
 <small>${esc(p.category || "Accessories")}</small>
-<h3>${esc(p.name)}</h3>
+<h3 data-details="${esc(p.id)}" style="cursor:pointer">${esc(p.name)}</h3>
 <div class="price">${money(p.price)}</div>
 ${images.length > 1 ? `<p style="font-size:11px;color:#888;margin-bottom:10px">${images.length} photos · View gallery</p>` : ""}
 <button data-add="${esc(p.id)}" ${Number(p.stock) <= 0 ? "disabled" : ""}>
@@ -1283,12 +1300,121 @@ document.querySelectorAll("[data-add]").forEach(button => {
 button.onclick = () => addToCart(button.dataset.add);
 });
 document.querySelectorAll("[data-details]").forEach(image => {
-image.onclick = () => openProductDetails(image.dataset.details);
+image.onclick = () => openProductPage(image.dataset.details);
 });
 }
 
 // ======================================
-// PRODUCT GALLERY
+// DEDICATED PRODUCT PAGE ROUTING
+// ======================================
+function slugifyProduct(value) {
+return String(value || "product").normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"") || "product";
+}
+
+function getProductRouteKey(product) {
+const slug = product.slug || slugifyProduct(product.name);
+return `${slug}--${product.id}`;
+}
+
+function openProductPage(id) {
+const product = products.find(p => String(p.id) === String(id));
+if (!product) return;
+location.hash = `#product/${encodeURIComponent(getProductRouteKey(product))}`;
+}
+
+function getProductFromRoute() {
+if (!isProductRoute()) return null;
+let key = location.hash.slice("#product/".length);
+try { key = decodeURIComponent(key); } catch {}
+const marker = key.lastIndexOf("--");
+if (marker >= 0) {
+const id = key.slice(marker + 2);
+const byId = products.find(p => String(p.id) === id);
+if (byId) return byId;
+}
+return products.find(p => (p.slug || slugifyProduct(p.name)) === key) || null;
+}
+
+function renderProductPageFromRoute() {
+const container = document.getElementById("productPageContent");
+if (!container) return;
+const product = getProductFromRoute();
+if (!product) {
+container.innerHTML = products.length
+? '<div class="card empty">Ce produit est introuvable ou n’est plus disponible. <a href="#shop">Retour à la boutique</a></div>'
+: '<div class="loading">Chargement du produit...</div>';
+return;
+}
+const images = productImages(product);
+document.title = `${product.name} | OY Accessories`;
+const related = products.filter(p => p.id !== product.id).slice(0,4);
+const outOfStock = Number(product.stock) <= 0;
+const waText = `Bonjour OY Accessories, je souhaite commander : ${product.name} — ${money(product.price)}. Lien : ${location.href}. Paiement à la livraison.`;
+container.innerHTML = `
+  <div class="product-detail-layout">
+    <div class="product-gallery">
+      <img id="productPageMainImage" class="product-gallery-main" src="${esc(images[0])}" alt="${esc(product.name)}" onerror="this.onerror=null;this.src='${fallbackImage}'">
+      <div class="product-gallery-thumbs" id="productPageThumbs">
+        ${images.map((url,index)=>`<button type="button" class="${index===0?'selected':''}" data-product-image="${index}" aria-label="Voir photo ${index+1}"><img src="${esc(url)}" alt="${esc(product.name)} photo ${index+1}"></button>`).join("")}
+      </div>
+    </div>
+    <div class="product-detail-info">
+      <div class="product-detail-category">${esc(product.category || "Accessoires")}</div>
+      <h1 class="product-detail-title">${esc(product.name)}</h1>
+      <div class="product-detail-price">${money(product.price)}</div>
+      <div class="product-stock-note">${outOfStock ? "Rupture de stock" : `Disponible · ${Number(product.stock)} en stock`}</div>
+      <div class="product-quantity">
+        <label for="productPageQty"><strong>Quantité</strong></label>
+        <input id="productPageQty" type="number" min="1" max="${Math.max(1,Number(product.stock)||1)}" value="1" ${outOfStock?'disabled':''}>
+      </div>
+      <div class="product-actions">
+        <button type="button" class="gold-btn" id="productPageAdd" ${outOfStock?'disabled':''}>AJOUTER AU PANIER</button>
+        <button type="button" class="dark-btn" id="productPageOrder" ${outOfStock?'disabled':''}>COMMANDER — PAYER À LA LIVRAISON</button>
+        <a class="outline-btn" href="https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(waText)}" target="_blank" rel="noopener">COMMANDER SUR WHATSAPP</a>
+      </div>
+      <div class="product-trust-grid">
+        <div class="product-trust-item"><strong>100% Authentique</strong>Articles sélectionnés avec soin</div>
+        <div class="product-trust-item"><strong>Paiement à la livraison</strong>Payez à la réception</div>
+        <div class="product-trust-item"><strong>Livraison 24-48h</strong>Partout au Maroc</div>
+        <div class="product-trust-item"><strong>Échange facile</strong>Contactez-nous sur WhatsApp</div>
+      </div>
+      <div class="product-delivery-info">
+        <strong>Livraison</strong><br>
+        Casablanca : 20 DH · Autres villes : 40 DH<br>
+        Livraison gratuite dès 300 DH d'achat sur le total du panier.
+      </div>
+      ${product.description ? `<div class="product-detail-description">${esc(product.description)}</div>` : ""}
+    </div>
+  </div>
+  ${related.length ? `<div class="product-recommendations"><h2>Vous aimerez aussi</h2><div class="products">${related.map(p=>{
+    const photo=productImages(p)[0];
+    return `<article class="product"><img src="${esc(photo)}" alt="${esc(p.name)}" data-related-product="${esc(p.id)}" loading="lazy"><div class="product-info"><small>${esc(p.category||"Accessoires")}</small><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><button type="button" data-related-product="${esc(p.id)}">VOIR LE PRODUIT</button></div></article>`;
+  }).join("")}</div></div>` : ""}
+`;
+
+container.querySelectorAll("[data-product-image]").forEach(button=>{
+button.onclick=()=>{
+const index=Number(button.dataset.productImage);
+document.getElementById("productPageMainImage").src=images[index];
+container.querySelectorAll("[data-product-image]").forEach(b=>b.classList.toggle("selected",b===button));
+};
+});
+container.querySelectorAll("[data-related-product]").forEach(el=>{
+el.onclick=()=>openProductPage(el.dataset.relatedProduct);
+});
+const qtyInput=document.getElementById("productPageQty");
+const getQty=()=>Math.max(1,Math.min(Number(product.stock)||1,Math.floor(Number(qtyInput.value)||1)));
+document.getElementById("productPageAdd").onclick=()=>addToCart(product.id,getQty());
+document.getElementById("productPageOrder").onclick=()=>{
+addToCart(product.id,getQty(),false);
+openCart();
+setTimeout(()=>document.getElementById("checkout").scrollIntoView({behavior:"smooth",block:"start"}),100);
+};
+}
+
+// ======================================
+// PRODUCT GALLERY (legacy modal retained)
 // ======================================
 function openProductDetails(id) {
 const p = products.find(x => x.id === id);
@@ -1362,18 +1488,20 @@ renderCartCount();
 renderCart();
 }
 
-function addToCart(id) {
+function addToCart(id,quantity=1,showCart=true) {
 const product = products.find(p => p.id === id);
 if (!product) return;
+const requestedQty = Math.max(1,Math.floor(Number(quantity)||1));
 const item = cart.find(p => p.id === id);
-if ((item ? item.qty : 0) >= Number(product.stock)) {
+const currentQty = item ? Number(item.qty)||0 : 0;
+if (currentQty + requestedQty > Number(product.stock)) {
 alert("Not enough stock available.");
 return;
 }
-if (item) item.qty++;
-else cart.push({...product,qty:1});
+if (item) item.qty += requestedQty;
+else cart.push({...product,qty:requestedQty});
 saveCart();
-openCart();
+if (showCart) openCart();
 }
 
 function renderCartCount() {
@@ -1619,92 +1747,6 @@ return data.user;
 }
 
 // ======================================
-// OY NOTIFICATIONS FUNCTIONS
-// ======================================
-
-async function loadNotifications() {
-  const list = document.getElementById("notificationsList");
-  const count = document.getElementById("unreadCount");
-
-  if (!list || !count) return;
-
-  const { data, error } = await db
-    .from("notifications")
-    .select("id,reference,title,body,is_read,created_at")
-    .order("created_at", { ascending: false })
-    .limit(30);
-
-  if (error) {
-    console.error("Notifications error:", error);
-    list.innerHTML = `
-      <div class="notification-empty">
-        Could not load notifications.
-      </div>`;
-    return;
-  }
-
-  const notifications = data || [];
-  const unread = notifications.filter(n => !n.is_read).length;
-
-  count.textContent = unread;
-
-  if (!notifications.length) {
-    list.innerHTML = `
-      <div class="notification-empty">
-        No notifications yet.
-      </div>`;
-    return;
-  }
-
-  list.innerHTML = notifications.map(n => `
-    <div class="notification-item ${n.is_read ? "" : "unread"}">
-      <div>
-        <strong>${esc(n.title || "New Order")}</strong>
-        <p>${esc(n.body || ("Order: " + (n.reference || "")))}</p>
-        <small>${new Date(n.created_at).toLocaleString()}</small>
-      </div>
-
-      ${n.is_read ? "" : `
-        <button class="outline-btn small-btn mark-notification-read"
-          data-id="${esc(n.id)}">
-          MARK AS READ
-        </button>
-      `}
-    </div>
-  `).join("");
-}
-
-async function markNotificationRead(id) {
-  const { error } = await db
-    .from("notifications")
-    .update({ is_read: true })
-    .eq("id", id);
-
-  if (error) {
-    console.error("Mark notification error:", error);
-    return;
-  }
-
-  await loadNotifications();
-}
-
-function setupNotificationEvents() {
-  const bell = document.getElementById("notificationBell");
-  const list = document.getElementById("notificationsList");
-
-  bell.onclick = loadNotifications;
-
-  list.onclick = async function(event) {
-    const button = event.target.closest(".mark-notification-read");
-
-    if (!button) return;
-
-    button.disabled = true;
-    await markNotificationRead(button.dataset.id);
-  };
-}
-
-// ======================================
 // ORDER MONITOR
 // ======================================
 async function checkForNewOrders() {
@@ -1846,31 +1888,26 @@ document.getElementById("monthFilter").addEventListener("change",renderSelectedM
 // ADMIN DASHBOARD
 // ======================================
 async function loadDashboard() {
-  if (dashboardLoading) return;
-  dashboardLoading = true;
+if (dashboardLoading) return;
+dashboardLoading = true;
 
-  try {
-    const user = await requireAdmin();
-    if (!user) return;
-
-    adminMessage("Loading dashboard...");
-
-    setupNotificationEvents();
-
-    await Promise.all([
-      loadAdminOrders(),
-      loadAdminProducts(),
-      loadNotifications()
-    ]);
-
-    await startOrderMonitor();
-
-    adminMessage("Dashboard updated.","success");
-
-  } finally {
-    dashboardLoading = false;
-  }
+try {
+const user = await requireAdmin();
+if (!user) return;
+adminMessage("Loading dashboard...");
+setupNotificationEvents();
+await Promise.all([
+loadAdminOrders(),
+loadAdminProducts(),
+loadNotifications()
+]);
+await startOrderMonitor();
+adminMessage("Dashboard updated.","success");
+} finally {
+dashboardLoading = false;
 }
+}
+
 async function loadAdminOrders() {
 const tbody = document.getElementById("ordersTable");
 tbody.innerHTML = '<tr><td colspan="7">Loading orders...</td></tr>';
@@ -2365,16 +2402,12 @@ loadProducts();
 showPage();
 
 </script>
-   <script>
+<script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      const registration = await navigator.serviceWorker.register(
-        "./service-worker.js"
-      );
-
+      const registration = await navigator.serviceWorker.register("./service-worker.js");
       console.log("OY Service Worker registered:", registration);
-
     } catch (error) {
       console.error("Service Worker registration failed:", error);
     }

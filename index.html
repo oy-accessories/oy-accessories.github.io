@@ -126,7 +126,7 @@ textarea{min-height:75px;resize:vertical}
 .form-small{max-width:430px;margin:30px auto}
 .message{margin:15px 0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
 .error{color:#a83232}.success{color:#287744}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin:20px 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin:20px 0}
 .stat{background:white;padding:20px;border:1px solid #eee}
 .stat small{color:#777}
 .stat strong{display:block;font:normal 28px Georgia,serif;margin-top:10px}
@@ -441,6 +441,7 @@ color:#827966;
 line-height:1.6;
 margin-top:15px;
 }
+@media(max-width:1100px){#dashboardPage .stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){
 .products{grid-template-columns:repeat(2,1fr)}
 .stats{grid-template-columns:repeat(2,1fr)}
@@ -745,8 +746,13 @@ transform:none!important;
 <div class="stat"><small>Total Orders</small><strong id="statOrders">0</strong></div>
 <div class="stat"><small>Pending Orders</small><strong id="statNew">0</strong></div>
 <div class="stat"><small>Products</small><strong id="statProducts">0</strong></div>
-<div class="stat"><small>Sales (DH)</small><strong id="statSales">0</strong></div>
+<div class="stat"><small>Coût vente total</small><strong id="statSales">0 DH</strong></div>
+<div class="stat"><small>Coût vente sans livraison</small><strong id="statSalesNoDelivery">0 DH</strong></div>
+<div class="stat"><small>Livraison facturée</small><strong id="statDelivery">0 DH</strong></div>
+<div class="stat"><small>Coût d'achat</small><strong id="statPurchase">0 DH</strong></div>
+<div class="stat"><small>Bénéfice</small><strong id="statProfit">0 DH</strong></div>
 </div>
+<p id="financialNote" class="monthly-footnote">Calcul financier : commandes non annulées uniquement.</p>
 
 <!-- MONTHLY ANALYTICS -->
 <div class="card monthly-card">
@@ -810,7 +816,8 @@ Monthly sales exclude cancelled orders. Figures are calculated from the order to
 <h3 id="productFormTitle">Add New Product</h3>
 <form id="productForm">
 <input name="name" placeholder="Product name (French)" required>
-<input name="price" type="number" min="0" step="0.01" placeholder="Price (DH)" required>
+<input name="price" type="number" min="0" step="0.01" placeholder="Prix de vente (DH)" required>
+<input name="purchase_cost" type="number" min="0" step="0.01" placeholder="Coût d'achat (DH)" required>
 <input name="stock" type="number" min="0" step="1" placeholder="Stock quantity" required>
 <input name="category" placeholder="Category (French)" required>
 
@@ -829,6 +836,7 @@ GENERATE WITH AI
 </button>
 
 <p id="aiStatus" class="message" role="status"></p>
+<div id="aiGoogleSearch" class="ai-note"></div>
 
 <textarea name="description" placeholder="Product description (French + Arabic)"></textarea>
 
@@ -1925,10 +1933,30 @@ return;
 const orders = data || [];
 dashboardOrders = orders;
 
+const activeOrders = orders.filter(o => o.status !== "cancelled");
+const saleTotal = activeOrders.reduce((sum,o) => sum + Number(o.total || 0),0);
+const deliveryTotal = activeOrders.reduce((sum,o) => sum + Number(o.delivery_fee || 0),0);
+const saleWithoutDelivery = saleTotal - deliveryTotal;
+const {data: financialRows, error: financialError} = await db.from("order_financials")
+  .select("order_id,purchase_cost_total");
+if (financialError) throw financialError;
+const financialMap = new Map((financialRows || []).map(row => [row.order_id, Number(row.purchase_cost_total)]));
+const missingFinancials = activeOrders.filter(o => !financialMap.has(o.id));
+const purchaseTotal = activeOrders.reduce((sum,o) => sum + (financialMap.has(o.id) ? financialMap.get(o.id) : 0),0);
+const profit = saleWithoutDelivery - purchaseTotal;
+
 document.getElementById("statOrders").textContent = orders.length;
 document.getElementById("statNew").textContent = orders.filter(o => o.status === "pending").length;
-document.getElementById("statSales").textContent =
-orders.filter(o => o.status !== "cancelled").reduce((s,o) => s+Number(o.total || 0),0).toFixed(0);
+document.getElementById("statSales").textContent = money(saleTotal);
+document.getElementById("statSalesNoDelivery").textContent = money(saleWithoutDelivery);
+document.getElementById("statDelivery").textContent = money(deliveryTotal);
+document.getElementById("statPurchase").textContent = missingFinancials.length ? `${money(purchaseTotal)} *` : money(purchaseTotal);
+document.getElementById("statProfit").textContent = missingFinancials.length ? `${money(profit)} *` : money(profit);
+const financialNote = missingFinancials.length
+  ? `Attention : ${missingFinancials.length} commande(s) sans snapshot financier. Les coûts d'achat et bénéfices affichés sont incomplets.`
+  : "Bénéfice = ventes hors livraison − coûts d'achat. Les commandes annulées sont exclues.";
+const financialNoteEl = document.getElementById("financialNote");
+if (financialNoteEl) financialNoteEl.textContent = financialNote;
 
 // Update the monthly selector, selected month and six-month chart.
 renderMonthlyAnalytics(orders);
@@ -2191,13 +2219,19 @@ const form = document.getElementById("productForm");
 if (suggestions.name) form.elements.name.value = suggestions.name;
 if (suggestions.category) form.elements.category.value = suggestions.category;
 
+const inoxLine = "Conçu en acier inoxydable, un matériau apprécié pour sa résistance et sa durabilité.";
+const frenchDescription = suggestions.description_fr
+  ? (suggestions.description_fr.includes(inoxLine) ? suggestions.description_fr : suggestions.description_fr + "\n\n" + inoxLine)
+  : inoxLine;
 const description = [
-suggestions.description_fr ? "Description (Français):\n"+suggestions.description_fr : "",
+"Description (Français):\n"+frenchDescription,
 suggestions.description_ar ? "الوصف (العربية):\n"+suggestions.description_ar : ""
 ].filter(Boolean).join("\n\n");
 
 if (description) form.elements.description.value = description;
-showMessage(status,"AI suggestions generated. Review and edit the information before saving.","success");
+const searchPhrase = String(suggestions.google_search_query || suggestions.search_query_fr || suggestions.name || "accessoires similaires").trim();
+document.getElementById("aiGoogleSearch").innerHTML = `Recherche manuelle : <a href="https://www.google.com/search?q=${encodeURIComponent(searchPhrase)}" target="_blank" rel="noopener" style="color:#80612f;text-decoration:underline">Voir des produits similaires sur Google</a>`;
+showMessage(status,"AI suggestions generated. Review and edit the information before saving. Google results are opened separately and are not verified by AI.","success");
 } catch(err) {
 console.error("AI generation error:",err);
 showMessage(status,"AI error: "+err.message,"error");
@@ -2210,7 +2244,7 @@ button.textContent = "GENERATE WITH AI";
 // ======================================
 // PRODUCT EDITING
 // ======================================
-function editProduct(id,list) {
+async function editProduct(id,list) {
 const p = list.find(x => x.id === id);
 if (!p) return;
 editingProductId = id;
@@ -2221,6 +2255,10 @@ editingProductIsActive = !!p.is_active;
 const form = document.getElementById("productForm");
 form.elements.name.value = p.name || "";
 form.elements.price.value = p.price ?? "";
+form.elements.purchase_cost.value = "";
+const costResult = await db.from("product_costs").select("purchase_cost").eq("product_id",id).maybeSingle();
+if (costResult.error) { showMessage(document.getElementById("productMessage"),"Could not load purchase cost: "+costResult.error.message,"error"); return; }
+form.elements.purchase_cost.value = costResult.data?.purchase_cost ?? "";
 form.elements.stock.value = p.stock ?? 0;
 form.elements.category.value = p.category || "";
 form.elements.description.value = p.description || "";
@@ -2286,6 +2324,7 @@ document.getElementById("productFormTitle").textContent = "Add New Product";
 document.getElementById("saveProductButton").textContent = "SAVE AS DRAFT";
 document.getElementById("cancelEdit").classList.add("hidden");
 document.getElementById("aiStatus").textContent = "";
+document.getElementById("aiGoogleSearch").innerHTML = "";
 }
 document.getElementById("cancelEdit").onclick = resetProductForm;
 
@@ -2329,11 +2368,12 @@ const f = Object.fromEntries(new FormData(form).entries());
 
 const name = String(f.name || "").trim();
 const price = Number(f.price);
+const purchaseCost = Number(f.purchase_cost);
 const stock = Number(f.stock);
 const category = String(f.category || "").trim();
 const description = String(f.description || "").trim();
 
-if (!name || !category || !Number.isFinite(price) || price < 0 || !Number.isInteger(stock) || stock < 0) {
+if (!name || !category || !Number.isFinite(price) || price < 0 || !Number.isFinite(purchaseCost) || purchaseCost < 0 || !Number.isInteger(stock) || stock < 0) {
 showMessage(msg,"Please check the product details.","error");
 return;
 }
@@ -2369,15 +2409,27 @@ const slug = name.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()
 
 const record = {name,slug,price,stock,category,image_url:imageUrl,image_urls:imageUrls,description};
 let result;
+let savedProductId = productIdBeingEdited;
 
 if (isEditing) {
 result = await db.from("products").update(record).eq("id",productIdBeingEdited);
-} else {
-result = await db.from("products").insert({...record,is_active:false});
-}
 if (result.error) throw result.error;
+} else {
+result = await db.from("products").insert({...record,is_active:false}).select("id").single();
+if (result.error) throw result.error;
+savedProductId = result.data.id;
+}
+const {error: costError} = await db.from("product_costs").upsert({
+product_id:savedProductId,
+purchase_cost:purchaseCost,
+updated_at:new Date().toISOString()
+},{onConflict:"product_id"});
+if (costError) {
+if (!isEditing && savedProductId) await db.from("products").delete().eq("id",savedProductId);
+throw new Error("Product cost could not be saved. "+costError.message);
+}
 
-showMessage(msg,isEditing ? "Product updated successfully." : "Product saved as a draft. Publish it from Products & Stock when ready.","success");
+showMessage(msg,isEditing ? "Product and purchase cost updated successfully." : "Product and purchase cost saved as a draft. Publish it from Products & Stock when ready.","success");
 resetProductForm();
 await loadAdminProducts();
 await loadProducts();

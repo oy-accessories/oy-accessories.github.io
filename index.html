@@ -308,6 +308,13 @@ width:58px;
 height:58px;
 border-radius:3px;
 }
+.order-items-list{display:grid;gap:10px;min-width:190px;max-width:260px}
+.order-item-line{display:flex;align-items:center;gap:9px;min-width:0}
+.order-item-line img,.order-item-no-image{width:48px;height:48px;flex:0 0 48px;object-fit:cover;border:1px solid #e8dfd0;border-radius:3px;background:#f4efe5}
+.order-item-no-image{display:grid;place-items:center;color:#a48650;font:normal 17px Georgia,serif}
+.order-item-info{display:grid;gap:5px;min-width:0}
+.order-item-info strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.order-item-info small,.order-items-missing{font-size:11px;color:#817762}
 #dashboardPage .status{
 background:#f1e8d7;
 color:#765a2d;
@@ -829,12 +836,12 @@ Monthly sales include delivery fees and exclude cancelled orders. Figures are ca
 <table>
 <thead>
 <tr>
-<th>Reference</th><th>Customer</th><th>Phone</th>
+<th>Reference</th><th>Products</th><th>Customer</th><th>Phone</th>
 <th>Subtotal / Delivery / Total</th><th>Date</th><th>Status</th><th>Update</th>
 </tr>
 </thead>
 <tbody id="ordersTable">
-<tr><td colspan="7">Loading...</td></tr>
+<tr><td colspan="8">Loading...</td></tr>
 </tbody>
 </table>
 </div>
@@ -1939,7 +1946,7 @@ function filterAdminOrders() {
 
   tbody.querySelector(".orders-filter-empty")?.remove();
   if (rows.length && visible === 0) {
-    tbody.insertAdjacentHTML("beforeend", '<tr class="orders-filter-empty"><td colspan="7">No orders match your search or filter.</td></tr>');
+    tbody.insertAdjacentHTML("beforeend", '<tr class="orders-filter-empty"><td colspan="8">No orders match your search or filter.</td></tr>');
   }
 
   const count = document.getElementById("ordersCount");
@@ -1975,20 +1982,50 @@ dashboardLoading = false;
 
 async function loadAdminOrders() {
 const tbody = document.getElementById("ordersTable");
-tbody.innerHTML = '<tr><td colspan="7">Loading orders...</td></tr>';
+tbody.innerHTML = '<tr><td colspan="8">Loading orders...</td></tr>';
 
 const {data,error} = await db.from("orders")
 .select("id,reference,customer_name,phone,city,address,total,delivery_fee,status,created_at")
 .order("created_at",{ascending:false});
 
 if (error) {
-tbody.innerHTML = '<tr><td colspan="7">Could not load orders.</td></tr>';
+tbody.innerHTML = '<tr><td colspan="8">Could not load orders.</td></tr>';
 console.error(error);
 return;
 }
 
 const orders = data || [];
 dashboardOrders = orders;
+
+// Load the products saved with each order and their current product images.
+let orderItems = [];
+if (orders.length) {
+  const {data: itemData, error: itemError} = await db.from("order_items")
+    .select("order_id,product_id,product_name,unit_price,quantity,subtotal")
+    .in("order_id", orders.map(order => order.id));
+  if (itemError) {
+    console.warn("Could not load order items:", itemError);
+  } else {
+    orderItems = itemData || [];
+  }
+}
+const productIds = [...new Set(orderItems.map(item => item.product_id).filter(Boolean))];
+let productImageMap = new Map();
+if (productIds.length) {
+  const {data: productImages, error: imageError} = await db.from("products")
+    .select("id,image_url")
+    .in("id", productIds);
+  if (imageError) {
+    console.warn("Could not load product images for orders:", imageError);
+  } else {
+    productImageMap = new Map((productImages || []).map(product => [product.id, product.image_url]));
+  }
+}
+const orderItemsMap = new Map();
+orderItems.forEach(item => {
+  if (!orderItemsMap.has(item.order_id)) orderItemsMap.set(item.order_id, []);
+  orderItemsMap.get(item.order_id).push(item);
+});
 
 const activeOrders = orders.filter(o => o.status !== "cancelled");
 const saleTotal = activeOrders.reduce((sum,o) => sum + Number(o.total || 0),0);
@@ -2023,10 +2060,24 @@ renderMonthlyAnalytics(orders);
 tbody.innerHTML = orders.map(o => {
 const deliveryFee = Number(o.delivery_fee || 0);
 const subtotal = Number(o.total || 0) - deliveryFee;
-const orderSearchText = `${o.reference || ""} ${o.customer_name || ""} ${o.phone || ""} ${o.city || ""}`.toLowerCase();
+const items = orderItemsMap.get(o.id) || [];
+const itemsSearchText = items.map(item => item.product_name || "").join(" ");
+const orderSearchText = `${o.reference || ""} ${o.customer_name || ""} ${o.phone || ""} ${o.city || ""} ${itemsSearchText}`.toLowerCase();
+const itemsHtml = items.length ? items.map(item => {
+  const imageUrl = productImageMap.get(item.product_id) || "";
+  const productName = item.product_name || "Product";
+  return `<div class="order-item-line">
+    ${imageUrl ? `<img src="${esc(imageUrl)}" alt="${esc(productName)}" loading="lazy">` : '<div class="order-item-no-image">OY</div>'}
+    <div class="order-item-info">
+      <strong>${esc(productName)}</strong>
+      <small>${Number(item.quantity || 0)} × ${money(item.unit_price || 0)}</small>
+    </div>
+  </div>`;
+}).join("") : '<span class="order-items-missing">No product details</span>';
 return `
 <tr data-order-search="${esc(orderSearchText)}" data-order-status="${esc(o.status || "pending")}">
 <td><strong>${esc(o.reference)}</strong></td>
+<td><div class="order-items-list">${itemsHtml}</div></td>
 <td>${esc(o.customer_name)}<br><small>${esc(o.city)}</small></td>
 <td>${esc(o.phone)}</td>
 <td>Subtotal: ${money(subtotal)}<br>Delivery: ${money(deliveryFee)}<br><strong>Total: ${money(o.total)}</strong></td>
@@ -2043,7 +2094,7 @@ return `
 <button class="dark-btn small-btn" data-update="${esc(o.id)}">Save</button>
 </td>
 </tr>`;
-}).join("") || '<tr><td colspan="7">No orders yet.</td></tr>';
+}).join("") || '<tr><td colspan="8">No orders yet.</td></tr>';
 filterAdminOrders();
 
 document.querySelectorAll("[data-update]").forEach(button => {

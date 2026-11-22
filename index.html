@@ -624,12 +624,27 @@ transform:none!important;
 .notification-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;margin-left:5px;border-radius:20px;background:#a9874d;color:#fff;font-size:11px}
 #pushStatus{margin:10px 0}
 #notificationsList{display:grid;gap:9px;margin-top:14px}
+.orders-toolbar{display:grid;grid-template-columns:minmax(180px,1fr) minmax(150px,220px) auto;gap:10px;align-items:center;margin:0 0 15px}
+.orders-toolbar input,.orders-toolbar select{min-width:0}
+.orders-count{font-size:12px;color:#827966;white-space:nowrap}
+.status{font-weight:bold;border-radius:20px;padding:6px 10px}
+.status-pending{background:#fff3d8!important;color:#8a5b0b!important;border-color:#efd49b!important}
+.status-confirmed{background:#e6efff!important;color:#28528c!important;border-color:#c5d8f5!important}
+.status-shipped{background:#eee8ff!important;color:#6544a0!important;border-color:#d6c8f4!important}
+.status-delivered{background:#e4f4e9!important;color:#28683d!important;border-color:#c2e2cc!important}
+.status-cancelled{background:#fbe8e6!important;color:#9b3831!important;border-color:#efc7c3!important}
+.stock-pill{display:inline-block;margin-top:5px;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:bold;white-space:nowrap}
+.stock-ok{background:#e4f4e9;color:#28683d}
+.stock-low{background:#fff3d8;color:#8a5b0b}
+.stock-out{background:#fbe8e6;color:#9b3831}
+.orders-filter-empty td{text-align:center!important;color:#827966!important;padding:24px!important}
 .notification-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px;background:#f7f4ed;border-left:3px solid #d5c5a5}
 .notification-item.unread{background:#f2eadb;border-left-color:#a9874d}
 .notification-item p{font-size:13px;color:#5e584e;line-height:1.5;margin:4px 0}
 .notification-item small{font-size:11px;color:#8b8376}
 .notification-empty{padding:18px;text-align:center;color:#827966;font-size:13px;background:#f7f4ed}
-@media(max-width:600px){.notification-item{align-items:flex-start;flex-direction:column}.notification-item button{width:100%}}
+@media(max-width:700px){.orders-toolbar{grid-template-columns:1fr 1fr}.orders-toolbar input{grid-column:1/-1}.orders-count{grid-column:1/-1}}
+@media(max-width:600px){.notification-item{align-items:flex-start;flex-direction:column}.notification-item button{width:100%}.orders-toolbar{grid-template-columns:1fr}.orders-toolbar input,.orders-toolbar select,.orders-count{grid-column:auto}}
 
 </style>
 </head>
@@ -745,6 +760,8 @@ transform:none!important;
 <div class="stats">
 <div class="stat"><small>Total Orders</small><strong id="statOrders">0</strong></div>
 <div class="stat"><small>Pending Orders</small><strong id="statNew">0</strong></div>
+<div class="stat"><small>Delivered Orders</small><strong id="statDelivered">0</strong></div>
+<div class="stat"><small>Cancelled Orders</small><strong id="statCancelled">0</strong></div>
 <div class="stat"><small>Products</small><strong id="statProducts">0</strong></div>
 <div class="stat"><small>Coût vente total</small><strong id="statSales">0 DH</strong></div>
 <div class="stat"><small>Coût vente sans livraison</small><strong id="statSalesNoDelivery">0 DH</strong></div>
@@ -790,12 +807,24 @@ transform:none!important;
 <div class="monthly-empty">Loading monthly sales...</div>
 </div>
 <p class="monthly-footnote">
-Monthly sales exclude cancelled orders. Figures are calculated from the order totals saved in your database.
+Monthly sales include delivery fees and exclude cancelled orders. Figures are calculated from the order totals saved in your database.
 </p>
 </div>
 
 <div class="card">
 <h3>Orders & Customers</h3>
+<div class="orders-toolbar">
+<input id="orderSearch" type="search" placeholder="Search reference, customer, phone or city..." aria-label="Search orders">
+<select id="orderStatusFilter" aria-label="Filter orders by status">
+<option value="all">All statuses</option>
+<option value="pending">Pending</option>
+<option value="confirmed">Confirmed</option>
+<option value="shipped">Shipped</option>
+<option value="delivered">Delivered</option>
+<option value="cancelled">Cancelled</option>
+</select>
+<span class="orders-count" id="ordersCount">0 orders</span>
+</div>
 <div class="table-wrap">
 <table>
 <thead>
@@ -1893,6 +1922,33 @@ return `
 
 document.getElementById("monthFilter").addEventListener("change",renderSelectedMonth);
 
+// Search and filter the orders already loaded from Supabase without another database request.
+function filterAdminOrders() {
+  const tbody = document.getElementById("ordersTable");
+  const query = (document.getElementById("orderSearch")?.value || "").trim().toLowerCase();
+  const status = document.getElementById("orderStatusFilter")?.value || "all";
+  const rows = [...tbody.querySelectorAll("tr[data-order-search]")];
+  let visible = 0;
+
+  rows.forEach(row => {
+    const matchesText = !query || row.dataset.orderSearch.includes(query);
+    const matchesStatus = status === "all" || row.dataset.orderStatus === status;
+    row.hidden = !(matchesText && matchesStatus);
+    if (!row.hidden) visible++;
+  });
+
+  tbody.querySelector(".orders-filter-empty")?.remove();
+  if (rows.length && visible === 0) {
+    tbody.insertAdjacentHTML("beforeend", '<tr class="orders-filter-empty"><td colspan="7">No orders match your search or filter.</td></tr>');
+  }
+
+  const count = document.getElementById("ordersCount");
+  if (count) count.textContent = `${visible} / ${rows.length} orders`;
+}
+
+document.getElementById("orderSearch")?.addEventListener("input",filterAdminOrders);
+document.getElementById("orderStatusFilter")?.addEventListener("change",filterAdminOrders);
+
 // ======================================
 // ADMIN DASHBOARD
 // ======================================
@@ -1948,6 +2004,8 @@ const profit = saleWithoutDelivery - purchaseTotal;
 
 document.getElementById("statOrders").textContent = orders.length;
 document.getElementById("statNew").textContent = orders.filter(o => o.status === "pending").length;
+document.getElementById("statDelivered").textContent = orders.filter(o => o.status === "delivered").length;
+document.getElementById("statCancelled").textContent = orders.filter(o => o.status === "cancelled").length;
 document.getElementById("statSales").textContent = money(saleTotal);
 document.getElementById("statSalesNoDelivery").textContent = money(saleWithoutDelivery);
 document.getElementById("statDelivery").textContent = money(deliveryTotal);
@@ -1965,14 +2023,15 @@ renderMonthlyAnalytics(orders);
 tbody.innerHTML = orders.map(o => {
 const deliveryFee = Number(o.delivery_fee || 0);
 const subtotal = Number(o.total || 0) - deliveryFee;
+const orderSearchText = `${o.reference || ""} ${o.customer_name || ""} ${o.phone || ""} ${o.city || ""}`.toLowerCase();
 return `
-<tr>
+<tr data-order-search="${esc(orderSearchText)}" data-order-status="${esc(o.status || "pending")}">
 <td><strong>${esc(o.reference)}</strong></td>
 <td>${esc(o.customer_name)}<br><small>${esc(o.city)}</small></td>
 <td>${esc(o.phone)}</td>
 <td>Subtotal: ${money(subtotal)}<br>Delivery: ${money(deliveryFee)}<br><strong>Total: ${money(o.total)}</strong></td>
 <td>${new Date(o.created_at).toLocaleDateString()}</td>
-<td><span class="status">${esc(o.status || "pending")}</span></td>
+<td><span class="status status-${esc(o.status || "pending")}">${esc(o.status || "pending")}</span></td>
 <td>
 <select data-status="${esc(o.id)}">
 <option value="pending" ${o.status==="pending"?"selected":""}>Pending</option>
@@ -1985,6 +2044,7 @@ return `
 </td>
 </tr>`;
 }).join("") || '<tr><td colspan="7">No orders yet.</td></tr>';
+filterAdminOrders();
 
 document.querySelectorAll("[data-update]").forEach(button => {
 button.onclick = async () => {
@@ -2032,6 +2092,7 @@ container.innerHTML = list.map(p => `
 ${money(p.price)} · Stock: ${Number(p.stock)} · ${productImages(p).length} photo(s) ·
 ${p.is_active ? "Published" : "Draft / Hidden"}
 </div>
+<span class="stock-pill ${Number(p.stock) <= 0 ? "stock-out" : Number(p.stock) <= 3 ? "stock-low" : "stock-ok"}">${Number(p.stock) <= 0 ? "OUT OF STOCK" : Number(p.stock) <= 3 ? "LOW STOCK" : "IN STOCK"}</span>
 </div>
 <div class="product-admin-actions">
 <button class="outline-btn small-btn" data-edit="${esc(p.id)}">Edit</button>

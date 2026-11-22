@@ -653,6 +653,14 @@ transform:none!important;
 @media(max-width:700px){.orders-toolbar{grid-template-columns:1fr 1fr}.orders-toolbar input{grid-column:1/-1}.orders-count{grid-column:1/-1}}
 @media(max-width:600px){.notification-item{align-items:flex-start;flex-direction:column}.notification-item button{width:100%}.orders-toolbar{grid-template-columns:1fr}.orders-toolbar input,.orders-toolbar select,.orders-count{grid-column:auto}}
 
+/* Bilingual interface */
+.language-toggle{white-space:nowrap;min-width:86px}
+html[dir="rtl"] body{direction:rtl;text-align:right}
+html[dir="rtl"] nav,html[dir="rtl"] .cart-line,html[dir="rtl"] .product-admin,html[dir="rtl"] .order-item-line{direction:rtl}
+html[dir="rtl"] .panel{margin-left:0;margin-right:auto}
+html[dir="rtl"] th,html[dir="rtl"] td,html[dir="rtl"] input,html[dir="rtl"] textarea,html[dir="rtl"] select{text-align:right}
+html[dir="rtl"] .notification-item{border-left:0;border-right:3px solid #d5c5a5}
+html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .section-head small,html[dir="rtl"] #dashboardPage .stat small{letter-spacing:0}
 </style>
 </head>
 
@@ -670,6 +678,7 @@ transform:none!important;
 <a href="#shop">SHOP</a>
 <a href="#track">TRACK ORDER</a>
 <button class="outline-btn" id="openCart">CART (<span id="cartCount">0</span>)</button>
+<button class="outline-btn language-toggle" type="button">العربية</button>
 </nav>
 </header>
 
@@ -2582,6 +2591,59 @@ if ("serviceWorker" in navigator) {
     }
   });
 }
+</script>
+
+<script>
+(function(){
+const dict={
+"HOME":"الرئيسية","SHOP":"المتجر","TRACK ORDER":"تتبع الطلب","CART":"السلة",
+"OY ACCESSORIES COLLECTION":"تشكيلة OY ACCESSORIES","Timeless Details.":"تفاصيل خالدة.","Modern Elegance.":"أناقة عصرية.",
+"Discover carefully selected accessories designed to complete your everyday style.":"اكتشفوا إكسسوارات مختارة بعناية لإكمال أناقتكم اليومية.",
+"DISCOVER COLLECTION":"اكتشفوا التشكيلة","THE COLLECTION":"التشكيلة","Discover Our Products":"اكتشفوا منتجاتنا",
+"OUR PHILOSOPHY":"فلسفتنا","Less, But Better.":"الأناقة في البساطة.",
+"At OY Accessories, we believe that the smallest details make the biggest difference.":"في OY Accessories، نؤمن بأن التفاصيل الصغيرة تصنع الفرق الكبير.",
+"Track Your Order":"تتبع طلبكم","Enter your order reference and the phone number used at checkout.":"أدخلوا رقم الطلب ورقم الهاتف المستخدم عند الشراء.",
+"Order reference (OY-...)":"رقم الطلب (OY-...)","Phone number":"رقم الهاتف",
+"Admin Login":"دخول المسؤول","Sign in to manage OY Accessories.":"سجّل الدخول لإدارة متجر OY Accessories.",
+"Admin email":"البريد الإلكتروني للمسؤول","Password":"كلمة المرور","SIGN IN":"تسجيل الدخول",
+"Admin Dashboard":"لوحة الإدارة","REFRESH":"تحديث","LOG OUT":"تسجيل الخروج",
+"Notifications":"الإشعارات","🔔 NOTIFICATIONS":"🔔 الإشعارات","ENABLE PUSH NOTIFICATIONS":"تفعيل الإشعارات",
+"Total Orders":"إجمالي الطلبات","Pending Orders":"الطلبات قيد الانتظار","Delivered Orders":"الطلبات المسلّمة","Bénéfice":"صافي الربح",
+"Monthly Analytics":"الإحصائيات الشهرية","SELECT MONTH":"اختر الشهر","Monthly Sales":"مبيعات الشهر","Cancelled Orders":"الطلبات الملغاة",
+"Sales — Last 6 Months":"المبيعات خلال آخر 6 أشهر","Orders & Customers":"الطلبات والعملاء",
+"Search reference, customer, phone or city...":"ابحث برقم الطلب أو اسم العميل أو الهاتف أو المدينة...",
+"All statuses":"جميع الحالات","Pending":"قيد الانتظار","Confirmed":"تم التأكيد","Shipped":"تم الشحن","Delivered":"تم التسليم","Cancelled":"ملغى",
+"Reference":"رقم الطلب","Products":"المنتجات","Customer":"العميل","Phone":"الهاتف","Subtotal / Delivery / Total":"المجموع الفرعي / التوصيل / الإجمالي","Date":"التاريخ","Status":"الحالة","Update":"تحديث",
+"Add New Product":"إضافة منتج جديد","Product name (French)":"اسم المنتج (بالفرنسية)","Prix de vente (DH)":"سعر البيع (درهم)","Coût d'achat (DH)":"تكلفة الشراء (درهم)","Stock quantity":"كمية المخزون","Category (French)":"الفئة (بالفرنسية)",
+"Product Images (Maximum 5)":"صور المنتج (بحد أقصى 5)","GENERATE WITH AI":"إنشاء بالذكاء الاصطناعي","SAVE AS DRAFT":"حفظ كمسودة","CANCEL":"إلغاء","Products & Stock":"المنتجات والمخزون",
+"Your Cart":"سلة المشتريات","Subtotal":"المجموع الفرعي","Delivery fee":"رسوم التوصيل","Total":"الإجمالي","Delivery Details":"معلومات التوصيل",
+"First name":"الاسم الشخصي","Last name":"اسم العائلة","Choose your delivery location":"اختروا مكان التوصيل","Autre ville":"مدينة أخرى",
+"Select your city":"اختروا المدينة","Choose your city":"اختاروا المدينة","Full delivery address":"عنوان التوصيل بالتفصيل",
+"Payment method: Cash on Delivery":"طريقة الدفع: الدفع عند الاستلام","You will pay when you receive your order.":"ستدفعون عند استلام طلبكم.",
+"CONFIRM ORDER":"تأكيد الطلب","Your cart is empty.":"سلة المشتريات فارغة.","Choose a city":"اختاروا المدينة",
+"FREE":"مجاني","FREE DELIVERY UNLOCKED!":"تهانينا! التوصيل مجاني","FREE DELIVERY FROM 300 DH":"توصيل مجاني ابتداءً من 300 درهم",
+"ADD TO CART":"أضف إلى السلة","OUT OF STOCK":"نفد المخزون","Loading products...":"جارٍ تحميل المنتجات...","No products available yet.":"لا توجد منتجات متاحة حالياً.",
+"INFORMATIONS":"معلومات","NOS COLLECTIONS":"تشكيلاتنا","Bagues":"خواتم","Colliers":"قلادات","Bracelets":"أساور","Accessoires":"إكسسوارات","CONTACT":"اتصلوا بنا",
+"Suivre ma commande":"تتبع طلبي","WhatsApp us":"تواصلوا معنا عبر واتساب","Tous nos articles sont en acier inoxydable (Inox).":"جميع منتجاتنا مصنوعة من الفولاذ المقاوم للصدأ.",
+"100% Authentique.":"أصلي 100%.","Échange facile.":"استبدال سهل.","Livraison 24-48h.":"التوصيل خلال 24–48 ساعة.",
+"Livraison gratuite dès 300 DH d'achat.":"توصيل مجاني ابتداءً من 300 درهم.","Livraison partout au Maroc.":"التوصيل إلى جميع أنحاء المغرب.","Paiement à la livraison.":"الدفع عند الاستلام.",
+"Edit":"تعديل","Hide":"إخفاء","Publish":"نشر","Delete":"حذف","IN STOCK":"متوفر","LOW STOCK":"مخزون منخفض","MAIN IMAGE":"الصورة الرئيسية",
+"Edit Product":"تعديل المنتج","UPDATE PRODUCT":"تحديث المنتج","Loading...":"جارٍ التحميل...","No orders yet.":"لا توجد طلبات حالياً.",
+"Order status updated.":"تم تحديث حالة الطلب.","Dashboard updated.":"تم تحديث لوحة الإدارة.","Signing in...":"جارٍ تسجيل الدخول...",
+"Login successful.":"تم تسجيل الدخول بنجاح.","Login failed:":"فشل تسجيل الدخول:","MARK AS READ":"تحديد كمقروء",
+"Product":"المنتج","Quantity":"الكمية","Previous":"السابق","NEXT":"التالي","Save":"حفظ"
+};
+const keys=Object.keys(dict).sort((a,b)=>b.length-a.length), originals=new WeakMap(), attrs=new WeakMap();
+let lang="fr";
+function tr(s){let v=s;for(const k of keys)if(v.includes(k))v=v.split(k).join(dict[k]);return v.replace(/(\d+) orders/g,"$1 طلب").replace(/Stock:/g,"المخزون:").replace(/Subtotal:/g,"المجموع الفرعي:").replace(/Delivery:/g,"التوصيل:").replace(/Total:/g,"الإجمالي:").replace(/City:/g,"المدينة:").replace(/Date:/g,"التاريخ:").replace(/Reference:/g,"رقم الطلب:").replace(/Status:/g,"الحالة:");}
+function apply(root,arabic){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!n.nodeValue.trim())continue;if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=arabic?tr(originals.get(n)):originals.get(n);}
+const els=[root,...root.querySelectorAll("*")];for(const e of els){for(const a of ["placeholder","aria-label","title"]){if(!e.hasAttribute(a))continue;let o=attrs.get(e)||{};if(o[a]===undefined)o[a]=e.getAttribute(a);attrs.set(e,o);e.setAttribute(a,arabic?tr(o[a]):o[a]);}}}
+function setLang(v){lang=v;const ar=v==="ar";document.documentElement.lang=ar?"ar":"fr";document.documentElement.dir=ar?"rtl":"ltr";document.querySelectorAll(".language-toggle").forEach(b=>b.textContent=ar?"Français":"العربية");try{localStorage.setItem("oy-language",v)}catch(e){}apply(document.body,ar);}
+document.querySelectorAll(".language-toggle").forEach(b=>b.addEventListener("click",()=>setLang(lang==="ar"?"fr":"ar")));
+const obs=new MutationObserver(records=>{if(lang!=="ar")return;for(const r of records){if(r.type==="childList")r.addedNodes.forEach(n=>{if(n.nodeType===1)apply(n,true);else if(n.nodeType===3){if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=tr(originals.get(n));}});else if(r.type==="characterData"){const n=r.target;if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=tr(originals.get(n));}}});
+obs.observe(document.body,{subtree:true,childList:true,characterData:true});
+let saved="fr";try{saved=localStorage.getItem("oy-language")||"fr"}catch(e){}setLang(saved==="ar"?"ar":"fr");
+})();
 </script>
 </body>
 </html>

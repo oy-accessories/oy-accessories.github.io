@@ -2633,14 +2633,49 @@ const dict={
 "Login successful.":"تم تسجيل الدخول بنجاح.","Login failed:":"فشل تسجيل الدخول:","MARK AS READ":"تحديد كمقروء",
 "Product":"المنتج","Quantity":"الكمية","Previous":"السابق","NEXT":"التالي","Save":"حفظ"
 };
+const frDict={
+"HOME":"ACCUEIL","SHOP":"BOUTIQUE","TRACK ORDER":"SUIVRE MA COMMANDE","CART":"PANIER",
+"OY ACCESSORIES COLLECTION":"COLLECTION OY ACCESSORIES","Timeless Details.":"Des détails intemporels.","Modern Elegance.":"Une élégance moderne.",
+"Discover carefully selected accessories designed to complete your everyday style.":"Découvrez des accessoires soigneusement sélectionnés pour sublimer votre style au quotidien.",
+"DISCOVER COLLECTION":"DÉCOUVRIR LA COLLECTION","THE COLLECTION":"LA COLLECTION","Discover Our Products":"Découvrez nos produits",
+"OUR PHILOSOPHY":"NOTRE PHILOSOPHIE","Less, But Better.":"Moins, mais mieux.",
+"At OY Accessories, we believe that the smallest details make the biggest difference.":"Chez OY Accessories, nous croyons que les petits détails font toute la différence.",
+"Track Your Order":"Suivre ma commande","Enter your order reference and the phone number used at checkout.":"Saisissez la référence de votre commande et le numéro de téléphone utilisé lors de l'achat.",
+"Order reference (OY-...)":"Référence de commande (OY-...)","Phone number":"Numéro de téléphone",
+"Admin Login":"Connexion administrateur","Sign in to manage OY Accessories.":"Connectez-vous pour gérer OY Accessories.",
+"Admin email":"E-mail administrateur","Password":"Mot de passe","SIGN IN":"SE CONNECTER",
+"Admin Dashboard":"Tableau de bord","REFRESH":"ACTUALISER","LOG OUT":"DÉCONNEXION",
+"Notifications":"Notifications","ENABLE PUSH NOTIFICATIONS":"ACTIVER LES NOTIFICATIONS",
+"Total Orders":"Commandes totales","Pending Orders":"Commandes en attente","Delivered Orders":"Commandes livrées",
+"Monthly Analytics":"Statistiques mensuelles","SELECT MONTH":"CHOISIR LE MOIS","Monthly Sales":"Ventes du mois",
+"Cancelled Orders":"Commandes annulées","Sales — Last 6 Months":"Ventes — 6 derniers mois","Orders & Customers":"Commandes et clients",
+"Search reference, customer, phone or city...":"Rechercher une référence, un client, un téléphone ou une ville...",
+"All statuses":"Tous les statuts","Pending":"En attente","Confirmed":"Confirmée","Shipped":"Expédiée","Delivered":"Livrée","Cancelled":"Annulée",
+"Reference":"Référence","Products":"Produits","Customer":"Client","Phone":"Téléphone","Subtotal / Delivery / Total":"Sous-total / Livraison / Total","Date":"Date","Status":"Statut","Update":"Mettre à jour",
+"Add New Product":"Ajouter un produit","Product name (French)":"Nom du produit (français)","Stock quantity":"Quantité en stock","Category (French)":"Catégorie (français)",
+"Product Images (Maximum 5)":"Images du produit (maximum 5)","GENERATE WITH AI":"GÉNÉRER AVEC L'IA","SAVE AS DRAFT":"ENREGISTRER EN BROUILLON",
+"Products & Stock":"Produits et stock","Your Cart":"Votre panier","Subtotal":"Sous-total","Delivery fee":"Frais de livraison","Total":"Total","Delivery Details":"Informations de livraison",
+"First name":"Prénom","Last name":"Nom","Choose your delivery location":"Choisissez votre lieu de livraison","Autre ville":"Autre ville",
+"Select your city":"Choisissez votre ville","Choose your city":"Choisissez votre ville","Full delivery address":"Adresse complète de livraison",
+"Payment method: Cash on Delivery":"Mode de paiement : paiement à la livraison","You will pay when you receive your order.":"Vous paierez à la réception de votre commande.",
+"CONFIRM ORDER":"CONFIRMER LA COMMANDE","Your cart is empty.":"Votre panier est vide.","Choose a city":"Choisissez une ville",
+"FREE":"GRATUIT","FREE DELIVERY UNLOCKED!":"LIVRAISON GRATUITE ACTIVÉE !","FREE DELIVERY FROM 300 DH":"LIVRAISON GRATUITE DÈS 300 DH",
+"ADD TO CART":"AJOUTER AU PANIER","OUT OF STOCK":"RUPTURE DE STOCK","Loading products...":"Chargement des produits...","No products available yet.":"Aucun produit disponible pour le moment.",
+"INFORMATIONS":"INFORMATIONS","NOS COLLECTIONS":"NOS COLLECTIONS","CONTACT":"CONTACT","WhatsApp us":"Contactez-nous sur WhatsApp",
+"Edit":"Modifier","Hide":"Masquer","Publish":"Publier","Delete":"Supprimer","IN STOCK":"EN STOCK","LOW STOCK":"STOCK FAIBLE",
+"Edit Product":"Modifier le produit","UPDATE PRODUCT":"METTRE À JOUR LE PRODUIT","Loading...":"Chargement...","No orders yet.":"Aucune commande pour le moment.",
+"Order status updated.":"Statut de la commande mis à jour.","Dashboard updated.":"Tableau de bord actualisé.",
+"Signing in...":"Connexion en cours...","Login successful.":"Connexion réussie.","Login failed:":"Échec de la connexion :",
+"MARK AS READ":"MARQUER COMME LU","Product":"Produit","Quantity":"Quantité","Previous":"Précédent","NEXT":"SUIVANT"
+};
 const keys=Object.keys(dict).sort((a,b)=>b.length-a.length), originals=new WeakMap(), attrs=new WeakMap();
 let lang="fr";
-function tr(s){let v=s;for(const k of keys)if(v.includes(k))v=v.split(k).join(dict[k]);return v.replace(/(\d+) orders/g,"$1 طلب").replace(/Stock:/g,"المخزون:").replace(/Subtotal:/g,"المجموع الفرعي:").replace(/Delivery:/g,"التوصيل:").replace(/Total:/g,"الإجمالي:").replace(/City:/g,"المدينة:").replace(/Date:/g,"التاريخ:").replace(/Reference:/g,"رقم الطلب:").replace(/Status:/g,"الحالة:");}
-function apply(root,arabic){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!n.nodeValue.trim())continue;if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=arabic?tr(originals.get(n)):originals.get(n);}
-const els=[root,...root.querySelectorAll("*")];for(const e of els){for(const a of ["placeholder","aria-label","title"]){if(!e.hasAttribute(a))continue;let o=attrs.get(e)||{};if(o[a]===undefined)o[a]=e.getAttribute(a);attrs.set(e,o);e.setAttribute(a,arabic?tr(o[a]):o[a]);}}}
+function tr(s,which){let v=s;const active=which==="ar"?dict:frDict;for(const k of Object.keys(active).sort((a,b)=>b.length-a.length))if(v.includes(k))v=v.split(k).join(active[k]);return v.replace(/(\d+) orders/g,"$1 طلب").replace(/Stock:/g,"المخزون:").replace(/Subtotal:/g,"المجموع الفرعي:").replace(/Delivery:/g,"التوصيل:").replace(/Total:/g,"الإجمالي:").replace(/City:/g,"المدينة:").replace(/Date:/g,"التاريخ:").replace(/Reference:/g,"رقم الطلب:").replace(/Status:/g,"الحالة:");}
+function apply(root,arabic){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(!n.nodeValue.trim())continue;if(!originals.has(n))originals.set(n,n.nodeValue);const target=arabic?tr(originals.get(n),"ar"):tr(originals.get(n),"fr");if(n.nodeValue!==target)n.nodeValue=target;}
+const els=[root,...root.querySelectorAll("*")];for(const e of els){for(const a of ["placeholder","aria-label","title"]){if(!e.hasAttribute(a))continue;let o=attrs.get(e)||{};if(o[a]===undefined)o[a]=e.getAttribute(a);attrs.set(e,o);e.setAttribute(a,arabic?tr(o[a],"ar"):tr(o[a],"fr"));}}}
 function setLang(v){lang=v;const ar=v==="ar";document.documentElement.lang=ar?"ar":"fr";document.documentElement.dir=ar?"rtl":"ltr";document.querySelectorAll(".language-toggle").forEach(b=>b.textContent=ar?"Français":"العربية");try{localStorage.setItem("oy-language",v)}catch(e){}apply(document.body,ar);}
 document.querySelectorAll(".language-toggle").forEach(b=>b.addEventListener("click",()=>setLang(lang==="ar"?"fr":"ar")));
-const obs=new MutationObserver(records=>{if(lang!=="ar")return;for(const r of records){if(r.type==="childList")r.addedNodes.forEach(n=>{if(n.nodeType===1)apply(n,true);else if(n.nodeType===3){if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=tr(originals.get(n));}});else if(r.type==="characterData"){const n=r.target;if(!originals.has(n))originals.set(n,n.nodeValue);n.nodeValue=tr(originals.get(n));}}});
+const obs=new MutationObserver(records=>{if(lang!=="ar")return;for(const r of records){if(r.type==="childList")r.addedNodes.forEach(n=>{if(n.nodeType===1)apply(n,true);else if(n.nodeType===3){if(!originals.has(n))originals.set(n,n.nodeValue);{const target=tr(originals.get(n),"ar");if(n.nodeValue!==target)n.nodeValue=target;}}});else if(r.type==="characterData"){const n=r.target;if(!originals.has(n))originals.set(n,n.nodeValue);{const target=tr(originals.get(n),"ar");if(n.nodeValue!==target)n.nodeValue=target;}}}});
 obs.observe(document.body,{subtree:true,childList:true,characterData:true});
 let saved="fr";try{saved=localStorage.getItem("oy-language")||"fr"}catch(e){}setLang(saved==="ar"?"ar":"fr");
 })();

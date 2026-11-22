@@ -1120,6 +1120,7 @@ async function loadNotifications() {
   if (!list || !count) return;
   const { data, error } = await db.from("notifications")
     .select("id,reference,title,body,is_read,created_at")
+    .eq("is_read", false)
     .order("created_at", { ascending: false }).limit(30);
   if (error) {
     console.error("Notifications error:", error);
@@ -1127,7 +1128,7 @@ async function loadNotifications() {
     return;
   }
   const notifications = data || [];
-  count.textContent = notifications.filter(n => !n.is_read).length;
+  count.textContent = notifications.length;
   if (!notifications.length) {
     list.innerHTML = '<div class="notification-empty">No notifications yet.</div>';
     return;

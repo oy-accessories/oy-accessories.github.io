@@ -768,15 +768,19 @@ transform:none!important;
 <div class="stat"><small>Total Orders</small><strong id="statOrders">0</strong></div>
 <div class="stat"><small>Pending Orders</small><strong id="statNew">0</strong></div>
 <div class="stat"><small>Delivered Orders</small><strong id="statDelivered">0</strong></div>
-<div class="stat"><small>Cancelled Orders</small><strong id="statCancelled">0</strong></div>
-<div class="stat"><small>Products</small><strong id="statProducts">0</strong></div>
-<div class="stat"><small>Coût vente total</small><strong id="statSales">0 DH</strong></div>
-<div class="stat"><small>Coût vente sans livraison</small><strong id="statSalesNoDelivery">0 DH</strong></div>
-<div class="stat"><small>Livraison facturée</small><strong id="statDelivery">0 DH</strong></div>
-<div class="stat"><small>Coût d'achat</small><strong id="statPurchase">0 DH</strong></div>
 <div class="stat"><small>Bénéfice</small><strong id="statProfit">0 DH</strong></div>
 </div>
-<p id="financialNote" class="monthly-footnote">Calcul financier : commandes non annulées uniquement.</p>
+
+<!-- Keep internal dashboard values available for existing calculations without displaying extra cards. -->
+<div hidden>
+<strong id="statCancelled">0</strong>
+<strong id="statProducts">0</strong>
+<strong id="statSales">0 DH</strong>
+<strong id="statSalesNoDelivery">0 DH</strong>
+<strong id="statDelivery">0 DH</strong>
+<strong id="statPurchase">0 DH</strong>
+<p id="financialNote">Calcul financier : commandes non annulées uniquement.</p>
+</div>
 
 <!-- MONTHLY ANALYTICS -->
 <div class="card monthly-card">

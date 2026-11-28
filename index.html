@@ -909,6 +909,17 @@ Monthly sales include delivery fees and exclude cancelled orders. Figures are ca
 </div>
 </div>
 
+<div class="card" id="loyaltyAdminCard">
+<h3>Programme Fidélité — Cartes clients</h3>
+<p class="ai-note" style="margin:-5px 0 15px">20 points pour chaque commande confirmée de 70 DH ou plus. Cadeau disponible à partir de 150 points.</p>
+<div class="table-wrap">
+<table style="min-width:650px">
+<thead><tr><th>Client</th><th>Téléphone</th><th>Points</th><th>Récompense</th><th>Carte digitale</th></tr></thead>
+<tbody id="loyaltyMembersTable"><tr><td colspan="5">Chargement des cartes...</td></tr></tbody>
+</table>
+</div>
+</div>
+
 <div class="admin-grid">
 <div class="card">
 <h3 id="productFormTitle">Add New Product</h3>
@@ -2081,13 +2092,45 @@ setupNotificationEvents();
 await Promise.all([
 loadAdminOrders(),
 loadAdminProducts(),
-loadNotifications()
+loadNotifications(),
+loadLoyaltyMembers()
 ]);
 await startOrderMonitor();
 adminMessage("Dashboard updated.","success");
 } finally {
 dashboardLoading = false;
 }
+}
+
+async function loadLoyaltyMembers() {
+  const tbody = document.getElementById("loyaltyMembersTable");
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="5">Chargement...</td></tr>';
+
+  const {data, error} = await db.from("loyalty_members")
+    .select("customer_name,phone,points_balance,card_code,created_at")
+    .order("points_balance", {ascending:false});
+
+  if (error) {
+    console.error("Loyalty members:", error);
+    tbody.innerHTML = '<tr><td colspan="5">Impossible de charger les cartes fidélité.</td></tr>';
+    return;
+  }
+
+  if (!data?.length) {
+    tbody.innerHTML = '<tr><td colspan="5">Aucune carte fidélité pour le moment. Les cartes apparaîtront après confirmation d’une première commande éligible.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(member => {
+    const cardUrl = new URL("loyalty.html", location.href);
+    cardUrl.searchParams.set("card", member.card_code);
+    const safeName = String(member.customer_name || "Client").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    const safePhone = String(member.phone || "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    const points = Number(member.points_balance) || 0;
+    const reward = points >= 150 ? '<strong style="color:#287744">Cadeau disponible</strong>' : '<span>' + (150-points) + ' pts restants</span>';
+    return '<tr><td>' + safeName + '</td><td>' + safePhone + '</td><td><strong>' + points + ' pts</strong></td><td>' + reward + '</td><td><a class="outline-btn small-btn" href="' + cardUrl.href + '" target="_blank" rel="noopener">OUVRIR LA CARTE</a></td></tr>';
+  }).join("");
 }
 
 async function loadAdminOrders() {

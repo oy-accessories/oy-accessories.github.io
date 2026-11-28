@@ -661,6 +661,14 @@ html[dir="rtl"] .panel{margin-left:0;margin-right:auto}
 html[dir="rtl"] th,html[dir="rtl"] td,html[dir="rtl"] input,html[dir="rtl"] textarea,html[dir="rtl"] select{text-align:right}
 html[dir="rtl"] .notification-item{border-left:0;border-right:3px solid #d5c5a5}
 html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .section-head small,html[dir="rtl"] #dashboardPage .stat small{letter-spacing:0}
+
+.brand-logo{display:block;object-fit:contain;height:auto}
+.brand-logo-link{display:flex;align-items:center;flex:0 0 auto}
+.header-brand-logo{width:104px;max-height:68px}
+.footer-brand-logo{width:150px;max-height:150px;margin:0 0 14px}
+.login-brand-logo{width:132px;max-height:132px;margin:0 auto 14px}
+.dashboard-brand-logo{width:100px;max-height:100px;margin-bottom:8px}
+@media(max-width:600px){.header-brand-logo{width:76px;max-height:54px}.footer-brand-logo{width:125px}}
 </style>
 </head>
 
@@ -672,7 +680,7 @@ html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .se
 </div>
 
 <header>
-<a class="logo" href="#home">OY <span>ACCESSORIES</span></a>
+<a class="brand-logo-link" href="#home" aria-label="OY Accessories"><img class="brand-logo header-brand-logo" src="/oy-logo.svg" alt="OY Accessories"></a>
 <nav>
 <a href="#home">HOME</a>
 <a href="#shop">SHOP</a>
@@ -732,7 +740,7 @@ html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .se
 
 <section id="adminLoginPage" class="page hidden">
 <div class="form-small card">
-<h1 class="page-title">Admin Login</h1>
+<img class="brand-logo login-brand-logo" src="/oy-logo.svg" alt="OY Accessories"><h1 class="page-title">Admin Login</h1>
 <p style="margin-bottom:18px;color:#666">Sign in to manage OY Accessories.</p>
 <form id="loginForm">
 <input name="email" type="email" placeholder="Admin email" required>
@@ -747,7 +755,7 @@ html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .se
 <section id="dashboardPage" class="page hidden">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap">
 <div>
-<small style="color:#a48650;letter-spacing:3px">OY ACCESSORIES</small>
+<img class="brand-logo dashboard-brand-logo" src="/oy-logo.svg" alt="OY Accessories">
 <h1 class="page-title" style="margin:8px 0">Admin Dashboard</h1>
 <p id="adminEmail" style="color:#777;font-size:13px"></p>
 </div>
@@ -907,7 +915,7 @@ GENERATE WITH AI
 <footer id="contact">
 <div class="footer-grid">
 <div>
-<div class="logo">OY <span>ACCESSORIES</span></div>
+<img class="brand-logo footer-brand-logo" src="/oy-logo.svg" alt="OY Accessories">
 <p>Des accessoires élégants pour sublimer votre style au quotidien.
 Timeless Details. Everyday Elegance.</p>
 </div>

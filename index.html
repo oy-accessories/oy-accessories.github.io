@@ -726,6 +726,7 @@ html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .se
 <a href="#home">HOME</a>
 <a href="#shop">SHOP</a>
 <a href="#track">TRACK ORDER</a>
+<a href="#account">MON COMPTE</a>
 <button class="outline-btn" id="openCart">CART (<span id="cartCount">0</span>)</button>
 <button class="outline-btn language-toggle" type="button">العربية</button>
 </nav>
@@ -777,6 +778,60 @@ html[dir="rtl"] .shipping-banner,html[dir="rtl"] .hero small,html[dir="rtl"] .se
 </form>
 <div id="trackResult" class="message" role="status"></div>
 </div>
+</section>
+
+<section id="accountPage" class="page hidden">
+  <div class="form-small card" style="max-width:520px">
+    <h1 class="page-title">Mon compte fidélité</h1>
+    <p style="color:#666;line-height:1.7;margin-bottom:20px">Créez votre compte OY Accessories pour retrouver vos points fidélité et vos avantages.</p>
+
+    <div id="accountAuthPanel">
+      <div class="card" style="padding:16px;background:#f7f4ed">
+        <h3 style="font-size:19px">Créer un compte</h3>
+        <form id="loyaltySignupForm">
+          <input name="email" type="email" placeholder="Adresse Gmail / e-mail" autocomplete="email" required>
+          <input name="password" type="password" placeholder="Mot de passe (8 caractères minimum)" minlength="8" autocomplete="new-password" required>
+          <button class="gold-btn" type="submit">CRÉER MON COMPTE</button>
+        </form>
+      </div>
+      <div class="card" style="padding:16px">
+        <h3 style="font-size:19px">J'ai déjà un compte</h3>
+        <form id="loyaltyLoginForm">
+          <input name="email" type="email" placeholder="Adresse e-mail" autocomplete="email" required>
+          <input name="password" type="password" placeholder="Mot de passe" autocomplete="current-password" required>
+          <button class="dark-btn" type="submit">SE CONNECTER</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="accountLinkPanel" class="hidden">
+      <h3>Associer mes anciennes commandes</h3>
+      <p style="color:#666;line-height:1.7;margin-bottom:14px">Entrez le numéro de téléphone utilisé lors de vos achats et la référence d'une commande déjà confirmée. Vos anciennes commandes éligibles seront alors rattachées à votre compte.</p>
+      <form id="loyaltyLinkForm">
+        <input name="phone" type="tel" placeholder="Téléphone utilisé pour les commandes" autocomplete="tel" required>
+        <input name="order_reference" placeholder="Référence d'une commande (OY-...)" required>
+        <button class="gold-btn" type="submit">LIER MES COMMANDES</button>
+      </form>
+    </div>
+
+    <div id="accountMemberPanel" class="hidden">
+      <div style="background:#191814;color:#f7f4ed;border:1px solid #c6a66b;padding:22px;margin:15px 0">
+        <div style="color:#c6a66b;letter-spacing:2px;font-size:11px">OY ACCESSORIES · FIDÉLITÉ</div>
+        <h2 id="accountCustomerName" style="font:normal 25px Georgia,serif;margin:14px 0 5px">Membre OY</h2>
+        <p id="accountCustomerPhone" style="color:#c8c0b2;font-size:13px"></p>
+        <div style="margin-top:22px;color:#c6a66b;font-size:11px;letter-spacing:1px">VOTRE SOLDE</div>
+        <div style="font:normal 38px Georgia,serif;margin:5px 0"><span id="accountPoints">0</span> <small style="font:normal 12px Arial">POINTS</small></div>
+        <div style="height:8px;background:#ffffff24;border-radius:20px;overflow:hidden"><span id="accountProgress" style="display:block;height:100%;width:0;background:#c6a66b"></span></div>
+        <p id="accountRewardText" style="font-size:13px;line-height:1.6;color:#e5d8bf;margin-top:12px"></p>
+      </div>
+      <h3>Historique des points</h3>
+      <div id="accountLedger" style="font-size:13px;line-height:1.8"></div>
+      <button type="button" class="outline-btn" id="loyaltyLogoutButton">SE DÉCONNECTER</button>
+    </div>
+
+    <div id="accountMessage" class="message" role="status"></div>
+    <a href="#home" style="font-size:13px;color:#777">← Retour à la boutique</a>
+  </div>
 </section>
 
 <section id="adminLoginPage" class="page hidden">
@@ -910,11 +965,11 @@ Monthly sales include delivery fees and exclude cancelled orders. Figures are ca
 </div>
 
 <div class="card" id="loyaltyAdminCard">
-<h3>Programme Fidélité — Cartes clients</h3>
-<p class="ai-note" style="margin:-5px 0 15px">20 points pour chaque commande confirmée de 70 DH ou plus. Cadeau disponible à partir de 150 points.</p>
+<h3>Programme Fidélité — Comptes clients</h3>
+<p class="ai-note" style="margin:-5px 0 15px">10 points pour une commande confirmée de moins de 70 DH · 20 points à partir de 70 DH · Cadeau à 150 points.</p>
 <div class="table-wrap">
 <table style="min-width:650px">
-<thead><tr><th>Client</th><th>Téléphone</th><th>Points</th><th>Récompense</th><th>Carte digitale</th></tr></thead>
+<thead><tr><th>Client</th><th>Téléphone</th><th>Points</th><th>Récompense</th><th>Compte client</th></tr></thead>
 <tbody id="loyaltyMembersTable"><tr><td colspan="5">Chargement des cartes...</td></tr></tbody>
 </table>
 </div>
@@ -1003,6 +1058,7 @@ Timeless Details. Everyday Elegance.</p>
 </div>
 <p>+212 660 120 463</p>
 <p><a href="#track">Suivre ma commande</a></p>
+<p><a href="#account">Mon compte fidélité</a></p>
 <p><a href="#admin">Admin</a></p>
 <p>© <span id="year"></span> OY Accessories</p>
 </div>
@@ -1341,12 +1397,14 @@ const productRoute = isProductRoute();
 document.getElementById("storePage").classList.toggle("hidden",productRoute || (hash !== "#home" && hash !== "#shop"));
 document.getElementById("productPage").classList.toggle("hidden",!productRoute);
 document.getElementById("trackPage").classList.toggle("hidden",hash !== "#track");
+document.getElementById("accountPage").classList.toggle("hidden",hash !== "#account");
 document.getElementById("adminLoginPage").classList.toggle("hidden",hash !== "#admin");
 document.getElementById("dashboardPage").classList.toggle("hidden",hash !== "#dashboard");
 
 if (hash === "#admin") checkExistingSession();
 if (hash === "#dashboard") loadDashboard();
 if (hash === "#track") document.getElementById("trackResult").textContent = "";
+if (hash === "#account") loadLoyaltyAccount();
 if (productRoute) {
 renderProductPageFromRoute();
 } else if (hash === "#home" || hash === "#shop") {
@@ -1355,6 +1413,142 @@ document.title = "OY Accessories | Timeless Details";
 window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",showPage);
+
+// ======================================
+// CUSTOMER LOYALTY ACCOUNT
+// ======================================
+function accountMessage(message,type="") {
+  showMessage(document.getElementById("accountMessage"),message,type);
+}
+
+async function loadLoyaltyAccount() {
+  const authPanel = document.getElementById("accountAuthPanel");
+  const linkPanel = document.getElementById("accountLinkPanel");
+  const memberPanel = document.getElementById("accountMemberPanel");
+  authPanel.classList.remove("hidden");
+  linkPanel.classList.add("hidden");
+  memberPanel.classList.add("hidden");
+
+  const {data:{user},error:authError} = await db.auth.getUser();
+  if (authError || !user) return;
+
+  authPanel.classList.add("hidden");
+  const {data:member,error} = await db.from("loyalty_members")
+    .select("customer_name,phone,points_balance")
+    .eq("auth_user_id",user.id)
+    .maybeSingle();
+
+  if (error) {
+    accountMessage("Impossible de charger votre compte. Réessayez.","error");
+    console.error("Loyalty account:",error);
+    return;
+  }
+
+  if (!member) {
+    linkPanel.classList.remove("hidden");
+    return;
+  }
+
+  memberPanel.classList.remove("hidden");
+  const points = Number(member.points_balance || 0);
+  document.getElementById("accountCustomerName").textContent = member.customer_name || "Membre OY";
+  document.getElementById("accountCustomerPhone").textContent = member.phone || "";
+  document.getElementById("accountPoints").textContent = points;
+  document.getElementById("accountProgress").style.width = Math.min(100,points/150*100)+"%";
+  document.getElementById("accountRewardText").textContent = points >= 150
+    ? "🎁 Votre cadeau est disponible ! Contactez OY Accessories pour le récupérer."
+    : "Encore "+(150-points)+" points pour débloquer votre cadeau.";
+
+  const {data:ledger,error:ledgerError} = await db.from("loyalty_ledger")
+    .select("points,entry_type,note,created_at")
+    .order("created_at",{ascending:false})
+    .limit(20);
+  const ledgerBox = document.getElementById("accountLedger");
+  if (ledgerError) {
+    ledgerBox.textContent = "Historique indisponible pour le moment.";
+  } else if (!ledger?.length) {
+    ledgerBox.textContent = "Aucun mouvement pour le moment.";
+  } else {
+    ledgerBox.innerHTML = ledger.map(item => {
+      const amount = Number(item.points || 0);
+      const label = amount > 0 ? "+"+amount : String(amount);
+      return '<div style="display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:8px 0"><span>'+esc(item.note || item.entry_type)+'</span><strong>'+label+' pts</strong></div>';
+    }).join("");
+  }
+}
+
+document.getElementById("loyaltySignupForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const button=form.querySelector("button");
+  const values=Object.fromEntries(new FormData(form).entries());
+  button.disabled=true;
+  accountMessage("Création du compte...");
+  try{
+    const {data,error}=await db.auth.signUp({
+      email:values.email,
+      password:values.password,
+      options:{emailRedirectTo:location.origin+location.pathname+"#account"}
+    });
+    if(error) throw error;
+    if(data.session){
+      accountMessage("Compte créé. Vous pouvez maintenant associer vos commandes.","success");
+      await loadLoyaltyAccount();
+    }else{
+      accountMessage("Un e-mail de confirmation vient d'être envoyé. Confirmez votre adresse, puis connectez-vous ici.","success");
+    }
+  }catch(err){accountMessage(err.message || "Impossible de créer le compte.","error");}
+  finally{button.disabled=false;}
+});
+
+document.getElementById("loyaltyLoginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const button=form.querySelector("button");
+  const values=Object.fromEntries(new FormData(form).entries());
+  button.disabled=true;
+  accountMessage("Connexion...");
+  try{
+    const {error}=await db.auth.signInWithPassword({email:values.email,password:values.password});
+    if(error) throw error;
+    accountMessage("Connexion réussie.","success");
+    await loadLoyaltyAccount();
+  }catch(err){accountMessage(err.message || "Connexion impossible.","error");}
+  finally{button.disabled=false;}
+});
+
+document.getElementById("loyaltyLinkForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const button=form.querySelector("button");
+  const values=Object.fromEntries(new FormData(form).entries());
+  button.disabled=true;
+  accountMessage("Vérification de votre commande...");
+  try{
+    const {data:{session}}=await db.auth.getSession();
+    if(!session) throw new Error("Veuillez vous reconnecter.");
+    const response=await fetch(SUPABASE_URL+"/functions/v1/loyalty-account-link",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "apikey":SUPABASE_PUBLISHABLE_KEY,
+        "Authorization":"Bearer "+session.access_token
+      },
+      body:JSON.stringify(values)
+    });
+    const result=await response.json();
+    if(!response.ok) throw new Error(result.error || "Impossible de lier vos commandes.");
+    accountMessage("Vos commandes ont été associées à votre compte.","success");
+    await loadLoyaltyAccount();
+  }catch(err){accountMessage(err.message || "Une erreur est survenue.","error");}
+  finally{button.disabled=false;}
+});
+
+document.getElementById("loyaltyLogoutButton").addEventListener("click",async()=>{
+  await db.auth.signOut();
+  accountMessage("Vous êtes déconnecté.");
+  await loadLoyaltyAccount();
+});
 
 // ======================================
 // STORE PRODUCTS
@@ -2108,31 +2302,31 @@ async function loadLoyaltyMembers() {
   tbody.innerHTML = '<tr><td colspan="5">Chargement...</td></tr>';
 
   const {data, error} = await db.from("loyalty_members")
-    .select("customer_name,phone,points_balance,card_code,created_at")
+    .select("customer_name,phone,points_balance,auth_user_id,created_at")
     .order("points_balance", {ascending:false});
 
   if (error) {
     console.error("Loyalty members:", error);
-    tbody.innerHTML = '<tr><td colspan="5">Impossible de charger les cartes fidélité.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5">Impossible de charger les comptes fidélité.</td></tr>';
     return;
   }
 
   if (!data?.length) {
-    tbody.innerHTML = '<tr><td colspan="5">Aucune carte fidélité pour le moment. Les cartes apparaîtront après confirmation d’une première commande éligible.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5">Aucun membre fidélité pour le moment.</td></tr>';
     return;
   }
 
   tbody.innerHTML = data.map(member => {
-    const cardUrl = new URL("loyalty.html", location.href);
-    cardUrl.searchParams.set("card", member.card_code);
-    const safeName = String(member.customer_name || "Client").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-    const safePhone = String(member.phone || "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    const safeName = esc(member.customer_name || "Client");
+    const safePhone = esc(member.phone || "");
     const points = Number(member.points_balance) || 0;
     const reward = points >= 150 ? '<strong style="color:#287744">Cadeau disponible</strong>' : '<span>' + (150-points) + ' pts restants</span>';
-    return '<tr><td>' + safeName + '</td><td>' + safePhone + '</td><td><strong>' + points + ' pts</strong></td><td>' + reward + '</td><td><a class="outline-btn small-btn" href="' + cardUrl.href + '" target="_blank" rel="noopener">OUVRIR LA CARTE</a></td></tr>';
+    const accountStatus = member.auth_user_id
+      ? '<strong style="color:#287744">Compte activé</strong>'
+      : '<span>En attente d’inscription</span>';
+    return '<tr><td>' + safeName + '</td><td>' + safePhone + '</td><td><strong>' + points + ' pts</strong></td><td>' + reward + '</td><td>' + accountStatus + '</td></tr>';
   }).join("");
 }
-
 async function loadAdminOrders() {
 const tbody = document.getElementById("ordersTable");
 tbody.innerHTML = '<tr><td colspan="8">Loading orders...</td></tr>';

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11110f">
+<meta name="description" content="Votre carte de fidélité OY Accessories.">
+<title>Ma carte fidélité | OY Accessories</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+:root{--black:#11110f;--gold:#c6a66b;--ivory:#f7f4ed;--muted:#a9a397}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#3a3325,#11110f 58%);font-family:Arial,sans-serif;color:var(--ivory);padding:28px 16px;display:flex;align-items:center;justify-content:center}
+.wrap{width:100%;max-width:440px}
+.brand{text-align:center;letter-spacing:5px;color:var(--gold);font-size:13px;margin-bottom:22px}
+.card{background:linear-gradient(145deg,#242219,#11110f 72%);border:1px solid var(--gold);border-radius:18px;padding:26px 22px;box-shadow:0 22px 65px #0008;position:relative;overflow:hidden}
+.card:after{content:"OY";position:absolute;right:12px;top:35px;font:normal 110px Georgia,serif;color:#c6a66b0c;pointer-events:none}
+.kicker{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+h1{font:normal 30px Georgia,serif;margin:10px 0 22px}
+.name{font:normal 23px Georgia,serif;overflow-wrap:anywhere}
+.phone{color:#c4bba9;font-size:13px;margin-top:7px}
+.points-area{margin:25px 0 20px;padding:18px;background:#ffffff08;border:1px solid #c6a66b55;border-radius:10px}
+.points-line{display:flex;justify-content:space-between;align-items:end;gap:12px}
+.points{font:normal 36px Georgia,serif;color:var(--gold)}
+.points small{font:normal 12px Arial;color:#d4c8b2}
+.progress{height:8px;background:#ffffff20;border-radius:20px;margin-top:13px;overflow:hidden}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,#a9874d,#e2c68f);border-radius:20px;width:0}
+.reward{font-size:12px;color:#d6cbb7;line-height:1.6;margin-top:12px}
+.reward strong{color:var(--gold)}
+.qr-wrap{background:#fff;border-radius:12px;width:190px;height:190px;margin:22px auto 12px;display:grid;place-items:center;padding:10px}
+.qr-wrap img{width:170px;height:170px;display:block}
+.qr-caption{text-align:center;color:#b9b1a2;font-size:11px;line-height:1.6}
+.footer{text-align:center;color:#8d877b;font-size:11px;margin-top:20px;line-height:1.8}
+.error,.loading{text-align:center;padding:30px 18px;line-height:1.7}
+.error{color:#f0b4a8}
+button{background:var(--gold);color:var(--black);border:0;padding:12px 18px;font-weight:bold;cursor:pointer;margin-top:15px}
+.hidden{display:none}
+@media print{body{background:#fff;padding:0}.wrap{max-width:100%}.brand,.footer{color:#555}.card{box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="brand">OY ACCESSORIES</div>
+<section id="loading" class="card loading">Chargement de votre carte fidélité...</section>
+<section id="error" class="card error hidden"></section>
+<section id="loyaltyCard" class="card hidden">
+<div class="kicker">Programme de fidélité</div>
+<h1>Carte Privilège</h1>
+<div class="kicker">Membre OY</div>
+<div class="name" id="customerName">—</div>
+<div class="phone" id="customerPhone">—</div>
+<div class="points-area">
+<div class="points-line"><div><div class="kicker">Votre solde</div><div class="points"><span id="points">0</span> <small>POINTS</small></div></div><div class="kicker" id="level">OY MEMBER</div></div>
+<div class="progress"><span id="progressBar"></span></div>
+<div class="reward" id="rewardText"></div>
+</div>
+<div class="qr-wrap"><img id="qrCode" alt="QR Code de votre carte fidélité"></div>
+<div class="qr-caption">Présentez ce QR Code en magasin ou à notre équipe<br>pour consulter votre carte fidélité.</div>
+</section>
+<div class="footer">TIMELESS DETAILS. MODERN ELEGANCE.<br>OY Accessories · Maroc</div>
+</main>
+<script>
+(async function(){
+  const params = new URLSearchParams(location.search);
+  const cardCode = params.get("card") || "";
+  const loading = document.getElementById("loading");
+  const errorBox = document.getElementById("error");
+  const card = document.getElementById("loyaltyCard");
+  function fail(message){
+    loading.classList.add("hidden");
+    errorBox.textContent = message;
+    errorBox.classList.remove("hidden");
+  }
+  if(!/^[a-f0-9]{32}$/i.test(cardCode)){
+    fail("Lien de carte invalide. Contactez OY Accessories pour récupérer votre carte.");
+    return;
+  }
+  try{
+    const response = await fetch("https://ibmcpnlsejnyigqthpsh.supabase.co/functions/v1/loyalty-card",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({card_code:cardCode})
+    });
+    const data = await response.json();
+    if(!response.ok) throw new Error(data.error || "Carte introuvable.");
+    const points = Number(data.points_balance)||0;
+    document.getElementById("customerName").textContent = data.customer_name || "Client OY";
+    document.getElementById("customerPhone").textContent = data.phone || "";
+    document.getElementById("points").textContent = points;
+    document.getElementById("level").textContent = points >= 150 ? "OY PRIVILEGE" : "OY MEMBER";
+    document.getElementById("progressBar").style.width = Math.min(100,(points/150)*100)+"%";
+    document.getElementById("rewardText").innerHTML = points >= 150
+      ? "🎁 <strong>Votre cadeau est disponible !</strong> Contactez notre équipe pour le récupérer."
+      : "Encore <strong>"+(150-points)+" points</strong> pour débloquer votre cadeau.";
+    const cardUrl = location.href;
+    document.getElementById("qrCode").src = "https://api.qrserver.com/v1/create-qr-code/?size=340x340&data="+encodeURIComponent(cardUrl);
+    document.getElementById("qrCode").alt = "QR Code de la carte de "+(data.customer_name||"membre OY");
+    loading.classList.add("hidden");
+    card.classList.remove("hidden");
+  }catch(err){
+    fail(err.message || "Impossible de charger la carte. Réessayez plus tard.");
+  }
+})();
+</script>
+</body>
+</html>

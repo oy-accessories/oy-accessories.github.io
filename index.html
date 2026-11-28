@@ -1311,9 +1311,9 @@ window.addEventListener("hashchange",showPage);
 // ======================================
 // STORE PRODUCTS
 // ======================================
-async function loadProducts() {
+async function loadProducts(silent = false) {
 const container = document.getElementById("products");
-container.innerHTML = '<div class="loading">Loading products...</div>';
+if (!silent) container.innerHTML = '<div class="loading">Loading products...</div>';
 
 const {data,error} = await db.from("products")
 .select("id,name,slug,description,price,image_url,image_urls,category,stock,is_active")
@@ -1321,7 +1321,7 @@ const {data,error} = await db.from("products")
 .order("created_at",{ascending:false});
 
 if (error) {
-container.innerHTML = '<div class="empty">Could not load products. Please try again later.</div>';
+if (!silent) container.innerHTML = '<div class="empty">Could not load products. Please try again later.</div>';
 console.error(error);
 return;
 }
@@ -1590,22 +1590,59 @@ document.getElementById("cartCount").textContent = cart.reduce((sum,p) => sum + 
 }
 
 function renderCart() {
-document.getElementById("cartItems").innerHTML = cart.length ? cart.map(p => `
-<div class="cart-line">
-<img src="${esc(productImages(p)[0])}" alt="">
-<div>
-<strong>${esc(p.name)}</strong>
-<div>${money(p.price)}</div>
-<div class="qty">
-<button data-dec="${esc(p.id)}">−</button>
-${p.qty}
-<button data-inc="${esc(p.id)}">+</button>
-<button data-remove="${esc(p.id)}">Remove</button>
-</div>
-</div>
-<strong>${money(p.price * p.qty)}</strong>
-</div>
-`).join("") : '<div class="empty">Your cart is empty.</div>';
+const cartItems = document.getElementById("cartItems");
+cartItems.replaceChildren();
+
+if (!cart.length) {
+const empty = document.createElement("div");
+empty.className = "empty";
+empty.textContent = "Your cart is empty.";
+cartItems.appendChild(empty);
+} else {
+cart.forEach(p => {
+const line = document.createElement("div");
+line.className = "cart-line";
+
+const image = document.createElement("img");
+image.src = productImages(p)[0];
+image.alt = p.name || "Product";
+image.loading = "lazy";
+image.onerror = function() {
+this.onerror = null;
+this.src = fallbackImage;
+};
+
+const details = document.createElement("div");
+const name = document.createElement("strong");
+name.textContent = p.name || "Product";
+const unitPrice = document.createElement("div");
+unitPrice.textContent = money(p.price);
+
+const controls = document.createElement("div");
+controls.className = "qty";
+const dec = document.createElement("button");
+dec.type = "button";
+dec.dataset.dec = p.id;
+dec.textContent = "−";
+const quantity = document.createElement("span");
+quantity.textContent = String(p.qty);
+const inc = document.createElement("button");
+inc.type = "button";
+inc.dataset.inc = p.id;
+inc.textContent = "+";
+const remove = document.createElement("button");
+remove.type = "button";
+remove.dataset.remove = p.id;
+remove.textContent = "Remove";
+controls.append(dec, quantity, inc, remove);
+details.append(name, unitPrice, controls);
+
+const lineTotal = document.createElement("strong");
+lineTotal.textContent = money(Number(p.price) * Number(p.qty));
+line.append(image, details, lineTotal);
+cartItems.appendChild(line);
+});
+}
 
 const subtotal = getCartSubtotal();
 const city = getSelectedCity();
@@ -2601,6 +2638,20 @@ renderCartCount();
 renderCart();
 loadProducts();
 showPage();
+
+// Refresh the public catalogue every 60 seconds, and immediately when
+// the visitor returns to this tab. Avoid replacing the catalogue while hidden.
+let catalogueRefreshTimer = null;
+function startCatalogueRefresh() {
+if (catalogueRefreshTimer) clearInterval(catalogueRefreshTimer);
+catalogueRefreshTimer = setInterval(() => {
+if (!document.hidden) loadProducts(true);
+}, 60000);
+}
+document.addEventListener("visibilitychange", () => {
+if (!document.hidden) loadProducts(true);
+});
+startCatalogueRefresh();
 
 </script>
 <script>
